@@ -1,10 +1,10 @@
-### Analisis estadistico TFG 1                                      Comparacion entre individuos salvajes de tres entornos naturales diferentes
+### Analisis estadistico TFG 1                                          Efecto de la reproducción en cautividad
 
 # Version II (optimizada)
 
 # Alberto Coll Fernandez                                                   Comienzo: 07/12/2022                                                       Fin : 21/12/2022 (Pausa) Retomado el 13/03/2023
 
-# Problemas y aspectos a resolver:                                                  - Desglosar variables tentaculares y pedias, cambiar nombre a                 madurez por tiempo                                                        - Corregir codigo para eliminar distincion por tejido, implementar            anova de 3 vias                                                           - Implementar test de Tukey en bucle, con ifelse para que solo lo             haga a los que resulten significativos, y al resto les rellene las           letras con "". Problema, igual es mejor hacerlo manualmente si no           son muchas, ya que a Cristina no le gusta cómo opera el test de             tukey en anova de 2 vias.                                                
+# Problemas y aspectos a resolver:                                                  - Implementar test de Tukey en bucle, con ifelse para que solo lo             haga a los que resulten significativos, y al resto les rellene las           letras con "". Problema, igual es mejor hacerlo manualmente si no           son muchas, ya que a Cristina no le gusta cómo opera el test de             tukey en anova de 2 vias.                                                
 
 ### SETUP ----
 library(tidyverse)
@@ -14,9 +14,9 @@ library(car)
 
 # Directorio en laboratorio: C:/Users/Usuario/Documents/TFG Alberto Coll
 
-# Directorio en portatil: D:/collf/Documents/TFG-Alberto-Coll
+# Directorio en portatil: D:/collf/Documents/GitHub/TFG-Alberto-Coll
 
-setwd("D:/collf/Documents/TFG-Alberto-Coll")
+setwd("D:/collf/Documents/GitHub/TFG-Alberto-Coll")
 
 # Llamamos el script de lectura
 #source(file = "./scripts/0_data_lab.R") # Laboratorio
@@ -47,24 +47,11 @@ for (i in modelos) {
 # Homocedasticidad: test de levene
 
 sapply(modelos, function(x){
-  shapiro.test(residuals(x)) # No hay problemas con normalidad de residuos
-})
-
-sapply(modelos.tent, function(x){
-  #qqnorm(residuals(x)) # esto es para el qqplot pero con lo otro vale
-  #qqline(residuals(x))
-  print(shapiro.test(residuals(x)))
-  print(leveneTest(x))
-})
-sapply(modelos.pie, function(x){
-  #qqnorm(residuals(x)) # esto es para el qqplot pero con lo otro vale
-  #qqline(residuals(x))
-  print(shapiro.test(residuals(x)))
+  print(shapiro.test(residuals(x))) # No hay problemas con normalidad de residuos
   print(leveneTest(x))
 })
 
-# En este caso solo la catalasa tentacular parece que viola una asunción, pero realmente la p es muy cercana a 0.05 y el anova es bastante robusto
-
+# Parece que hay problemas con 3 variables (6,11,17): DTD tentacular, SOD pedia y G6PDH pedia. No tienen homocedasticidad. Probar transformacion log.
 
 
 ### Test post-hoc ----
