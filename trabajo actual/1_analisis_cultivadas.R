@@ -4,7 +4,7 @@
 
 # Alberto Coll Fernandez                                                   Comienzo: 07/12/2022                                                       Fin : 21/12/2022 (Pausa) Retomado el 13/03/2023
 
-# Problemas y aspectos a resolver:                                                  - Implementar test de Tukey en bucle, con ifelse para que solo lo             haga a los que resulten significativos, y al resto les rellene las           letras con "". Problema, igual es mejor hacerlo manualmente si no           son muchas, ya que a Cristina no le gusta cómo opera el test de             tukey en anova de 2 vias.                                                
+# Problemas y aspectos a resolver:                                                  - Implementar test de Tukey en bucle, con ifelse para que solo lo             haga a los que resulten significativos, y al resto les rellene las           letras con "". Problema, igual es mejor hacerlo manualmente si no           son muchas, ya que a Cristina no le gusta cómo opera el test de             tukey en anova de 2 vias.                                                 - Hay 3 variables en las que no se cumple la homocedasticidad,                probar transformacion logaritmica.                                        - Cuando el 1º modelo este listo, hay que ver en que casos la                 interaccion es significativa (función anova()) y eliminarla del             modelo en los casos en los que no lo sea                                  - Por  ultimo realizar modelo alternativo, con lm() y formula X ~             corte * tiempo + playa. Es el modelo mas completo pero el mas               complejo a pesar de ser un modelo lineal. Cuidado con esos casos            en los que la relacion no es lineal, utilizar transformaciones              logaritmicas. Las asunciones de homocedasticidad y normalidad de            los residuos tiene que estar mas o menos pero asume que alguna se           va a violar porque tenemos un tamaño de muestra muy pequeño    
 
 ### SETUP ----
 library(tidyverse)
@@ -167,11 +167,10 @@ for (i in colnames(datos[7:16])) {
 # Colores: #605E97 azul, #69B4AB verde, #FBBC4C amarillo
 # Idea para no usar grafica de barras, supuestamente mejor un boxplot con los datos individuales como puntos para ver la dispersion. Problema: son solo 5 datos y queda un poco cutre. Usar las barras oculta el tamaño de muestra.
 ggplot(datos) +
-  geom_boxplot(aes(x = playa, y = CAT), fill = "white", color = "grey60", alpha = 0.2) +
-  geom_jitter(aes(x = playa, y = CAT, color = playa), size = 4, 
+  geom_boxplot(aes(x = playa, y = CAT_t), fill = "white", color = "grey60", alpha = 0.2) +
+  geom_jitter(aes(x = playa, y = CAT_t, color = playa), size = 4, 
               width = 0.2, alpha = 0.8) +
   scale_color_manual(values = c("#605E97", "#69B4AB", "#FBBC4C")) +
-  facet_wrap(~tejido) +
   theme_ortimar() +
   theme(panel.grid.major.x = element_blank()
     
