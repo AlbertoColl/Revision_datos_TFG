@@ -23,7 +23,7 @@ setwd("D:/collf/Documents/GitHub/TFG-Alberto-Coll")
 source(file = "./scripts/0_data_home.R") # En casa
 datos <- datos %>% filter(cultivo == "Si")
 
-source(file = "./scripts/1_descriptiva_cultivadas.R") # Para tener las funciones de las graficas
+source(file = "./scripts/1_funciones_graficas.R") # Para tener las funciones de las graficas
 
 ### Ajuste de modelo EXTENDIDO ----
 
@@ -31,24 +31,30 @@ source(file = "./scripts/1_descriptiva_cultivadas.R") # Para tener las funciones
 
 formulas <- sapply(colnames(datos[c(6:25)]), function(x){as.formula(paste0(x, " ~ playa + corte * tiempo"))}) # En el analisis extendido vamos a ver la interaccion entre corte y tiempo, ademas de incluir el factor playa
 
-modelos <- sapply(formulas, function(x){lm(x, datos)})
+# Ahora comprobamos los modelos a ver que tal y en cuales quitamos interaccion (o playa)
+sapply(modelos, function(x){summary(x)})
 
-# Guardar todos los modelos individualmente en ./resultados/modelos
-# Posteriormente se pueden cargar con readRDS( y renombrarlos)
+# En el siguiente bloque voy a ajustar un modelo mas parsimonioso, sin la interaccion, para eliminar el termino en aquellos casos donde no haya diferencia significativa entre ambos modelos
 
-n <-  6
-for (i in modelos) {
-  saveRDS(i, file = paste0("./resultados/modelos/modelo", colnames(datos[n]), "_extendido.RDS"))
+formulas_sin <- sapply(colnames(datos[c(6:25)]), function(x){as.formula(paste0(x, " ~ playa + corte + tiempo"))})
+
+n <- 0
+for (variable in colnames(datos[c(6:25)])) {
   n <- n + 1
+  modelo_sin <- lm(formulas_sin[[n]], datos)
+  print("Se ha ajustado el modelo sin interaccion")
+  likelihood <- anova(modelos[[n]], modelo_sin)
+  print("Se ha hecho el ANOVA")
+  if (n != 3) {
+    if (likelihood$`Pr(>F)`[2] > 0.05) {
+      print("No hay diferencias, sustituimos")
+      modelos[[n]] <- modelo_sin
+    }  else {print("Los modelos son diferentes, nos quedamos con el complejo")
+    }
+  }
 }
 
-# Ahora comprobamos los modelos a ver que tal y en cuales quitamos interaccion (o playa)
-sapply(modelos, function(x){
-  summary(x)
-})
-
-
-### Asunciones ----
+### Asunciones modelo EXTENDIDO ----
 # Siguiente paso: necesitamos ver si los modelos cumnplen asunciones
 # Normalidad de residuos: qqplot y test de shapiro wilk
 # Homocedasticidad: test de levene
@@ -56,16 +62,29 @@ sapply(modelos, function(x){
 sapply(modelos, function(x){
   shapiro.test(residuals(x)) 
 }) # No hay problemas con normalidad de residuos en ningún caso, lo cual esta genial
+# GR_t no sigue normalidad de residuos, con transformación log se resuelve
+modelos[[4]] <- lm(log(GR_t) ~ playa + corte + tiempo, datos)
+# La G6PDH_p, SOD_p y G6PDH_t son marginalmente significativas pero en general el histograma de residuos está bien. Hay muy poco n, hay que ser flexible
 
+
+# En cuanto a homocedasticidad, examinando las graficas de Scale-Location
 sapply(modelos, function(x){
   plot(x, which = 3)
   title(main = x$terms[[2]])
 })
-# En cuanto a homocedasticidad, examinando las graficas de Scale-Location
-# G6PDH_p parece un poco rara
-# GPx_p regular
-# TEAC_t un poco rara
-# G6PDH_t mal
+# Algunas un poco raras pero volvemos a lo mismo, en general bastante bien considerando el poco tamaño de muestra que tenemos
+
+modelos <- sapply(formulas, function(x){lm(x, datos)})
+
+
+# Finalmente guardamos todos los modelos individualmente en ./resultados/modelos
+# Posteriormente se pueden cargar con readRDS (y renombrarlos como objetos)
+
+n <-  6
+for (i in modelos) {
+  saveRDS(i, file = paste0("./resultados/modelos/modelo", colnames(datos[n]), "_extendido.RDS"))
+  n <- n + 1
+}
 
 
 ### Test post-hoc ----
