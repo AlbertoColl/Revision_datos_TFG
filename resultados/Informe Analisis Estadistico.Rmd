@@ -1,0 +1,56 @@
+---
+title: "Informe Analisis Estadistico"
+author: "Alberto Coll Fernández"
+date: "2023-03-29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "D:/collf/Documents/GitHub/TFG-Alberto-Coll")
+setwd("D:/collf/Documents/GitHub/TFG-Alberto-Coll")
+
+library(tidyverse)
+library(ggthemr)
+library(multcompView)
+
+source(file = "./scripts/0_data_home.R")
+source(file = "./scripts/1_funciones_graficas.R")
+
+```
+
+## Introducción
+
+Para este análisis he utilizado únicamente los datos procedentes de individuos que permanecieron en cultivo, dejando los salvajes para otro análisis. El conjunto de datos resultante contaba 36 observaciones de 25 variables. La cabeza del conjunto de datos seria la siguiente:
+```{r}
+```
+
+De estas, las variables relevantes para el ensayo son **playa**, **corte** y **tiempo**. La variable **playa** hace referencia al punto de muestreo de los animales del ensayo, y toma tres valores: Calahonda, Salobreña y Almuñécar.
+
+La variable **corte** hace referencia al tratamiento principal del experimento: las anémonas en el grupo experimental *dissected* fueron seccionadas para estimular su reproducción asexual, mientras que se estableció un grupo *control* que no sufrió tal tratamiento.
+
+Por último, la variable **tiempo** responde a los dos muestreos que se realizaron durante el experimento: uno de ellos a las pocas semanas de la sección de las anémonas (*primer muestreo*), y el segundo a los cuatro meses, cuando las anémonas habían madurado sexualmente (*segundo muestreo*). No recuerdo ahora mismo en qué mes se realizó cada uno, pero tenía intención de utilizar el nombre del mes para las gráficas y resultados.
+
+El objetivo principal del ensayo es comprobar cómo responden las anémonas a la reproducción asexual en condiciones de cultivo, y cómo interacciona este evento con su maduración sexual en cautividad.
+
+Para ello, se midieron distintas enzimas involucradas en sistemas antioxidantes del animal (**SOD**, **CAT**, **GPx**, **GR**, **GST**, **DTD** y **G6PDH**), además de su capacidad antioxidante total (**TEAC**), su concentración de **proteína**, y su concentración de malondialdehído (**MDA**). Estas variables se midieron por duplicado, tanto en los tentáculos del animal como en su tronco o pie, por lo que en total hacen 20 variables de interés.
+
+## Elección de modelo y metodología de ajuste
+
+Para examinar esta pregunta de investigación, se utilizó un modelo lineal con la siguiente estructura:
+
+$variable \sim corte \ast tiempo + playa$
+
+Que quiere decir que cada una de las variables se modeló como una función de corte, tiempo, playa, y la interacción entre corte y tiempo. El término playa aparece porque el análisis exploratorio desveló que en ocasiones los individuos procedentes de distinta playa seguían tendencias diferentes para determinadas variables.
+
+Para cada modelo, se comprobó si existía un efecto significativo de la interacción corte-tiempo, y, en caso de no haberla, se optó por un modelo más parsimonioso en el que se eliminó el término de interacción.
+
+Una vez ajustados los modelos, se comprobó el ajuste y las asunciones generales de modelos lineales. La asunción de normalidad de los residuos se comprobó por medio del test de Shapiro-Wilk, y sólo una variable (GR tentacular) violó está asunción. Esto se remedió aplicando una transformación logarítmica. La asunción de homocedasticidad se comprobó visualmente mediante la examinación de la gráfica de Escala-Localización de cada modelo, sin que hubiera grandes violaciones de esta asunción.
+
+## 
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

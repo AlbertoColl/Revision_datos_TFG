@@ -1,10 +1,10 @@
-### Analisis estadistico TFG 1                                          Efecto de la reproducción en cautividad
+### Analisis estadistico TFG 1                                            Efecto de la reproducción en cautividad
 
 # Version II (optimizada)
 
-# Alberto Coll Fernandez                                                   Comienzo: 07/12/2022                                                       Fin : 21/12/2022 (Pausa) Retomado el 13/03/2023
+# Alberto Coll Fernandez                                                   Comienzo: 07/12/2022                                                          Fin : 21/12/2022 (Pausa) Retomado el 13/03/2023
 
-# Problemas y aspectos a resolver:                                                  - Implementar test de Tukey en bucle, con ifelse para que solo lo             haga a los que resulten significativos, y al resto les rellene las           letras con "". Problema, igual es mejor hacerlo manualmente si no           son muchas, ya que a Cristina no le gusta cómo opera el test de             tukey en anova de 2 vias.                                                 - Hacer bucle for o sapply que ajuste un modelo sin interaccion, lo           compare con el modelo ya ajustado, extraiga el p-valor y en caso            de que sea significativo, reemplace el modelo en lista por el               parsimonioso   
+# Problemas y aspectos a resolver:                                                  - Revisar las diferencias significativas porque en algunos los modelos son        mas simples y si que detectan diferencias, que tuckey no                     - Luego en test de tuckey sacar letras y simplificar en *, letras, y             + o numeros. Añadir variable a datos en funcion de su combinacion de           playa, tiempo y corte. Todo esto en un bucle y que la variable vaya            cambiando
 
 ### SETUP ----
 library(tidyverse)
@@ -27,21 +27,24 @@ source(file = "./scripts/1_funciones_graficas.R") # Para tener las funciones de 
 
 ### Ajuste de modelo EXTENDIDO ----
 
-# Creamos una lista de formulas con sapply(), y posteriormente aplicamos a dicha lista el aov()
+# Creamos una lista de formulas con sapply(), y posteriormente aplicamos a dicha lista el lm()
 
-formulas <- sapply(colnames(datos[c(6:25)]), function(x){as.formula(paste0(x, " ~ playa + corte * tiempo"))}) # En el analisis extendido vamos a ver la interaccion entre corte y tiempo, ademas de incluir el factor playa
+formulas <- sapply(colnames(datos[c(6:25)]), function(x){as.formula(paste0(x, " ~ playa * corte * tiempo"))}) # En el analisis extendido vamos a ver la interaccion entre corte y tiempo, ademas de incluir el factor playa
+
+# Creamos modelos con esas formulas
+modelos <- sapply(formulas, function(x){aov(x, datos)})
 
 # Ahora comprobamos los modelos a ver que tal y en cuales quitamos interaccion (o playa)
 sapply(modelos, function(x){summary(x)})
 
 # En el siguiente bloque voy a ajustar un modelo mas parsimonioso, sin la interaccion, para eliminar el termino en aquellos casos donde no haya diferencia significativa entre ambos modelos
 
-formulas_sin <- sapply(colnames(datos[c(6:25)]), function(x){as.formula(paste0(x, " ~ playa + corte + tiempo"))})
+formulas_sin <- sapply(colnames(datos[c(6:25)]), function(x){as.formula(paste0(x, " ~ playa * corte + tiempo"))})
 
 n <- 0
 for (variable in colnames(datos[c(6:25)])) {
   n <- n + 1
-  modelo_sin <- lm(formulas_sin[[n]], datos)
+  modelo_sin <- aov(formulas_sin[[n]], datos)
   print("Se ha ajustado el modelo sin interaccion")
   likelihood <- anova(modelos[[n]], modelo_sin)
   print("Se ha hecho el ANOVA")
@@ -54,10 +57,29 @@ for (variable in colnames(datos[c(6:25)])) {
   }
 }
 
+# Hay que hacerlo ahora con playa, para cada uno utilizando playa+corte+tiempo o playa+corte*tiempo segun se haya eliminado la interaccion o no
+
+formulas_sin <- sapply(colnames(datos[c(6:25)]), function(x){as.formula(paste0(x, " ~ playa + corte + tiempo"))})
+
+n <- 0
+for (variable in colnames(datos[c(6:25)])) {
+  n <- n + 1
+  modelo_sin <- aov(formulas_sin[[n]], datos)
+  print("Se ha ajustado el modelo sin interaccion")
+  likelihood <- anova(modelos[[n]], modelo_sin)
+  print("Se ha hecho el ANOVA")
+  if (n != 3) {
+    if (likelihood$`Pr(>F)`[2] > 0.05) {
+      print("No hay diferencias, sustituimos")
+      modelos[[n]] <- modelo_sin
+    }  else {print("Los modelos son diferentes, nos quedamos con el complejo")}
+  }}
+
 ### Asunciones modelo EXTENDIDO ----
+
 # Siguiente paso: necesitamos ver si los modelos cumnplen asunciones
 # Normalidad de residuos: qqplot y test de shapiro wilk
-# Homocedasticidad: test de levene
+# Homocedasticidad: test de levene y plot scale-location
 
 sapply(modelos, function(x){
   shapiro.test(residuals(x)) 
@@ -66,16 +88,13 @@ sapply(modelos, function(x){
 modelos[[4]] <- lm(log(GR_t) ~ playa + corte + tiempo, datos)
 # La G6PDH_p, SOD_p y G6PDH_t son marginalmente significativas pero en general el histograma de residuos está bien. Hay muy poco n, hay que ser flexible
 
-
 # En cuanto a homocedasticidad, examinando las graficas de Scale-Location
 sapply(modelos, function(x){
   plot(x, which = 3)
   title(main = x$terms[[2]])
 })
+
 # Algunas un poco raras pero volvemos a lo mismo, en general bastante bien considerando el poco tamaño de muestra que tenemos
-
-modelos <- sapply(formulas, function(x){lm(x, datos)})
-
 
 # Finalmente guardamos todos los modelos individualmente en ./resultados/modelos
 # Posteriormente se pueden cargar con readRDS (y renombrarlos como objetos)
@@ -86,7 +105,61 @@ for (i in modelos) {
   n <- n + 1
 }
 
+### Tablas ANOVA y test de Tukey ----
 
+# Extraer p_valores de la tabla ANOVA
+p_valores <- sapply(modelos, function(x){
+  unlist(anova(x)$`Pr(>F)`)[c(1:8)]
+})
+sign <- p_valores < 0.05 # Igual pero podemos quedarnos con los TRUE
+
+
+# En los casos en los que haya *algun* p valor signf, correr test de tukey
+# Almacenar letras y poner en su grafica de barras correspondiente
+# Poner texto correspondiente y p valor en grafica de interaccion
+
+# Ajustar modelos triple * para tukey
+formulas_t <- sapply(colnames(datos[c(6:25)]), function(x){as.formula(paste0(x, " ~ playa * corte * tiempo"))})
+modelos_t <- sapply(formulas, function(x){aov(x, datos)})
+
+# Comprobar si en sign hay algun TRUE para ese modelo
+# En caso de que haya, continuar, si no, omitir esa variable
+# TRUE %in% sign[,n], donde n es el n de variable
+# Sacar cld con TukeyHSD() y multcompLetters4(reversed = T) para el modelo con el mismo indice
+# Crear funcion que convierta cld en cld simplificado con letras, + y *
+#generar una nueva columna en datos (mutate()) de combinacion de playa:corte:tiempo en el orden de tuckey
+# intentar juntar las cld en datos con esta columna como guia
+# sacar grafica de barras y de interaccion con letras
+
+
+# Este bloque es el encargado de sacar las cld y generar las graficas, falta guardarlas e incluir las graficas de interaccion
+for (n in c(1:20)) {
+  print(n)
+  if (n != 13){
+    i <- colnames(datos[6:25])[[n]]
+    tabla_summ <- datos %>% group_by(playa, corte, tiempo) %>%
+      summarise(media = mean(get(i), na.rm = T),
+                desvest = sd(get(i), na.rm = T),
+                error = desvest/sqrt(sum(!is.na(get(i))))) %>% 
+      arrange(desc(media))
+    tabla_summ$Letters <- rep("", 12)
+    if (TRUE %in% sign[,n]) {
+      cld <- multcompLetters4(modelos_t[[n]], TukeyHSD(modelos_t[[n]]), reversed = T)
+      cld <- as.data.frame.list(cld$`playa:corte:tiempo`) %>% select(Letters)
+      tabla_summ$Letters <- cld$Letters
+      }
+    (grafica <- barras())
+    ggsave(paste0("./resultados/graficas/", i, "_barras1.png"), width = 1500, height = 1000, units = "px",
+           scale = 2, dpi = "retina")
+    saveRDS(grafica, file = paste0("./resultados/graficas/", i, "_barras1.RDS"))
+    (grafica <- interact())
+    ggsave(paste0("./resultados/graficas/", i, "_interaccion1.png"), width = 1500, height = 800, units = "px",
+           scale = 2, dpi = "retina")
+    saveRDS(grafica, file = paste0("./resultados/graficas/", i, "_interaccion1.RDS"))
+    }}
+
+
+#### A PARTIR DE ESTA PARTE ES ANTIGUO ###
 ### Test post-hoc ----
 
 # Necesito en primer lugar extraer los p valores de los modelos, utilizando la funcion anova() y unlist() que los convierte en vectores
@@ -113,6 +186,8 @@ for (j in c(1:10)) {
 # -Usamos TukeyHSD(modelo)
 # -Usamos multcompLetters4(modelo, tukey)
 # -Extraemos letras
+
+
 
 
 

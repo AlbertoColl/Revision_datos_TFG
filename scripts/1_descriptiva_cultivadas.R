@@ -2,8 +2,6 @@
 
 # Alberto Coll Fernandez                                                   Comienzo: 23/03/2022                                                           Fin:
 
-# Problemas y aspectos a resolver:                                                   - Podria hacer otra version de la grafica de interaccion y barras para           los casos en los que no incluya la playa en el modelo, sobre todo en el         caso de interaccion que creo que ayudaria mucho a hacerla mas visual         - Deberia hacer version de las graficas para el modelo simplificado de           corte * playa
-
 ### SETUP ----
 library(tidyverse)
 library(ggthemr)
@@ -26,10 +24,13 @@ source(file = "./scripts/1_funciones_graficas.R") # Para tener las funciones de 
 # Este bloque itera cada variable del estudio y genera su grafica de barras y de interaccion con el modelo extendido.
 for (i in colnames(datos[6:25])) {
   #print(i)
-  print(barras(datos))
+  (grafica <- barras(datos))
   ggsave(paste0("./resultados/graficas/", i, "_barras1.png"), width = 1000, height = 750, units = "px",
          scale = 2, dpi = "retina")
-  print(interact(datos))
+  saveRDS(grafica, file = paste0("./resultados/graficas/", i, "_barras1.RDS"))
+  (grafica <- interact(datos))
   ggsave(paste0("./resultados/graficas/", i, "_interaccion1.png"), width = 1500, height = 750, units = "px",
          scale = 2, dpi = "retina")
+  saveRDS(grafica, file = paste0("./resultados/graficas/", i, "_interaccion1.RDS"))
+  
 }
