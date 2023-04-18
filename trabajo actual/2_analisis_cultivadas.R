@@ -2,9 +2,9 @@
 
 # Version II (optimizada)
 
-# Alberto Coll Fernandez                                                   Comienzo: 07/12/2022                                                          Fin : 21/12/2022 (Pausa) Retomado el 13/03/2023
+# Alberto Coll Fernandez                                                   Comienzo: 07/12/2022                                                          Fin : 21/12/2022 (Pausa) Retomado el 13/03/2023                                 Fin: 29/03/23
 
-# Problemas y aspectos a resolver:                                                  - Revisar las diferencias significativas porque en algunos los modelos son        mas simples y si que detectan diferencias, que tuckey no                     - Luego en test de tuckey sacar letras y simplificar en *, letras, y             + o numeros. Añadir variable a datos en funcion de su combinacion de           playa, tiempo y corte. Todo esto en un bucle y que la variable vaya            cambiando
+# Problemas y aspectos a resolver:                                                  - Falta solo sacar diferencias significativas con Tuckey pero hay algun          problema. No se puede hacer con anova de 3 vias porque se enmascaran           algunas en los modelos mas simples. Probablemente habra que hacerlo como        lo hace Cristina, y meter las letras/simbolos manualmente en un conjunto        de datos nuevo.
 
 ### SETUP ----
 library(tidyverse)
@@ -85,7 +85,7 @@ sapply(modelos, function(x){
   shapiro.test(residuals(x)) 
 }) # No hay problemas con normalidad de residuos en ningún caso, lo cual esta genial
 # GR_t no sigue normalidad de residuos, con transformación log se resuelve
-modelos[[4]] <- lm(log(GR_t) ~ playa + corte + tiempo, datos)
+modelos[[4]] <- aov(log(GR_t) ~ playa + corte + tiempo, datos)
 # La G6PDH_p, SOD_p y G6PDH_t son marginalmente significativas pero en general el histograma de residuos está bien. Hay muy poco n, hay que ser flexible
 
 # En cuanto a homocedasticidad, examinando las graficas de Scale-Location
