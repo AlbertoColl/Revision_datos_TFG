@@ -20,7 +20,6 @@
 library(dplyr)
 library(ggplot2)
 library(ggthemr)
-library(lme4)
 library(multcompView)
 
 
@@ -35,8 +34,8 @@ source(file = "./scripts/1_descriptiva_cultivadas.R") # En casa
 ### MODELO  BASICO (EJEMPLO SOD ~ CORTE y SOD ~ CORTE*TIEMPO)----
 
 # Examinar distribucion de los datos por playa y agrupados
-ggplot(data = filter(datos, tejido == "tentacle")) +
-  geom_histogram(aes(x = SOD, fill = tiempo), bins = 7) +
+ggplot(data = datos) +
+  geom_histogram(aes(x = SOD_t, fill = tiempo), bins = 7) +
   facet_wrap(~playa)
 
 # MDA, DTD, GST, SOD y CAT siguen mas o menos distribucion normal (revisar CAT y SOD)
