@@ -1,589 +1,647 @@
 ---
 title: "**Informe del análisis estadístico**"
-author: "TFG Alberto Coll Fernández"
-date: "30/03/2023"
+subtitle: "**TFG: Objetivo 2**"
+author: "Alberto Coll Fernández"
+date: "27/12/2023"
 output:
   pdf_document: default
   fontsize: 12pt
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_knit$set(root.dir = "D:/collf/Documents/GitHub/TFG-Alberto-Coll")
+knitr::opts_knit$set(root.dir = "D:/collf/Documents/GitHub/Revision_datos_TFG")
 knitr::opts_chunk$set(fig.width=6, fig.height=3, fig.align = "center") 
-setwd("D:/collf/Documents/GitHub/TFG-Alberto-Coll")
+setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
 
 library(tidyverse)
 library(ggthemr)
 library(multcompView)
 
-source(file = "./scripts/0_data_home.R")
-source(file = "./scripts/1_funciones_graficas.R")
+source(file = "./analisis 12-2023/0_data_home.R")
+source(file = "./analisis 12-2023/0_5_graficas.R")
+source(file = "./analisis 12-2023/2_analisis corte.R")
+
 
 ```
 
 # Introducción y estructura de los datos
 
-Todo el análisis estadístico lo he realizado utilizando R 4.2.2 y RStudio 2022.12.0, y empleando únicamente los datos procedentes de las anémonas que permanecieron en cultivo, dejando los salvajes para otro análisis. El conjunto de datos resultante contaba 36 observaciones de 25 variables. La cabeza del conjunto de datos seria la siguiente:
+Todo el análisis estadístico lo he realizado utilizando R 4.3.0 y RStudio 2023.12.0. Para esta parte de los datos de mi TFG, he utilizado únicamente las ortiguillas en cultivo. He comparado el grupo control (que no fue cortado) con el que he llamado t1 (las que fueron cortadas), y su equivalente grupo t2 (las ortiguillas cortadas, en el segundo muestreo al final del estudio). No he diferenciado entre organismos procedentes de una playa u otra.
 
-```{r, echo = FALSE}
-knitr::kable(head(select(datos, individuo, playa, corte, tiempo, SOD_t, CAT_t, GPx_t, GR_t)))
-```
-
-De estas, las variables relevantes para el ensayo son **playa**, **corte** y **tiempo**. La variable **corte** hace referencia al tratamiento principal del experimento, y toma los valores *control* o *dissected*. Por último, la variable **tiempo** responde a los dos muestreos que se realizaron durante el experimento. No recuerdo ahora mismo en qué mes se realizó cada uno, pero tenía intención de utilizar el nombre del mes para las gráficas y resultados.
-
-El objetivo principal del ensayo es comprobar cómo responden las anémonas a la reproducción asexual en condiciones de cultivo, y cómo interacciona este evento con su maduración sexual en cautividad. Para ello, se midieron distintas enzimas involucradas en sistemas antioxidantes del animal (**SOD**, **CAT**, **GPx**, **GR**, **GST**, **DTD** y **G6PDH**), además de su capacidad antioxidante total (**TEAC**), su concentración de **proteína**, y su concentración de malondialdehído (**MDA**). Estas variables se midieron por duplicado, tanto en los tentáculos del animal como en su tronco o pie, por lo que en total hacen 20 variables de interés.
+El objetivo principal es comprobar cómo responden las anémonas a la reproducción asexual en condiciones de cultivo. Para ello, se midieron distintas enzimas involucradas en sistemas antioxidantes del animal (**SOD**, **CAT**, **GPx**, **GR**, **GST**, **DTD** y **G6PDH**), además de su capacidad antioxidante total (**TEAC**), su concentración de **proteína**, y su concentración de malondialdehído (**MDA**). Estas variables se midieron por duplicado, tanto en los tentáculos del animal como en su tronco o pie, por lo que en total hacen 20 variables de interés.
 
 # Metodología y elección del modelo
 
-Para examinar esta pregunta de investigación, he utilizado un modelo lineal con la siguiente estructura:
+Para examinar esta pregunta de investigación, he comprobado que las variables respuesta siguen una distribución aproximadamente normal, y he transformado logarítmicamente las variables que no cumplían este requisito. Una vez hecho esto, he utilizado un anova de una vía para comparar las medias entre los tres grupos. En caso de encontrarse diferencias significativas, utilicé un test de Tukey como test post-hoc para evaluar dichas diferencias. Una vez ajustados los modelos estadísticos, evalué las asunciones de normalidad de los residuos y homocedaticidad mediante examinación de la gráfica Q-Q y test de Levene, respectivamente,
 
-$$
-\begin{aligned}
- variable \sim corte \ast tiempo \ast playa
-\end{aligned}
-$$
+Las variables que requirieron una transformación logarítmica fueron la GPx y G6PDH en el disco pedio; y la SOD, CAT, GR y GST en tentáculo.
 
-Que quiere decir que cada una de las variables se modeló como una función de corte, tiempo, playa, y la interacción entre estos factores. El término playa aparece porque el análisis exploratorio desveló que en ocasiones los individuos procedentes de distinta playa seguían tendencias diferentes para determinadas variables.
-
-He optado por este modelo en lugar de hacer varios más sencillos para no realizar tantas comparaciones y test estadísticos, que al final incrementan mucho la probabilidad de error de tipo I. Tras ajustar los modelos, para cada variable, he comprobado si existía un efecto significativo de la interacción corte-tiempo, y, en caso de no haberla, opté por un modelo más parsimonioso, sin ese término de interacción.
-
-Una vez ajustados los modelos, he comprobado el ajuste y las asunciones generales de modelos lineales. La asunción de normalidad de los residuos la he comprobado por medio del test de Shapiro-Wilk, y sólo una variable (GR tentacular) violó está asunción. Para resolverlo, apliqué una transformación logarítmica. La asunción de homocedasticidad la comprobé visualmente mediante la examinación de la gráfica de Escala-Localización de cada modelo, y no encontré grandes violaciones de esta asunción (hay que tener en cuenta que con tan poco tamaño de muestra siempre hay irregularidades).
-
-Cuando para una variable se detectaron efectos significativos de cualquier tipo, hice un test post-hoc (Test de Tukey) para examinar en detalle dichas diferencias. Por el momento he usado las letras fruto del ANOVA con todos los grupos, pero en algunos casos no se detectan diferencias, así que tengo intención de comparar grupo a grupo como ya hicimos. Ahora mismo aún no aparecen en las gráficas
-
-He elaborado dos tipos de gráficas para visualizar los datos. Por un lado, gráficas de barras más tradicionales, y por otro lado, gráficas de interacción, que favorecen la visualización de los efectos de **corte** y **tiempo**. Los datos utilizados en ambos casos corresponden a la media $\pm$ error estándar de la media (SEM). Las letras y símbolos de las diferencias significativas aún no están puestos, pero tendré que usar algo más que letras y asteriscos porque tenemos 3 factores, no dos. Pensé en un +, pero coméntame si se suele usar otra cosa porque no lo sé.
+Finalmente, he expuesto los resultados del análisis en gráficas de barras. Para tenerlo lo antes posible, no las he retocado mucho, así que le faltan cosas como el título. Además, podrían utilizarse diagramas de cajas en vez de gráficas de barras en este caso concreto, ya que tenemos buen tamaño de muestra. Eso es, las graficas no son definitivas, son para que sepas el resultado del análisis.
 
 # Resultados
 
 ## Superóxido dismutasa (SOD)
 
-### SOD en tentáculo
-
-En las gráficas de barras, he separado en dos paneles diferentes los datos del primer y segundo muestreo (variable **tiempo**), mientras que en el eje x se encuentra la variable **corte**. Las playas se muestran mediante el código de color. Esta disposición se puede cambiar, así que si quieres alguna modificación en las gráficas basta con decirme qué variable quieres en cada sitio.
+### SOD en pie
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.width=6, fig.height=3}
-# SOD TENTACULO
-setwd("D:/collf/Documents/GitHub/TFG-Alberto-Coll")
+# SOD PIE
+setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
 n <- 1
 
-# Crear tabla_summ y llamar a barras() o interact()
-i <- colnames(datos[6:25])[[n]]
-tabla_summ <- datos %>% group_by(playa, corte, tiempo) %>% 
-  summarise(media = mean(get(i), na.rm = T),
-            desvest = sd(get(i), na.rm = T),
-            error = desvest/sqrt(sum(!is.na(get(i))))) %>%
-  arrange(desc(media))
-
-tabla_summ$Letters <- rep("", 12)
-
-plot <- barras()
-print(plot)
+# Crear tabla_summ y llamar a barras()
+i <- colnames(data_2[7:16])[[n]]
+  tabla_summ <- data_2 %>%
+    filter(tejido == "Pie") %>%   group_by(tratamiento) %>% 
+    summarise(media = mean(get(i), na.rm = T),
+              desvest = sd(get(i), na.rm = T),
+              error = desvest/sqrt(sum(!is.na(get(i)))))
+  if ((summary(modelos_p[[n]])[[1]][["Pr(>F)"]][1]) <= 0.05) {
+    tukey_loop <- TukeyHSD(modelos_p[[n]])
+    cld.tukey <- multcompLetters4(modelos_p[[n]], tukey_loop, reversed = T)
+    (letras <- rownames_to_column(as.data.frame(cld.tukey$tratamiento$Letters)))
+    colnames(letras) <- c("tratamiento", "tukey")
+    tabla_summ <- merge(tabla_summ, letras)
+  } else {
+    tabla_summ$tukey <- c("", "", "")
+  }
+  p <- barras_tfm()
+  print(p)
 ```
 
-La actividad SOD tentacular se mantuvo relativamente uniforme en todos los grupos experimentales, con una ligera tendencia a mayor actividad en individuos procedentes de Salobreña, pero sin llegar a ser significativas. La gráfica de interacción sería la siguiente:
+La actividad SOD en disco pedio presenta sólo diferencias marginalmente significativas entre los tres grupos, por lo que no se realizó test post hoc.
 
-```{r, echo=FALSE, warning=FALSE, message=FALSE }
-# SOD TENTACULO
-n <- 1
+### SOD en tentáculo
 
-# Crear tabla_summ y llamar a barras() o interact()
-i <- colnames(datos[6:25])[[n]]
-tabla_summ <- datos %>% group_by(playa, corte, tiempo) %>% 
-  summarise(media = mean(get(i), na.rm = T),
-            desvest = sd(get(i), na.rm = T),
-            error = desvest/sqrt(sum(!is.na(get(i))))) %>%
-  arrange(desc(media))
-
-tabla_summ$Letters <- rep("", 12)
-
-plot <- interact()
-print(plot)
-```
-
-En este tipo de gráficas he separado en tres paneles los datos de cada playa, utilizando además un color distinto para cada una de ellas. Dentro de cada panel, en el eje x tenemos la variable **tiempo**, mientras que el corte lo vemos con dos formas diferentes de cada punto. En esta gráfica podemos ver de nuevo esa tendencia ligeramente diferente en Salobreña.
-
-### SOD en disco pedio
-
-En el caso de la SOD pedia, sí que se detectaron diferencias significativas, en concreto asociadas a la variable **tiempo** y a su interacción con **corte**.
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.width=6, fig.height=3 }
-# SOD PIE
-setwd("D:/collf/Documents/GitHub/TFG-Alberto-Coll")
-n <- 11
+# SOD TENTACULO
+setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
+n <- 1
 
 # Crear tabla_summ y llamar a barras() o interact()
-i <- colnames(datos[6:25])[[n]]
-tabla_summ <- datos %>% group_by(playa, corte, tiempo) %>% 
-  summarise(media = mean(get(i), na.rm = T),
-            desvest = sd(get(i), na.rm = T),
-            error = desvest/sqrt(sum(!is.na(get(i))))) %>%
-  arrange(desc(media))
-
-tabla_summ$Letters <- rep("", 12)
-
-plot <- barras()
-print(plot)
+i <- colnames(data_2[7:16])[[n]]
+  tabla_summ <- data_2 %>%
+    filter(tejido == "Tentaculo") %>%   group_by(tratamiento) %>% 
+    summarise(media = mean(get(i), na.rm = T),
+              desvest = sd(get(i), na.rm = T),
+              error = desvest/sqrt(sum(!is.na(get(i)))))
+  if ((summary(modelos_t[[n]])[[1]][["Pr(>F)"]][1]) <= 0.05) {
+    tukey_loop <- TukeyHSD(modelos_t[[n]])
+    cld.tukey <- multcompLetters4(modelos_t[[n]], tukey_loop, reversed = T)
+    (letras <- rownames_to_column(as.data.frame(cld.tukey$tratamiento$Letters)))
+    colnames(letras) <- c("tratamiento", "tukey")
+    tabla_summ <- merge(tabla_summ, letras)
+  } else {
+    tabla_summ$tukey <- c("", "", "")
+  }
+  p <- barras_tfm()
+  print(p)
 ```
 
-La gráfica de barras para mi gusto es muy liosa, y pienso que se ve bastante mejor la situación en la gráfica de interacción:
-
-```{r, echo=FALSE, warning=FALSE, message=FALSE }
-# SOD PIE
-setwd("D:/collf/Documents/GitHub/TFG-Alberto-Coll")
-n <- 11
-
-# Crear tabla_summ y llamar a barras() o interact()
-i <- colnames(datos[6:25])[[n]]
-tabla_summ <- datos %>% group_by(playa, corte, tiempo) %>% 
-  summarise(media = mean(get(i), na.rm = T),
-            desvest = sd(get(i), na.rm = T),
-            error = desvest/sqrt(sum(!is.na(get(i))))) %>%
-  arrange(desc(media))
-
-tabla_summ$Letters <- rep("", 12)
-
-plot <- interact()
-print(plot)
-```
-
-Ahora sí, se puede observar cómo la maduración parece incrementar los niveles de actividad SOD en el disco pedio, sobre todo para los individuos que además fueron cortados, de ahí la significación estadística de la interacción entre ambas variables. Hay que destacar que en Calahonda tenemos el caso contrario, lo que indica que organismos de origen diferente responden de diferente manera a los tratamientos. Aun así, hay que destacar que estas diferencias, aunque significativas, son de pequeña magnitud.
+En SOD tentacular, no hay diferencias significativas entre grupos
 
 ## Catalasa (CAT)
 
-### CAT en tentáculo
+### CAT en pie
 
-En esta enzima sí que encontramos diferencias significativas de mayor relevancia. Vamos primero con la gráfica de barras de la catalasa tentacular:
-
-```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.width=6, fig.height=3 }
-# CAT TENTACULO
-setwd("D:/collf/Documents/GitHub/TFG-Alberto-Coll")
-n <- 2
-
-# Crear tabla_summ y llamar a barras() o interact()
-i <- colnames(datos[6:25])[[n]]
-tabla_summ <- datos %>% group_by(playa, corte, tiempo) %>% 
-  summarise(media = mean(get(i), na.rm = T),
-            desvest = sd(get(i), na.rm = T),
-            error = desvest/sqrt(sum(!is.na(get(i))))) %>%
-  arrange(desc(media))
-
-tabla_summ$Letters <- rep("", 12)
-
-plot <- barras()
-print(plot)
-```
-
-La catalasa tentacular muetra una clara tendencia diferente en los individuos de Salobreña, que se hace evidente en el grupo que fue cortado y maduró sexualmente. A parte de esto, tenemos un efecto de interacción **corte**:**tiempo**, que se aprecia muy bien en la gráfica de interacción:
-
-```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.width=6, fig.height=3  }
-# CAT TENTACULO
-setwd("D:/collf/Documents/GitHub/TFG-Alberto-Coll")
-n <- 2
-
-# Crear tabla_summ y llamar a barras() o interact()
-i <- colnames(datos[6:25])[[n]]
-tabla_summ <- datos %>% group_by(playa, corte, tiempo) %>% 
-  summarise(media = mean(get(i), na.rm = T),
-            desvest = sd(get(i), na.rm = T),
-            error = desvest/sqrt(sum(!is.na(get(i))))) %>%
-  arrange(desc(media))
-
-tabla_summ$Letters <- rep("", 12)
-
-plot <- interact()
-print(plot)
-```
-
-Las líneas que se cruzan en Calahonda y Almuñécar indican que, según el individuo haya sido cortados o no, la actividad catalasa responde incrementándose o disminuyendo con la maduración sexual.También se intuye una diferencia en los individuos cortados inmaduros, que fue marginalmente significativa en el modelo estadístico.
-
-### CAT en disco pedio
-
-En cuanto a la CAT en disco pedio, vemos que el corte produce un efecto muy patente en su actividad, y que tambien hay diferencias entre las tres playas. En este caso no hubo ningún efecto de la maduración sexual ni ninguna interacción. A partir de ahora voy a omitir la gráfica de barras para no alargar demasiado el documento, y porque creo que es mucho más visual en la de interacción.
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.width=6, fig.height=3 }
 # CAT PIE
-setwd("D:/collf/Documents/GitHub/TFG-Alberto-Coll")
-n <- 12
+setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
+n <- 2
+
+# Crear tabla_summ y llamar a barras()
+i <- colnames(data_2[7:16])[[n]]
+  tabla_summ <- data_2 %>%
+    filter(tejido == "Pie") %>%   group_by(tratamiento) %>% 
+    summarise(media = mean(get(i), na.rm = T),
+              desvest = sd(get(i), na.rm = T),
+              error = desvest/sqrt(sum(!is.na(get(i)))))
+  if ((summary(modelos_p[[n]])[[1]][["Pr(>F)"]][1]) <= 0.05) {
+    tukey_loop <- TukeyHSD(modelos_p[[n]])
+    cld.tukey <- multcompLetters4(modelos_p[[n]], tukey_loop, reversed = T)
+    (letras <- rownames_to_column(as.data.frame(cld.tukey$tratamiento$Letters)))
+    colnames(letras) <- c("tratamiento", "tukey")
+    tabla_summ <- merge(tabla_summ, letras)
+  } else {
+    tabla_summ$tukey <- c("", "", "")
+  }
+  p <- barras_tfm()
+  print(p)
+```
+
+De nuevo tenemos diferencias marginalmente significativas en el pie, ahora para la catalasa. Parece haber una tendencia a que su actividad se incrementa con el corte y aun mas al pasar el tiempo, pero no hay evidencia estadística con nuestros datos.
+
+### CAT en tentaculo
+
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.width=6, fig.height=3 }
+# CAT TENTACULO
+setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
+n <- 2
 
 # Crear tabla_summ y llamar a barras() o interact()
-i <- colnames(datos[6:25])[[n]]
-tabla_summ <- datos %>% group_by(playa, corte, tiempo) %>% 
-  summarise(media = mean(get(i), na.rm = T),
-            desvest = sd(get(i), na.rm = T),
-            error = desvest/sqrt(sum(!is.na(get(i))))) %>%
-  arrange(desc(media))
-
-tabla_summ$Letters <- rep("", 12)
-
-plot <- interact()
-print(plot)
+i <- colnames(data_2[7:16])[[n]]
+  tabla_summ <- data_2 %>%
+    filter(tejido == "Tentaculo") %>%   group_by(tratamiento) %>% 
+    summarise(media = mean(get(i), na.rm = T),
+              desvest = sd(get(i), na.rm = T),
+              error = desvest/sqrt(sum(!is.na(get(i)))))
+  if ((summary(modelos_t[[n]])[[1]][["Pr(>F)"]][1]) <= 0.05) {
+    tukey_loop <- TukeyHSD(modelos_t[[n]])
+    cld.tukey <- multcompLetters4(modelos_t[[n]], tukey_loop, reversed = T)
+    (letras <- rownames_to_column(as.data.frame(cld.tukey$tratamiento$Letters)))
+    colnames(letras) <- c("tratamiento", "tukey")
+    tabla_summ <- merge(tabla_summ, letras)
+  } else {
+    tabla_summ$tukey <- c("", "", "")
+  }
+  p <- barras_tfm()
+  print(p)
 ```
+En la CAT tentacular si que vemos diferencias claramente significativas, y un patron que se repite consistentemente a lo largo de otras variables: la actividad de la enzima se icnrementa en el grupo que ha recibido el corte recientemente, pero pasado el tiempo vuelve a valores similares a los del control inicial.
+
 
 ## Glutatión peroxidasa (GPx)
 
-Como ya esperábamos, la GPx no da mucho juego para el análisis porque faltan datos, aquellos en los que obtuvimos valores de actividad negativa. Podría transformalos en 0 pero no se cómo de fiable sería el análisis. En cualquier caso, faltan datos relativos a grupos experimentales completos, por lo que no he podido ajustar el modelo estadístico. Te dejo aquí una de las gráficas para que veas la situación:
+### GPx en pie
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.width=6, fig.height=3  }
+# GPX PIE
+setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
+n <- 3
+
+# Crear tabla_summ y llamar a barras()
+i <- colnames(data_2[7:16])[[n]]
+  tabla_summ <- data_2 %>%
+    filter(tejido == "Pie") %>%   group_by(tratamiento) %>% 
+    summarise(media = mean(get(i), na.rm = T),
+              desvest = sd(get(i), na.rm = T),
+              error = desvest/sqrt(sum(!is.na(get(i)))))
+  if ((summary(modelos_p[[n]])[[1]][["Pr(>F)"]][1]) <= 0.05) {
+    tukey_loop <- TukeyHSD(modelos_p[[n]])
+    cld.tukey <- multcompLetters4(modelos_p[[n]], tukey_loop, reversed = T)
+    (letras <- rownames_to_column(as.data.frame(cld.tukey$tratamiento$Letters)))
+    colnames(letras) <- c("tratamiento", "tukey")
+    tabla_summ <- merge(tabla_summ, letras)
+  } else {
+    tabla_summ$tukey <- c("", "", "")
+  }
+  p <- barras_tfm()
+  print(p)
+```
+En este caso, los resultados son sólo marginalmente significativos por la mala calidad de los datos, que tenian algunos valores no disponibles y mucha dispersion en general. Aun asi podemos ver cierta tendencia. Este modelo cogerlo con pinzas porque la distribucion de los residuos se alejaba mas de la normal de lo que debería.
+
+### GPx en tentaculo
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.width=6, fig.height=3 }
 # GPx TENTACULO
-setwd("D:/collf/Documents/GitHub/TFG-Alberto-Coll")
+setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
 n <- 3
 
 # Crear tabla_summ y llamar a barras() o interact()
-i <- colnames(datos[6:25])[[n]]
-tabla_summ <- datos %>% group_by(playa, corte, tiempo) %>% 
-  summarise(media = mean(get(i), na.rm = T),
-            desvest = sd(get(i), na.rm = T),
-            error = desvest/sqrt(sum(!is.na(get(i))))) %>%
-  arrange(desc(media))
-
-tabla_summ$Letters <- rep("", 12)
-
-plot <- interact()
-print(plot)
+i <- colnames(data_2[7:16])[[n]]
+  tabla_summ <- data_2 %>%
+    filter(tejido == "Tentaculo") %>%   group_by(tratamiento) %>% 
+    summarise(media = mean(get(i), na.rm = T),
+              desvest = sd(get(i), na.rm = T),
+              error = desvest/sqrt(sum(!is.na(get(i)))))
+  if ((summary(modelos_t[[n]])[[1]][["Pr(>F)"]][1]) <= 0.05) {
+    tukey_loop <- TukeyHSD(modelos_t[[n]])
+    cld.tukey <- multcompLetters4(modelos_t[[n]], tukey_loop, reversed = T)
+    (letras <- rownames_to_column(as.data.frame(cld.tukey$tratamiento$Letters)))
+    colnames(letras) <- c("tratamiento", "tukey")
+    tabla_summ <- merge(tabla_summ, letras)
+  } else {
+    tabla_summ$tukey <- c("", "", "")
+  }
+  p <- barras_tfm()
+  print(p)
 ```
+Aquino hay diferencias ningunas, quizás por la calidad de los datos o quizás porque realmente no hay efecto.
+
 
 ## Glutatión reductasa (GR)
+### GR en pie
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.width=6, fig.height=3  }
+# GR PIE
+setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
+n <- 4
+
+# Crear tabla_summ y llamar a barras()
+i <- colnames(data_2[7:16])[[n]]
+  tabla_summ <- data_2 %>%
+    filter(tejido == "Pie") %>%   group_by(tratamiento) %>% 
+    summarise(media = mean(get(i), na.rm = T),
+              desvest = sd(get(i), na.rm = T),
+              error = desvest/sqrt(sum(!is.na(get(i)))))
+  if ((summary(modelos_p[[n]])[[1]][["Pr(>F)"]][1]) <= 0.05) {
+    tukey_loop <- TukeyHSD(modelos_p[[n]])
+    cld.tukey <- multcompLetters4(modelos_p[[n]], tukey_loop, reversed = T)
+    (letras <- rownames_to_column(as.data.frame(cld.tukey$tratamiento$Letters)))
+    colnames(letras) <- c("tratamiento", "tukey")
+    tabla_summ <- merge(tabla_summ, letras)
+  } else {
+    tabla_summ$tukey <- c("", "", "")
+  }
+  p <- barras_tfm()
+  print(p)
+```
+Volvemos a tener el mismo patrón: la acitivdad de la GR en el pie se incrementa tras el corte, pero luego se recupera con el paso del tiempo.
 
 ### GR en tentáculo
 
-La actiidad GR en tentáculo muestra una respuesta muy clara y uniforme en las tres playas, sin interacciones con otras variables: la actividad disminuye con la maduración sexual:
 
-```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.width=6, fig.height=3  }
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.width=6, fig.height=3 }
 # GR TENTACULO
-setwd("D:/collf/Documents/GitHub/TFG-Alberto-Coll")
+setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
 n <- 4
 
 # Crear tabla_summ y llamar a barras() o interact()
-i <- colnames(datos[6:25])[[n]]
-tabla_summ <- datos %>% group_by(playa, corte, tiempo) %>% 
-  summarise(media = mean(get(i), na.rm = T),
-            desvest = sd(get(i), na.rm = T),
-            error = desvest/sqrt(sum(!is.na(get(i))))) %>%
-  arrange(desc(media))
-
-tabla_summ$Letters <- rep("", 12)
-
-plot <- interact()
-print(plot)
+i <- colnames(data_2[7:16])[[n]]
+  tabla_summ <- data_2 %>%
+    filter(tejido == "Tentaculo") %>%   group_by(tratamiento) %>% 
+    summarise(media = mean(get(i), na.rm = T),
+              desvest = sd(get(i), na.rm = T),
+              error = desvest/sqrt(sum(!is.na(get(i)))))
+  if ((summary(modelos_t[[n]])[[1]][["Pr(>F)"]][1]) <= 0.05) {
+    tukey_loop <- TukeyHSD(modelos_t[[n]])
+    cld.tukey <- multcompLetters4(modelos_t[[n]], tukey_loop, reversed = T)
+    (letras <- rownames_to_column(as.data.frame(cld.tukey$tratamiento$Letters)))
+    colnames(letras) <- c("tratamiento", "tukey")
+    tabla_summ <- merge(tabla_summ, letras)
+  } else {
+    tabla_summ$tukey <- c("", "", "")
+  }
+  p <- barras_tfm()
+  print(p)
 ```
+En este caso tenemos diferencias significativas en el último grupo, que tiene niveles inferiores al resto.
 
-### GR en disco pedio
-
-En el caso de su actividad en disco pedio, tenemos además un efecto del corte. De este modo, los individuos cortados tienen siempre mayor actividad GR, y esta desciende en todos los casos con la maduración sexual. Si te fijas, el hecho de que las líneas sean paralelas o casi paralelas deja muy claro la ausencia de interacción entre variables.
-
-```{r, echo=FALSE, warning=FALSE, message=FALSE }
-# GR PIE
-setwd("D:/collf/Documents/GitHub/TFG-Alberto-Coll")
-n <- 14
-
-# Crear tabla_summ y llamar a barras() o interact()
-i <- colnames(datos[6:25])[[n]]
-tabla_summ <- datos %>% group_by(playa, corte, tiempo) %>% 
-  summarise(media = mean(get(i), na.rm = T),
-            desvest = sd(get(i), na.rm = T),
-            error = desvest/sqrt(sum(!is.na(get(i))))) %>%
-  arrange(desc(media))
-
-tabla_summ$Letters <- rep("", 12)
-
-plot <- interact()
-print(plot)
-```
 
 ## Glutatión-S transferasa (GST)
 
-### GST en tentáculo
+### GST en pie
 
-En el caso se la GST tentacular, su actividad se ve afectada significativamente por el corte y por el tiempo, además de existir una interacción entre ambas. En la gráfica podemos observar que los individuos cortados presentan mayor actividad, pero que esta desciende mucho tras la maduración sexual, más que en los organismos que no han recibido dicho tratamiento.
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.width=6, fig.height=3  }
+# GST PIE
+setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
+n <- 5
+
+# Crear tabla_summ y llamar a barras()
+i <- colnames(data_2[7:16])[[n]]
+  tabla_summ <- data_2 %>%
+    filter(tejido == "Pie") %>%   group_by(tratamiento) %>% 
+    summarise(media = mean(get(i), na.rm = T),
+              desvest = sd(get(i), na.rm = T),
+              error = desvest/sqrt(sum(!is.na(get(i)))))
+  if ((summary(modelos_p[[n]])[[1]][["Pr(>F)"]][1]) <= 0.05) {
+    tukey_loop <- TukeyHSD(modelos_p[[n]])
+    cld.tukey <- multcompLetters4(modelos_p[[n]], tukey_loop, reversed = T)
+    (letras <- rownames_to_column(as.data.frame(cld.tukey$tratamiento$Letters)))
+    colnames(letras) <- c("tratamiento", "tukey")
+    tabla_summ <- merge(tabla_summ, letras)
+  } else {
+    tabla_summ$tukey <- c("", "", "")
+  }
+  p <- barras_tfm()
+  print(p)
+```
+En la GST pedia no tenemos diferencias significativas.
+
+### GST en tentaculo
+
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE }
 # GST TENTACULO
-setwd("D:/collf/Documents/GitHub/TFG-Alberto-Coll")
+setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
 n <- 5
 
 # Crear tabla_summ y llamar a barras() o interact()
-i <- colnames(datos[6:25])[[n]]
-tabla_summ <- datos %>% group_by(playa, corte, tiempo) %>% 
-  summarise(media = mean(get(i), na.rm = T),
-            desvest = sd(get(i), na.rm = T),
-            error = desvest/sqrt(sum(!is.na(get(i))))) %>%
-  arrange(desc(media))
-
-tabla_summ$Letters <- rep("", 12)
-
-plot <- interact()
-print(plot)
+i <- colnames(data_2[7:16])[[n]]
+  tabla_summ <- data_2 %>%
+    filter(tejido == "Tentaculo") %>%   group_by(tratamiento) %>% 
+    summarise(media = mean(get(i), na.rm = T),
+              desvest = sd(get(i), na.rm = T),
+              error = desvest/sqrt(sum(!is.na(get(i)))))
+  if ((summary(modelos_t[[n]])[[1]][["Pr(>F)"]][1]) <= 0.05) {
+    tukey_loop <- TukeyHSD(modelos_t[[n]])
+    cld.tukey <- multcompLetters4(modelos_t[[n]], tukey_loop, reversed = T)
+    (letras <- rownames_to_column(as.data.frame(cld.tukey$tratamiento$Letters)))
+    colnames(letras) <- c("tratamiento", "tukey")
+    tabla_summ <- merge(tabla_summ, letras)
+  } else {
+    tabla_summ$tukey <- c("", "", "")
+  }
+  p <- barras_tfm()
+  print(p)
 ```
-
-### GST en pie
-
-Sin embargo, en la actividad pedia tenemos principalmente diferencias entre puntos de muestreo, y una interacción de la población de origen con la respuesta al corte que vemos muy claramente en Almuñécar, donde la actividad es mucho más alta en individuos cortados. Esta actividad además se incrementa aún más con la maduración sexual, aunque sólo para individuos de este origen.
-
-```{r, echo=FALSE, warning=FALSE, message=FALSE }
-# GST PIE
-setwd("D:/collf/Documents/GitHub/TFG-Alberto-Coll")
-n <- 15
-
-# Crear tabla_summ y llamar a barras() o interact()
-i <- colnames(datos[6:25])[[n]]
-tabla_summ <- datos %>% group_by(playa, corte, tiempo) %>% 
-  summarise(media = mean(get(i), na.rm = T),
-            desvest = sd(get(i), na.rm = T),
-            error = desvest/sqrt(sum(!is.na(get(i))))) %>%
-  arrange(desc(media))
-
-tabla_summ$Letters <- rep("", 12)
-
-plot <- interact()
-print(plot)
-```
+De nuevo el mismo patron en la GST tentacular, con diferencias significativas.
 
 ## DT diaforasa (DTD)
 
-### DTD en tentáculo
-
-En esta enzima medida en tentáculo volvemos a obtener una respuesta muy clara: los individuos cortados presentan mayor actividad DTD, y esta disminuye en todos los casos con la maduración sexual. El ANOVA avisa que la interacción corte:tiempo es significativa, y podría referirse a que este descenso de la actividad es más acusado en individuos cortados y más suave en el grupo control.
-
-```{r, echo=FALSE, warning=FALSE, message=FALSE }
-# DTD TENTACULO
-setwd("D:/collf/Documents/GitHub/TFG-Alberto-Coll")
-n <- 6
-
-# Crear tabla_summ y llamar a barras() o interact()
-i <- colnames(datos[6:25])[[n]]
-tabla_summ <- datos %>% group_by(playa, corte, tiempo) %>% 
-  summarise(media = mean(get(i), na.rm = T),
-            desvest = sd(get(i), na.rm = T),
-            error = desvest/sqrt(sum(!is.na(get(i))))) %>%
-  arrange(desc(media))
-
-tabla_summ$Letters <- rep("", 12)
-
-plot <- interact()
-print(plot)
-```
-
-### DTD en disco pedio
-
-Al medir la misma enzima en el disco pedio, vemos cómo el corte sigue teniendo un efecto importante sobre la actividad DTD, aunque en este caso el efecto de la maduración sexual no es significativo. También parece que Salobreña tiene mayor actividad en general, y el ANOVA ha detectado un efecto significativo de la variable palya (hay que esperar a las letras para ver la naturaleza de estas diferencias).
+### DTD en pie
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE }
 # DTD PIE
-setwd("D:/collf/Documents/GitHub/TFG-Alberto-Coll")
-n <- 16
+setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
+n <- 6
+
+# Crear tabla_summ y llamar a barras()
+i <- colnames(data_2[7:16])[[n]]
+  tabla_summ <- data_2 %>%
+    filter(tejido == "Pie") %>%   group_by(tratamiento) %>% 
+    summarise(media = mean(get(i), na.rm = T),
+              desvest = sd(get(i), na.rm = T),
+              error = desvest/sqrt(sum(!is.na(get(i)))))
+  if ((summary(modelos_p[[n]])[[1]][["Pr(>F)"]][1]) <= 0.05) {
+    tukey_loop <- TukeyHSD(modelos_p[[n]])
+    cld.tukey <- multcompLetters4(modelos_p[[n]], tukey_loop, reversed = T)
+    (letras <- rownames_to_column(as.data.frame(cld.tukey$tratamiento$Letters)))
+    colnames(letras) <- c("tratamiento", "tukey")
+    tabla_summ <- merge(tabla_summ, letras)
+  } else {
+    tabla_summ$tukey <- c("", "", "")
+  }
+  p <- barras_tfm()
+  print(p)
+```
+Aunque se intuye un patrón ascendente, no hay diferencias significativas ni marginalmente significativas entre grupos.
+
+### DTD en tentaculo
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE }
+# DTD TENTACULO
+setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
+n <- 6
 
 # Crear tabla_summ y llamar a barras() o interact()
-i <- colnames(datos[6:25])[[n]]
-tabla_summ <- datos %>% group_by(playa, corte, tiempo) %>% 
-  summarise(media = mean(get(i), na.rm = T),
-            desvest = sd(get(i), na.rm = T),
-            error = desvest/sqrt(sum(!is.na(get(i))))) %>%
-  arrange(desc(media))
-
-tabla_summ$Letters <- rep("", 12)
-
-plot <- interact()
-print(plot)
+i <- colnames(data_2[7:16])[[n]]
+  tabla_summ <- data_2 %>%
+    filter(tejido == "Tentaculo") %>%   group_by(tratamiento) %>% 
+    summarise(media = mean(get(i), na.rm = T),
+              desvest = sd(get(i), na.rm = T),
+              error = desvest/sqrt(sum(!is.na(get(i)))))
+  if ((summary(modelos_t[[n]])[[1]][["Pr(>F)"]][1]) <= 0.05) {
+    tukey_loop <- TukeyHSD(modelos_t[[n]])
+    cld.tukey <- multcompLetters4(modelos_t[[n]], tukey_loop, reversed = T)
+    (letras <- rownames_to_column(as.data.frame(cld.tukey$tratamiento$Letters)))
+    colnames(letras) <- c("tratamiento", "tukey")
+    tabla_summ <- merge(tabla_summ, letras)
+  } else {
+    tabla_summ$tukey <- c("", "", "")
+  }
+  p <- barras_tfm()
+  print(p)
 ```
+De nuevo el mismo patrón en la DTD tentacular. Parece que está presente en muchas enzimas medidas en tentáculo y en alguna en el pie.
+
 
 ## Glucosa-6-P deshidrogenasa
 
-### G6PDH en tentáculo
-
-Con los resultados de esta enzima hay que andarse con ojo porque la calidad de los datos era bastante mejorable, aunque sí que permitió el análisis estadístico. En cualquier caso, la actividad G6PDH tentacular responde reduciéndose en los individuos cortados (a excepción de Salobreña donde parece que no hay mucha diferencia). La maduración sexual no produce diferencias significativas.
-
-```{r, echo=FALSE, warning=FALSE, message=FALSE }
-# G6PDH TENTACULO
-setwd("D:/collf/Documents/GitHub/TFG-Alberto-Coll")
-n <- 7
-
-# Crear tabla_summ y llamar a barras() o interact()
-i <- colnames(datos[6:25])[[n]]
-tabla_summ <- datos %>% group_by(playa, corte, tiempo) %>% 
-  summarise(media = mean(get(i), na.rm = T),
-            desvest = sd(get(i), na.rm = T),
-            error = desvest/sqrt(sum(!is.na(get(i))))) %>%
-  arrange(desc(media))
-
-tabla_summ$Letters <- rep("", 12)
-
-plot <- interact()
-print(plot)
-```
-
-### G6PDH en disco pedio
-
-En el caso del pie, nos encontramos con respuestas diferentes según el punto de muestreo. En Calahonda y Salobreña no vemos apenas efectos, y no hay diferencias significativas. Sin embargo, en Almuñécar, la maduración incrementó mucho la actividad G6PDH de los individuos control, mientras que los cortados se mantuvieron estables a través del tiempo.
+### G6PDH en pie
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE }
 # G6PDH PIE
-setwd("D:/collf/Documents/GitHub/TFG-Alberto-Coll")
-n <- 17
+setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
+n <- 7
+
+# Crear tabla_summ y llamar a barras()
+i <- colnames(data_2[7:16])[[n]]
+  tabla_summ <- data_2 %>%
+    filter(tejido == "Pie") %>%   group_by(tratamiento) %>% 
+    summarise(media = mean(get(i), na.rm = T),
+              desvest = sd(get(i), na.rm = T),
+              error = desvest/sqrt(sum(!is.na(get(i)))))
+  if ((summary(modelos_p[[n]])[[1]][["Pr(>F)"]][1]) <= 0.05) {
+    tukey_loop <- TukeyHSD(modelos_p[[n]])
+    cld.tukey <- multcompLetters4(modelos_p[[n]], tukey_loop, reversed = T)
+    (letras <- rownames_to_column(as.data.frame(cld.tukey$tratamiento$Letters)))
+    colnames(letras) <- c("tratamiento", "tukey")
+    tabla_summ <- merge(tabla_summ, letras)
+  } else {
+    tabla_summ$tukey <- c("", "", "")
+  }
+  p <- barras_tfm()
+  print(p)
+```
+Sin diferencias significativas pese al patrón descendente, puede ser producto del tamaño de muestra, dispersion de los datos (por azar), o simplemente que no haya una diferencia real.
+
+### G6PDH en tentáculo
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE }
+# G6PDH TENTACULO
+setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
+n <- 7
 
 # Crear tabla_summ y llamar a barras() o interact()
-i <- colnames(datos[6:25])[[n]]
-tabla_summ <- datos %>% group_by(playa, corte, tiempo) %>% 
-  summarise(media = mean(get(i), na.rm = T),
-            desvest = sd(get(i), na.rm = T),
-            error = desvest/sqrt(sum(!is.na(get(i))))) %>%
-  arrange(desc(media))
-
-tabla_summ$Letters <- rep("", 12)
-
-plot <- interact()
-print(plot)
+i <- colnames(data_2[7:16])[[n]]
+  tabla_summ <- data_2 %>%
+    filter(tejido == "Tentaculo") %>%   group_by(tratamiento) %>% 
+    summarise(media = mean(get(i), na.rm = T),
+              desvest = sd(get(i), na.rm = T),
+              error = desvest/sqrt(sum(!is.na(get(i)))))
+  if ((summary(modelos_t[[n]])[[1]][["Pr(>F)"]][1]) <= 0.05) {
+    tukey_loop <- TukeyHSD(modelos_t[[n]])
+    cld.tukey <- multcompLetters4(modelos_t[[n]], tukey_loop, reversed = T)
+    (letras <- rownames_to_column(as.data.frame(cld.tukey$tratamiento$Letters)))
+    colnames(letras) <- c("tratamiento", "tukey")
+    tabla_summ <- merge(tabla_summ, letras)
+  } else {
+    tabla_summ$tukey <- c("", "", "")
+  }
+  p <- barras_tfm()
+  print(p)
 ```
+Estas diferencias son marginalmente significativas, pero se ve un patron bastante evidente.
 
 ## Capacidad antioxidante total (TEAC)
 
-### TEAC en tentáculo
-
-La capacidad antioxidante total en tentáculo no se ve afectado por ninguno de los tratamientos, pero sí que hay diferencias significativas entre playas, donde Salobreña tiene menos capacidad (esperar al test de Tukey para confirmar).
-
-```{r, echo=FALSE, warning=FALSE, message=FALSE }
-# TEAC TENTACULO
-setwd("D:/collf/Documents/GitHub/TFG-Alberto-Coll")
-n <- 8
-
-# Crear tabla_summ y llamar a barras() o interact()
-i <- colnames(datos[6:25])[[n]]
-tabla_summ <- datos %>% group_by(playa, corte, tiempo) %>% 
-  summarise(media = mean(get(i), na.rm = T),
-            desvest = sd(get(i), na.rm = T),
-            error = desvest/sqrt(sum(!is.na(get(i))))) %>%
-  arrange(desc(media))
-
-tabla_summ$Letters <- rep("", 12)
-
-plot <- interact()
-print(plot)
-```
-
-### TEAC en disco pedio
-
-En el pie, volvemos a tener diferencias entre playas, con menores valores en Salobreña y mayores en Calahonda, pero esta vez además vemos un efecto del corte presente sólo en Almuñécar, donde los individuos cortados tienen menor capacidad.
+### TEAC en pie
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE }
 # TEAC PIE
-setwd("D:/collf/Documents/GitHub/TFG-Alberto-Coll")
-n <- 18
+setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
+n <- 9
 
-# Crear tabla_summ y llamar a barras() o interact()
-i <- colnames(datos[6:25])[[n]]
-tabla_summ <- datos %>% group_by(playa, corte, tiempo) %>% 
-  summarise(media = mean(get(i), na.rm = T),
-            desvest = sd(get(i), na.rm = T),
-            error = desvest/sqrt(sum(!is.na(get(i))))) %>%
-  arrange(desc(media))
-
-tabla_summ$Letters <- rep("", 12)
-
-plot <- interact()
-print(plot)
+# Crear tabla_summ y llamar a barras()
+i <- colnames(data_2[7:16])[[n]]
+  tabla_summ <- data_2 %>%
+    filter(tejido == "Pie") %>%   group_by(tratamiento) %>% 
+    summarise(media = mean(get(i), na.rm = T),
+              desvest = sd(get(i), na.rm = T),
+              error = desvest/sqrt(sum(!is.na(get(i)))))
+  if ((summary(modelos_p[[n]])[[1]][["Pr(>F)"]][1]) <= 0.05) {
+    tukey_loop <- TukeyHSD(modelos_p[[n]])
+    cld.tukey <- multcompLetters4(modelos_p[[n]], tukey_loop, reversed = T)
+    (letras <- rownames_to_column(as.data.frame(cld.tukey$tratamiento$Letters)))
+    colnames(letras) <- c("tratamiento", "tukey")
+    tabla_summ <- merge(tabla_summ, letras)
+  } else {
+    tabla_summ$tukey <- c("", "", "")
+  }
+  p <- barras_tfm()
+  print(p)
 ```
+Sin diferencias.
 
-## Malondialdehído (MDA)
+### TEAC en tentaculo
 
-### MDA en tentáculo
-
-La concentración de MDA en tentáculo es bastante uniforme, y aunque el ANOVA destaca un efecto significativo del corte, en la gáfica prácticamente no se observa. Es curioso que los individuos control, sin cortar, tienen mayor concentración de MDA.
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE }
-# MDA TENTACULO
-setwd("D:/collf/Documents/GitHub/TFG-Alberto-Coll")
+# TEAC TENTACULO
+setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
 n <- 9
 
 # Crear tabla_summ y llamar a barras() o interact()
-i <- colnames(datos[6:25])[[n]]
-tabla_summ <- datos %>% group_by(playa, corte, tiempo) %>% 
-  summarise(media = mean(get(i), na.rm = T),
-            desvest = sd(get(i), na.rm = T),
-            error = desvest/sqrt(sum(!is.na(get(i))))) %>%
-  arrange(desc(media))
-
-tabla_summ$Letters <- rep("", 12)
-
-plot <- interact()
-print(plot)
+i <- colnames(data_2[7:16])[[n]]
+  tabla_summ <- data_2 %>%
+    filter(tejido == "Tentaculo") %>%   group_by(tratamiento) %>% 
+    summarise(media = mean(get(i), na.rm = T),
+              desvest = sd(get(i), na.rm = T),
+              error = desvest/sqrt(sum(!is.na(get(i)))))
+  if ((summary(modelos_t[[n]])[[1]][["Pr(>F)"]][1]) <= 0.05) {
+    tukey_loop <- TukeyHSD(modelos_t[[n]])
+    cld.tukey <- multcompLetters4(modelos_t[[n]], tukey_loop, reversed = T)
+    (letras <- rownames_to_column(as.data.frame(cld.tukey$tratamiento$Letters)))
+    colnames(letras) <- c("tratamiento", "tukey")
+    tabla_summ <- merge(tabla_summ, letras)
+  } else {
+    tabla_summ$tukey <- c("", "", "")
+  }
+  p <- barras_tfm()
+  print(p)
 ```
+De nuevo sin diferencias.
 
-### MDA en disco pedio
 
-En el caso del pie, volvemos a tener una gran uniformidad en concentración de MDA, y en este caso el ANOVA destaca un efecto algo significativo de la maduración, que parece hacer descender la concentración de este compuesto en todos los casos.
+## Malondialdehído (MDA)
+
+### MDA en pie
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE }
 # MDA PIE
-setwd("D:/collf/Documents/GitHub/TFG-Alberto-Coll")
-n <- 19
+setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
+n <- 10
 
-# Crear tabla_summ y llamar a barras() o interact()
-i <- colnames(datos[6:25])[[n]]
-tabla_summ <- datos %>% group_by(playa, corte, tiempo) %>% 
-  summarise(media = mean(get(i), na.rm = T),
-            desvest = sd(get(i), na.rm = T),
-            error = desvest/sqrt(sum(!is.na(get(i))))) %>%
-  arrange(desc(media))
-
-tabla_summ$Letters <- rep("", 12)
-
-plot <- interact()
-print(plot)
+# Crear tabla_summ y llamar a barras()
+i <- colnames(data_2[7:16])[[n]]
+  tabla_summ <- data_2 %>%
+    filter(tejido == "Pie") %>%   group_by(tratamiento) %>% 
+    summarise(media = mean(get(i), na.rm = T),
+              desvest = sd(get(i), na.rm = T),
+              error = desvest/sqrt(sum(!is.na(get(i)))))
+  if ((summary(modelos_p[[n]])[[1]][["Pr(>F)"]][1]) <= 0.05) {
+    tukey_loop <- TukeyHSD(modelos_p[[n]])
+    cld.tukey <- multcompLetters4(modelos_p[[n]], tukey_loop, reversed = T)
+    (letras <- rownames_to_column(as.data.frame(cld.tukey$tratamiento$Letters)))
+    colnames(letras) <- c("tratamiento", "tukey")
+    tabla_summ <- merge(tabla_summ, letras)
+  } else {
+    tabla_summ$tukey <- c("", "", "")
+  }
+  p <- barras_tfm()
+  print(p)
 ```
+Diferencias marginalmente significativas con un patrón descendente.
 
-## Proteína
-
-### Proteína en tentáculo
-
-La proteína no es de mucho interés salvo para expresar las unidades de actividad enzimática, pero tenemos su análisis igual. Vemos que prácticamente no hay diferencias, aunque el ANOVA destaca un pequeño efecto significativo del corte.
+### MDA en tentaculo
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE }
-# proteina TENTACULO
-setwd("D:/collf/Documents/GitHub/TFG-Alberto-Coll")
+# MDA TENTACULO
+setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
 n <- 10
 
 # Crear tabla_summ y llamar a barras() o interact()
-i <- colnames(datos[6:25])[[n]]
-tabla_summ <- datos %>% group_by(playa, corte, tiempo) %>% 
-  summarise(media = mean(get(i), na.rm = T),
-            desvest = sd(get(i), na.rm = T),
-            error = desvest/sqrt(sum(!is.na(get(i))))) %>%
-  arrange(desc(media))
-
-tabla_summ$Letters <- rep("", 12)
-
-plot <- interact()
-print(plot)
+i <- colnames(data_2[7:16])[[n]]
+  tabla_summ <- data_2 %>%
+    filter(tejido == "Tentaculo") %>%   group_by(tratamiento) %>% 
+    summarise(media = mean(get(i), na.rm = T),
+              desvest = sd(get(i), na.rm = T),
+              error = desvest/sqrt(sum(!is.na(get(i)))))
+  if ((summary(modelos_t[[n]])[[1]][["Pr(>F)"]][1]) <= 0.05) {
+    tukey_loop <- TukeyHSD(modelos_t[[n]])
+    cld.tukey <- multcompLetters4(modelos_t[[n]], tukey_loop, reversed = T)
+    (letras <- rownames_to_column(as.data.frame(cld.tukey$tratamiento$Letters)))
+    colnames(letras) <- c("tratamiento", "tukey")
+    tabla_summ <- merge(tabla_summ, letras)
+  } else {
+    tabla_summ$tukey <- c("", "", "")
+  }
+  p <- barras_tfm()
+  print(p)
 ```
+Mismo patrón, aquí si que obtenemos significación estadística, y vemos que en el grupo control hay mayor concentración de MDA que en los otros dos.
 
-### Proteína en disco pedio
+## Proteína
 
-En el caso del pie, la única tendencia estadísticamente significativa que se observa es que la concentración de proteína tiene a disminuir ligeramente con la maduración, pero en las gráficas vemos que es algo sutil.
+### Proteína en pie
+
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE }
 # proteina PIE
-setwd("D:/collf/Documents/GitHub/TFG-Alberto-Coll")
-n <- 20
+setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
+n <- 8
+
+# Crear tabla_summ y llamar a barras()
+i <- colnames(data_2[7:16])[[n]]
+  tabla_summ <- data_2 %>%
+    filter(tejido == "Pie") %>%   group_by(tratamiento) %>% 
+    summarise(media = mean(get(i), na.rm = T),
+              desvest = sd(get(i), na.rm = T),
+              error = desvest/sqrt(sum(!is.na(get(i)))))
+  if ((summary(modelos_p[[n]])[[1]][["Pr(>F)"]][1]) <= 0.05) {
+    tukey_loop <- TukeyHSD(modelos_p[[n]])
+    cld.tukey <- multcompLetters4(modelos_p[[n]], tukey_loop, reversed = T)
+    (letras <- rownames_to_column(as.data.frame(cld.tukey$tratamiento$Letters)))
+    colnames(letras) <- c("tratamiento", "tukey")
+    tabla_summ <- merge(tabla_summ, letras)
+  } else {
+    tabla_summ$tukey <- c("", "", "")
+  }
+  p <- barras_tfm()
+  print(p)
+```
+Parece que la ceoncentracion de proteina en el pie disminuye tras el corte aunque la magnitud del efecto no es muy grande
+
+### Proteína en tentaculo
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE }
+# proteina TENTACULO
+setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
+n <- 8
 
 # Crear tabla_summ y llamar a barras() o interact()
-i <- colnames(datos[6:25])[[n]]
-tabla_summ <- datos %>% group_by(playa, corte, tiempo) %>% 
-  summarise(media = mean(get(i), na.rm = T),
-            desvest = sd(get(i), na.rm = T),
-            error = desvest/sqrt(sum(!is.na(get(i))))) %>%
-  arrange(desc(media))
-
-tabla_summ$Letters <- rep("", 12)
-
-plot <- interact()
-print(plot)
+i <- colnames(data_2[7:16])[[n]]
+  tabla_summ <- data_2 %>%
+    filter(tejido == "Tentaculo") %>%   group_by(tratamiento) %>% 
+    summarise(media = mean(get(i), na.rm = T),
+              desvest = sd(get(i), na.rm = T),
+              error = desvest/sqrt(sum(!is.na(get(i)))))
+  if ((summary(modelos_t[[n]])[[1]][["Pr(>F)"]][1]) <= 0.05) {
+    tukey_loop <- TukeyHSD(modelos_t[[n]])
+    cld.tukey <- multcompLetters4(modelos_t[[n]], tukey_loop, reversed = T)
+    (letras <- rownames_to_column(as.data.frame(cld.tukey$tratamiento$Letters)))
+    colnames(letras) <- c("tratamiento", "tukey")
+    tabla_summ <- merge(tabla_summ, letras)
+  } else {
+    tabla_summ$tukey <- c("", "", "")
+  }
+  p <- barras_tfm()
+  print(p)
 ```
+Sin efecto significtaivo.
 
 # Conclusiones
 
--   La enzima GPx no fue ni siquiera analizable, mientras que la G6PDH sí que permitió el análisis pero con un ajuste muy malo, por lo que sus conclusiones podrían no ser las más fiables.
+-  La CAT tentacular, GR pedia y tentacular, GST tentacular y DTD tentacular muestran el mismo patrón: su actividad se incrementa al inducir la reproducción asexual en las anémonas, pero posteriormente se recuperaen niveles similares o inferiores al control previo.
 
--   Las variables que más bondad de ajuste ($R^2 ajustado$) presentan son la CAT tentacular, ambas GR, ambas GST y ambas DTD. Esto quiere decir que para esas enzimas, los factores playa, corte y tiempo consiguen explicar una buena parte de la variación que presentan, y por tanto el modelo es muy bueno "prediciendo" sus valores.
+-  El MDA en tentáculo muestra que las anemonas cortadas mostraron valores inferiores a las del control, pero en pie no se repite el patrón.
 
--   Es también en estas variables donde encontramos más cambios asociados al corte y a la maduración, y donde más claramente se observan. En estas enzimas, los individuos cortados presentaban mayores niveles de actividad, y en algunas de ellas estos niveles descendían bruscamente con la maduración sexual.
+-  Ni el TEAC ni la SOD muestran variación entre grupos
 
--   La SOD, MDA y TEAC presentaron en general muy poca variación a lo largo de los tratamientos, con sólo unos pocos efectos significativos. En general no son parámetros que se alteren mucho al inducir la reproducción asexual o incluso con la maduración sexual de las anémonas
+-  La G6PDH en tentáculo muestra un patrón curioso, similar al del MDA, pero no hay mucha evidencia estadística que lo respalde.
+
+-  La GPx muestra patrones curiosos, pero fue uno de los peores modelos en cuanto a ajuste por lo que los resultados para esta enzima son menos robustos.
