@@ -25,7 +25,7 @@ source(file = "./analisis 12-2023/0_data_lab.R")
 source(file = "./analisis 12-2023/0_5_graficas.R")
 
 data_1 <- filter(datos, corte == "control") %>% 
-  filter(cultivo == "No" | madurez == "Si")
+  filter(cultivo == "wild" | madurez == "Si")
 
 ### Exploracion ----
 

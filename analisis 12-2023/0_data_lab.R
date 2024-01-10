@@ -25,6 +25,8 @@ datos$playa <- factor(datos$playa, levels = c("Calahonda", "Almuñecar", "Salobr
 
 # Poner in english los nombres de los niveles
 datos$corte <- factor(datos$corte, levels = c("No", "Si"), labels = c("control", "dissected"))
+datos$cultivo <- factor(datos$cultivo, levels = c("No", "Si"), labels = c("wild", "cultured"))
+
 
 # Limpieza de datos ----
 datos <- datos %>% 
