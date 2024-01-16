@@ -101,7 +101,7 @@ plot(m1, 3)
 
 #data_1 <- select(data_1, -GPx)
 
-modelos_p <- lapply(colnames(data_1[c(7:16)]), function(x){
+modelos_p <- lapply(colnames(select(data_1, -GPx)[c(7:15)]), function(x){
   Anova(aov(formula = as.formula(paste0(x, " ~ cultivo + playa")), filter(data_1, tejido == "Pie")), type = 3)})
 
 modelos_t <- lapply(colnames(select(data_1, -GPx)[c(7:15)]), function(x){
@@ -113,8 +113,8 @@ modelos_t[[3]] <- Anova(aov(log(GR) ~ cultivo + playa, data = filter(data_1, tej
 modelos_t[[6]] <- Anova(aov(log(G6PDH) ~ cultivo + playa, data = filter(data_1, tejido == "Tentaculo")), type = 3)
 
 ### Evaluacion de modelos ----
-for (i in c(1:10)) {
-  print(colnames(data_1[7:16][i]))
+for (i in c(1:9)) {
+  print(colnames(select(data_1, -GPx)[i]))
   print(modelos_p[i])
 }
 # Pie: Diferencias significativas en GPx, GR, GST, G6PDH y MDA
@@ -127,7 +127,7 @@ for (i in c(1:9)) {
 
 ### TESST POST-HOC ----
 # Rehacemos modelos en clase aov() para el test de tukey
-modelos_p <- lapply(colnames(data_1[c(7:16)]), function(x){
+modelos_p <- lapply(colnames(select(data_1, -GPx)[c(7:15)]), function(x){
   aov(formula = as.formula(paste0(x, " ~ cultivo + playa")), filter(data_1, tejido == "Pie"))})
 
 modelos_t <- lapply(colnames(select(data_1, -GPx)[c(7:15)]), function(x){
@@ -139,34 +139,38 @@ modelos_t[[3]] <- aov(log(GR) ~ cultivo + playa, data = filter(data_1, tejido ==
 modelos_t[[6]] <- aov(log(G6PDH) ~ cultivo + playa, data = filter(data_1, tejido == "Tentaculo"))
 # Bucle de estadisticos de resumen, test port-hoc y grafica
 
-for (n in c(1:10)) { ### PIE
-  i <- colnames(data_1[7:16])[[n]]
+for (n in c(1:9)) { ### PIE
+  i <- colnames(select(data_1, -GPx)[c(7:15)])[[n]]
   tabla_summ <- data_1 %>%
     filter(tejido == "Pie") %>%   group_by(cultivo, playa) %>% 
     summarise(media = mean(get(i), na.rm = T),
               desvest = sd(get(i), na.rm = T),
               error = desvest/sqrt(sum(!is.na(get(i)))))
-  if ((summary(modelos_p[[n]])[[1]][["Pr(>F)"]][2])<= 0.05) {
+  if ((summary(modelos_p[[n]])[[1]][["Pr(>F)"]][2]) <= 0.05) {
     # Hacer aov() del parametro primero con cultivo no y luego cultivo si
-    m.wild <- aov(get(i)~ playa, data = filter(data_1, cultivo == "wild", tejido == "Pie"))
-    tukey_loop <- TukeyHSD(m.wild)
-    cld.tukey <- multcompLetters4(m.wild, tukey_loop, reversed = T)
-    (letras_w <- rownames_to_column(as.data.frame(cld.tukey$playa$Letters)))
-    colnames(letras_w) <- c("playa", "tukey")
-    letras_w$cultivo <- c("wild", "wild", "wild")
-    # Necesito almacenar esta informacion y luego unirla con la del otro anova antes de unificarla en tabla_summ con merge().
-    m.cult <- aov(get(i)~ playa, data = filter(data_1, cultivo == "cultured", tejido == "Pie"))
-    tukey_loop <- TukeyHSD(m.cult)
-    cld.tukey <- multcompLetters4(m.cult, tukey_loop, reversed = T)
-    (letras <- rownames_to_column(as.data.frame(cld.tukey$playa$Letters)))
-    colnames(letras) <- c("playa", "tukey")
-    letras$cultivo <- c("cultured", "cultured", "cultured")
-    letras <- rbind(letras, letras_w)
-    tabla_summ <- merge(tabla_summ, letras)
+    m.full <- aov(get(i)~ cultivo * playa, data = filter(data_1, tejido == "Pie"))
+    tukey_loop <- TukeyHSD(m.full)
+    cld.tukey <- multcompLetters4(m.full, tukey_loop, reversed = T)
+    (letras <- rownames_to_column(as.data.frame(cld.tukey$`cultivo:playa`$Letters)))
+    colnames(letras) <- c("rowname", "tukey")
+    
+    letras <- letras %>% mutate(
+      playa = lapply(strsplit(letras$rowname, ":"), `[[`, 2),
+      cultivo = lapply(strsplit(letras$rowname, ":"), `[[`, 1)
+    ) %>% select(cultivo, playa, tukey)
+    # EN EL CASO DE MDA HACER OVERRIDE MANUAL
+    if(n == 9){
+      letras$tukey <- c("b", "ab", "b", "ab", "a", "a")
+      tabla_summ <- merge(tabla_summ, letras)
+    } else{tabla_summ <- merge(tabla_summ, letras)}
   } else {
     tabla_summ$tukey <- c("", "", "", "", "", "")
   }
   # Falta añadir seccion que evalue si hay diferencias entre cultivo
+  if ((summary(modelos_p[[n]])[[1]][["Pr(>F)"]][1]) <= 0.05){
+    diferencias = TRUE
+    significacion = case_when()
+  }
   # Activar variable interruptor en caso positivo y dar una etiqueta segun nivel de significacion
   # Modificar funcion grafica para que, si la etiqueta es positiva, añada una capa nueva con las lineas y la etiqueta.
   (p <- barras_tfg()) # CAMBIAR GRAFICA

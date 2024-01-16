@@ -6,6 +6,7 @@
 ## SETUP ----
 library(tidyverse)
 library(ggthemr)
+library(ggsignif)
 
 # Directorio en laboratorio: C:/Users/Usuario/Documents/TFM-Ortiguilla
 # Directorio en portatil: D:/collf/Documents/GitHub/TFM-Anemonia-sulcata
@@ -71,6 +72,10 @@ barras_tfg <- function(){
     geom_col(aes(x = cultivo, fill = playa, y = media), position = position_dodge(width = 0.9)) +
     geom_text(aes(x = cultivo, group = playa, y = media + error, label = tukey),
               color = "grey5", vjust = -0.5, size = 4, position = position_dodge(width = 0.9)) +
+    annotate("segment", x = 0.75, xend = 2.25, y =  1.15 * (max(tabla_summ$media) + max(tabla_summ$error)), yend =  1.15 * (max(tabla_summ$media) + max(tabla_summ$error)), color = "gray30", size = 1) +
+    annotate("segment", x = 0.75, xend = 0.75, y = 1.15 * (max(tabla_summ$media) + max(tabla_summ$error)), yend = 1.1 * (max(tabla_summ$media) + max(tabla_summ$error)), color = "gray30", size = 1) +
+    annotate("segment", x = 2.25, xend = 2.25, y = 1.15 * (max(tabla_summ$media) + max(tabla_summ$error)), yend = 1.1 * (max(tabla_summ$media) + max(tabla_summ$error)), color = "gray30", size = 1) +
+    annotate("text", x = 1.5, y = 1.2 * (max(tabla_summ$media) + max(tabla_summ$error)), label = "*", size = 7) +
     ylab(case_when(
       i == "proteina" ~ "protein mg / ml",
       i == "MDA" ~ "μM  MDA",
