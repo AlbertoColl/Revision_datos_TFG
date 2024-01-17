@@ -1,0 +1,111 @@
+---
+title: "**Informe del análisis estadístico**"
+subtitle: "**TFG: Objetivo 1**"
+author: "Alberto Coll Fernández"
+date: "17/01/2024"
+output:
+  pdf_document: default
+  fontsize: 14pt
+---
+
+```{r setup, include=FALSE}
+# Directorio en lab: "C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG"
+# Directorio en portatil: "D:/collf/Documents/GitHub/Revision_datos_TFG"
+knitr::opts_knit$set(root.dir = "C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
+knitr::opts_chunk$set(fig.width=6, fig.height=3, fig.align = "center") 
+
+library(tidyverse)
+library(ggthemr)
+library(multcompView)
+
+```
+
+# Introducción y estructura de los datos
+
+Todo el análisis estadístico lo he realizado utilizando R 4.2.2 y RStudio 2023.12.0. Para esta primera parte de los datos de mi TFG, he comparado las ortiguillas procedentes del medio natural con aquellas ortiguillas que permanecieron en cultivo sin ser manipuladas para estimular su reproducción asexual, y que fueron muestreadas al final del experimento (sin cortar, supuestamente maduras sexualmente). Para este análisis además he tenido en cuenta la variable playa de origen, que en algunas ocasiones ha arrojado diferencias significativas.
+
+La pregunta principal del análisis es comprobar cómo responden las anémonas a su mantenimiento en cultivo, y si hay diferencias entre esta respuesta para las distintas playas. Para ello, se midieron distintas enzimas involucradas en sistemas antioxidantes del animal (**SOD**, **CAT**, **GPx**, **GR**, **GST**, **DTD** y **G6PDH**), además de su capacidad antioxidante total (**TEAC**), su concentración de **proteína**, y su concentración de malondialdehído (**MDA**). Estas variables se midieron por duplicado, tanto en los tentáculos del animal como en su tronco o pie, por lo que en total hacen 20 variables de interés. Sin embargo, los datos relativos a la variable GPx tanto en pie como en tentáculo eran insuficientes para ejecutar el análisis, por lo que fueron excluidos.
+
+# Metodología y elección del modelo
+
+Para examinar esta pregunta de investigación, he comprobado que las variables respuesta siguen una distribución aproximadamente normal, y he transformado logarítmicamente las variables que no cumplían este requisito. Igualmente valoré excluir determinados puntos muy alejados de la mediana que podían influenciar el análisis.
+
+Una vez hecho esto, he utilizado un anova de dos vía para comparar las medias entre los dos grupos y playas. No he tenido en cuenta la interacción entre ambos factores dentro del modelo, ya que tenemos un tamaño de muestra muy pequeño. Debido a que el tamaño de muestra era desigual entre los grupos salvaje y cultivado, he utilizado un anova con suma de cuadrados tipo III. Cuando he encontrado diferencias significativas asociadas a la variable playa, he utilizado el test de Tukey como test post-hoc para evaluar dichas diferencias. Una vez ajustados los modelos estadísticos, evalué las asunciones de normalidad de los residuos y homocedaticidad mediante examinación de la gráfica Q-Q y test de Levene, respectivamente,
+
+Las variables que requirieron una transformación logarítmica fueron la GR y G6PDH en tentáculo
+
+Finalmente, he expuesto los resultados del análisis en gráficas de barras, aunque se pueden refinar más. Es decir, aun no son las graficas definitivas, y se les puede cambiar aspectos estéticos fácilmente. Las diferencias significativas entre grupos de cultivo las he anotado como una barra con el nivel de significación estadística, mientras que las diferencias significativas entre playas las he anotado con notación de letras.
+
+# Resultados
+
+## Superóxido dismutasa (SOD)
+
+![Grafica SOD pie](1/SOD_pie.png)
+![Grafica SOD tentaculo](1/SOD_tent.png)
+
+
+La SOD en el pie del animal no presenta diferencias algunas ni asociadas al cultivo ni al punto de origen del animal. En el tentaculo si que encontramos diferencias asociadas al punto de origen, aunque no al hecho de haber estado en cultivo. Podemos ver como las anemonas de Salobreña tienen valores de actividad SOD mayores que las de Almuñécar.
+
+## Catalasa (CAT)
+
+![Grafica CAT pie](1/CAT_pie.png)
+![Grafica CAT tentaculo](1/CAT_tent.png)
+
+De nuevo, no aparecen diferencias en la actividad catalasa en el pie, aunque hay un efecto marginalmente significativo del punto de origen de las ortiguillas (sin embargo en la gráfica prácticamente no se aprecia). En el tentáculo, volvemos a tener diferencias asociadas al punto de origen, donde las ortiguillas de Salobreña exhiben una actividad catalasa mucho mayor en pie respecto a las de otras playas, especialmente Calahonda.
+
+## Glutatión reductasa (GR)
+
+![Grafica GR pie](1/GR_pie.png)
+![Grafica GR tentaculo](1/GR_tent.png)
+
+Ni en pie ni en tentáculo hay ningun efecto relativo a la playa de origen, pero en el pie vemos como, en las anémonas cultivadas, la atividad GR es sensiblemente menor respecto a las anémonas salvajes. En tentáculo también hubo un efecto marginalmente significativo del cultivo.
+
+## Glutatión S-transferasa (GST)
+
+![Grafica GST pie](1/GST_pie.png)
+![Grafica GST tentaculo](1/GST_tent.png)
+
+En el caso de esta enzima, tanto en pie como en tentáculo se detecta un efecto significativo del cultivo sobre su actividad, aunque el sentido del efecto es contrario: en pie, los individuos salvajes tienen menor actividad que los cultivados; mientras que en tentáculo ocurre al contrario. En tentáculo también se aprecian diferencias entre playas, especialmente Calahonda tiene valores sensiblemente más bajos entre los individuos salvajes.
+
+## DT-Diaforasa (DTD)
+
+![Grafica DTD pie](1/DTD_pie.png)
+![Grafica DTD tentaculo](1/DTD_tent.png)
+
+La actividad DTD permanece inmutable en pie, mientras que en tentáculo aparecen diferencias entre salvajes y cultivadas, y también entre playas. En este caso, la actividad DTD de los cultivados es sensiblemente menor a la de los salvajes.
+
+## Glucosa-6-fosfato deshidrogenasa (G6PDH)
+
+![Grafica G6PDH pie](1/G6PDH_pie.png)
+![Grafica G6PDH tentaculo](1/G6PDH_tent.png)
+
+Para la G6PDH, aparece un efecto significativo del punto de origen, pero unicamente en pie. Vemos como entre los individuos salvajes, la actividad G6PDH de aquellos procedentes de  Salobreña es bastante menor. En ambos casos aparece también un efecto marginalmente significativo del cultivo, pero probablemente se vea enmascarado por la alta dispersión de los datos y el poco tamaño de muestra que quedó para esta enzima en concreto.
+
+## Capacidad antioxidante total (TEAC)
+
+![Grafica TEAC pie](1/TEAC_pie.png)
+![Grafica TEAC tentaculo](1/TEAC_tent.png)
+
+Para el TEAC, el único efecto que se detecta es un efecto del punto de origen en los niveles de tentáculo. Salobreña tiene niveles más bajos que el resto de playas, Almuécar tiene valores más elevados en el grupo salvaje.
+
+## Malondialdéhido (MDA)
+
+![Grafica MDA pie](1/MDA_pie.png)
+![Grafica MDA tentaculo](1/MDA_tent.png)
+
+Los niveles de MDA en pie varían significativamente entre individuos procedentes de distintas playas, con Salobreña presentando una acusada tendencia a menor concentración de MDA. EN cambio, en el tentáculo, se detecta un efecto significativo del cultivo, consistente en que los niveles de MDA son ligeramente mayores en el grupo cultivado respecto al salvaje.
+
+## Proteína soluble
+
+![Grafica proteina pie](1/proteina_pie.png)
+![Grafica proteina tentaculo](1/proteina_tent.png)
+
+En el caso de la proteina soluble, no aparece ninguna diferencia significativa asociada al cultivo ni a la playa de origen.
+
+# Conclusiones
+
+- Las anémonas cultivadas presentaron menores niveles de actividad GR (pie), DTD (tentaculo) y GST (pie). Sin embargo, también presentaron mayores niveles de actividad GST en tentáculo. Estos cambios en actividades enzimáticas se ven acompañados por un ligero aumento en la concentación de MDA en tentáculo
+
+- El punto de origen de los individuos fue un factore relevante en varias enzimas, como la SOD, CAT, GST, DTD y G6PDH, aunque no en todos los tejidos ni con un sentido de los cambios consistente. El TEAC en tentaculo y el MDA en pie tambien presentan diferencias notables entre playas.
+
+- Estas diferencias entre playas suelen involucrar a los individuos procedentes de Salobreña , que presentaron mayor actividad SOD, CAT y DTD tentaculares; menor actividad G6PDH en el pie; menores niveles de TEAC en tentáculo y menores valores de MDA en el pie. Muchas de estas diferencias son especialmente notables en los individuos salvajes.

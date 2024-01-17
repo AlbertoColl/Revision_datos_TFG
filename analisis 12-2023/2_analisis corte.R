@@ -4,28 +4,25 @@
 
 # Comparar los parametros entre los controles cultivados (cultivo si, corte no, madurez no), los cortados (corte si, madurez no), y los cortados t2 (corte si, madurez si)
 
-# Explorar las variables
-# Identificar posibles outliers
-# Ver si distribucion es normal y transformar
-# Hacer modelos y comprobar asunciones
-# Hacer graficas
 
 library(tidyverse)
 library(car)
 library(multcompView)
 
 ### Cargar datos y filtrar para el analisis ----
-setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
-source(file = "./analisis 12-2023/0_data_home.R")
+# setwd("D:/collf/Documents/GitHub/Revision_datos_TFG") # Casa
+#source(file = "./analisis 12-2023/0_data_home.R")
+
+setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG") # Lab
+source(file = "./analisis 12-2023/0_data_lab.R")
 source(file = "./analisis 12-2023/0_5_graficas.R")
 
-data_2 <- filter(datos, cultivo == "Si") %>% 
+data_2 <- filter(datos, cultivo == "cultured") %>% 
   filter((corte == "dissected") | ((corte == "control") & (madurez == "No"))) %>% 
-  mutate(tratamiento = case_when(corte == "control" ~ "control",
+  mutate(tratamiento = as.factor(case_when(corte == "control" ~ "control",
                                  (corte == "dissected") & (madurez == "No") ~ "t1",
-                                 (corte == "dissected") & (madurez == "Si") ~ "t2"))
+                                 (corte == "dissected") & (madurez == "Si") ~ "t2")))
 
-data_2$tratamiento <- as.factor(data_2$tratamiento)
 ### Exploracion ----
 
 ggplot(data_2, aes(y = MDA)) +
@@ -118,7 +115,8 @@ for (n in c(1:10)) { ### PIE
     tabla_summ$tukey <- c("", "", "")
   }
   (p <- barras_tfm())
-  ggsave(paste0("./analisis 12-2023/graficas/2/", i, "_pie.png"), width = 800, height = 1000, units = "px", scale = 2, dpi = "retina")
+  (p <- p + annotate("text", x = 2, y = 1.3 * (max(tabla_summ$media) + max(tabla_summ$error)), label = "paste(italic(Column))", size = 5, color = "gray30", parse = T))
+  ggsave(paste0("./resultados/2/", i, "_pie.png"), width = 400, height = 500, units = "px", scale = 2, dpi = "retina")
   }
 
 for (n in c(1:10)) { ### TENTACULO
@@ -138,5 +136,6 @@ for (n in c(1:10)) { ### TENTACULO
     tabla_summ$tukey <- c("", "", "")
   }
   (p <- barras_tfm())
-  ggsave(paste0("./analisis 12-2023/graficas/2/", i, "_tent.png"), width = 800, height = 1000, units = "px", scale = 2, dpi = "retina")
+  (p <- p + annotate("text", x = 2, y = 1.3 * (max(tabla_summ$media) + max(tabla_summ$error)), label = "paste(italic(Tentacle))", size = 5, color = "gray30", parse = T))
+  ggsave(paste0("./resultados/2/", i, "_tent.png"), width = 400, height = 500, units = "px", scale = 2, dpi = "retina")
 }

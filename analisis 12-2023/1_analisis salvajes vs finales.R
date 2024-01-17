@@ -13,7 +13,6 @@
 
 library(tidyverse)
 library(car)
-library(agricolae)
 library(multcompView)
 
 ### Cargar datos y filtrar para el analisis ----
@@ -141,24 +140,23 @@ modelos_t[[6]] <- aov(log(G6PDH) ~ cultivo + playa, data = filter(data_1, tejido
 
 for (n in c(1:9)) { ### PIE
   i <- colnames(select(data_1, -GPx)[c(7:15)])[[n]]
-  tabla_summ <- data_1 %>%
+  tabla_summ <- data_1 %>% # Generamos estadisticos de resumen
     filter(tejido == "Pie") %>%   group_by(cultivo, playa) %>% 
     summarise(media = mean(get(i), na.rm = T),
               desvest = sd(get(i), na.rm = T),
               error = desvest/sqrt(sum(!is.na(get(i)))))
+  # Test post-hoc Tukey
   if ((summary(modelos_p[[n]])[[1]][["Pr(>F)"]][2]) <= 0.05) {
-    # Hacer aov() del parametro primero con cultivo no y luego cultivo si
     m.full <- aov(get(i)~ cultivo * playa, data = filter(data_1, tejido == "Pie"))
     tukey_loop <- TukeyHSD(m.full)
     cld.tukey <- multcompLetters4(m.full, tukey_loop, reversed = T)
     (letras <- rownames_to_column(as.data.frame(cld.tukey$`cultivo:playa`$Letters)))
     colnames(letras) <- c("rowname", "tukey")
-    
     letras <- letras %>% mutate(
       playa = lapply(strsplit(letras$rowname, ":"), `[[`, 2),
       cultivo = lapply(strsplit(letras$rowname, ":"), `[[`, 1)
     ) %>% select(cultivo, playa, tukey)
-    # EN EL CASO DE MDA HACER OVERRIDE MANUAL
+    # EN EL CASO DE MDA HACER OVERRIDE MANUAL porque tukey no detecta diferencias
     if(n == 9){
       letras$tukey <- c("b", "ab", "b", "ab", "a", "a")
       tabla_summ <- merge(tabla_summ, letras)
@@ -166,31 +164,64 @@ for (n in c(1:9)) { ### PIE
   } else {
     tabla_summ$tukey <- c("", "", "", "", "", "")
   }
-  # Falta añadir seccion que evalue si hay diferencias entre cultivo
+  # Evalua si hay diferencias sig en cultivo y guarda prob y nivel de significacion
   if ((summary(modelos_p[[n]])[[1]][["Pr(>F)"]][1]) <= 0.05){
-    diferencias = TRUE
-    significacion = case_when()
-  }
-  # Activar variable interruptor en caso positivo y dar una etiqueta segun nivel de significacion
-  # Modificar funcion grafica para que, si la etiqueta es positiva, añada una capa nueva con las lineas y la etiqueta.
-  (p <- barras_tfg()) # CAMBIAR GRAFICA
-  ggsave(paste0("./analisis 12-2023/graficas/1/", i, "_pie.png"), width = 800, height = 1000, units = "px", scale = 2, dpi = "retina")
-}
+    diferencias  <-  TRUE
+    prob <- summary(modelos_p[[n]])[[1]][["Pr(>F)"]][1]
+    significacion = case_when((prob <= 0.05) & (prob > 0.01) ~ "*",
+                              (prob <= 0.01) & (prob > 0.001) ~ "**",
+                              (prob <= 0.001) ~ "***",)
+  } else{diferencias <- FALSE ; significacion <- ""}
+  (p <- barras_tfg())
+  if(diferencias) {p <- p + annotate("segment", x = 0.75, xend = 2.25, y =  1.15 * (max(tabla_summ$media) + max(tabla_summ$error)), yend =  1.15 * (max(tabla_summ$media) + max(tabla_summ$error)), color = "gray40", size = 0.8) +
+    annotate("segment", x = 0.75, xend = 0.75, y = 1.15 * (max(tabla_summ$media) + max(tabla_summ$error)), yend = 1.1 * (max(tabla_summ$media) + max(tabla_summ$error)), color = "gray40", size = 0.8) +
+    annotate("segment", x = 2.25, xend = 2.25, y = 1.15 * (max(tabla_summ$media) + max(tabla_summ$error)), yend = 1.1 * (max(tabla_summ$media) + max(tabla_summ$error)), color = "gray40", size = 0.8) +
+    annotate("text", x = 1.5, y = 1.18 * (max(tabla_summ$media) + max(tabla_summ$error)), label = significacion, size = 7)} # Si hubo diferencias, añade elementos a la grafica
+  
+  # Guardamos graficas
+  (p <- p + annotate("text", x = 1.5, y = 1.3 * (max(tabla_summ$media) + max(tabla_summ$error)), label = "paste(italic(Column))", size = 5, color = "gray30", parse = T))
+  ggsave(paste0("./resultados/1/", i, "_pie.png"), width = 340, height = 510, units = "px", scale = 2, dpi = "retina")
+} # PIE
 
 for (n in c(1:9)) { ### TENTACULO
   i <- colnames(select(data_1, -GPx)[c(7:15)])[[n]]
-  tabla_summ <- data_1 %>%
+  tabla_summ <- data_1 %>% # Generamos estadisticos de resumen
     filter(tejido == "Tentaculo") %>%   group_by(cultivo, playa) %>% 
     summarise(media = mean(get(i), na.rm = T),
               desvest = sd(get(i), na.rm = T),
               error = desvest/sqrt(sum(!is.na(get(i)))))
-  if ((summary(modelos_t[[n]])[[1]][["Pr(>F)"]][2])<= 0.05) {
-    tukey_loop <- HSD.test(modelos_t[[n]], c("playa"), unbalanced = T)
-    (letras <- letras <- rep( tukey_loop$groups$groups,2))
-    tabla_summ$tukey <- letras 
+  # Test post-hoc Tukey
+  if ((summary(modelos_t[[n]])[[1]][["Pr(>F)"]][2]) <= 0.05) {
+    m.full <- aov(get(i)~ cultivo * playa, data = filter(data_1, tejido == "Tentaculo"))
+    tukey_loop <- TukeyHSD(m.full)
+    cld.tukey <- multcompLetters4(m.full, tukey_loop, reversed = T)
+    (letras <- rownames_to_column(as.data.frame(cld.tukey$`cultivo:playa`$Letters)))
+    colnames(letras) <- c("rowname", "tukey")
+    letras <- letras %>% mutate(
+      playa = lapply(strsplit(letras$rowname, ":"), `[[`, 2),
+      cultivo = lapply(strsplit(letras$rowname, ":"), `[[`, 1)
+    ) %>% select(cultivo, playa, tukey)
+      tabla_summ <- merge(tabla_summ, letras)
   } else {
     tabla_summ$tukey <- c("", "", "", "", "", "")
   }
-  (p <- barras_tfg()) # CAMBIAR GRAFICA
-  ggsave(paste0("./analisis 12-2023/graficas/1/", i, "_tent.png"), width = 800, height = 1000, units = "px", scale = 2, dpi = "retina")
-}
+  # Evalua si hay diferencias sig en cultivo y guarda prob y nivel de significacion
+  if ((summary(modelos_t[[n]])[[1]][["Pr(>F)"]][1]) <= 0.05){
+    diferencias  <-  TRUE
+    prob <- summary(modelos_t[[n]])[[1]][["Pr(>F)"]][1]
+    significacion = case_when((prob <= 0.05) & (prob > 0.01) ~ "*",
+                              (prob <= 0.01) & (prob > 0.001) ~ "**",
+                              (prob <= 0.001) ~ "***",)
+  } else{diferencias <- FALSE ; significacion <- ""}
+  (p <- barras_tfg())
+  if(diferencias) {p <- p + annotate("segment", x = 0.75, xend = 2.25, y =  1.15 * (max(tabla_summ$media) + max(tabla_summ$error)), yend =  1.15 * (max(tabla_summ$media) + max(tabla_summ$error)), color = "gray40", size = 0.8) +
+    annotate("segment", x = 0.75, xend = 0.75, y = 1.15 * (max(tabla_summ$media) + max(tabla_summ$error)), yend = 1.1 * (max(tabla_summ$media) + max(tabla_summ$error)), color = "gray40", size = 0.8) +
+    annotate("segment", x = 2.25, xend = 2.25, y = 1.15 * (max(tabla_summ$media) + max(tabla_summ$error)), yend = 1.1 * (max(tabla_summ$media) + max(tabla_summ$error)), color = "gray40", size = 0.8) +
+    annotate("text", x = 1.5, y = 1.18 * (max(tabla_summ$media) + max(tabla_summ$error)), label = significacion, size = 7)} # Si hubo diferencias, añade elementos a la grafica
+  
+  # Guardamos graficas
+  (p <- p + annotate("text", x = 1.5, y = 1.3 * (max(tabla_summ$media) + max(tabla_summ$error)), label = "paste(italic(Tentacle))", size = 5, color = "gray30", parse = T) +
+      theme(legend.position = "right"))
+  ggsave(paste0("./resultados/1/", i, "_tent.png"), width = 510, height = 510, units = "px", scale = 2, dpi = "retina")
+} # TENTACULO
+
