@@ -32,7 +32,8 @@ ggplot(filter(data_1, tejido == "Tentaculo")) +
   geom_histogram(aes(x = TEAC, fill = playa), bins = 10, alpha = 0.8) +
   facet_wrap(~ madurez)
 
-shapiro.test(filter(data_1, tejido == "Tentaculo")$SOD)
+shapiro.test(log(filter(data_1, tejido == "Tentaculo")$GST))
+shapiro.test(filter(data_1, tejido == "Tentaculo")$GST)
 
 
 ggplot(data_1) +
@@ -46,20 +47,20 @@ ggplot(data_1) +
 # Observación n 1 (individuo 1) la TEAC sale mu alta (columna 15)
 
 ### Potenciales outliers ----
-data_1[38, 10] <-  NA
-data_1[12, 13] <-  NA
-data_1[6, 15] <-  NA
-data_1[1, 15] <-  NA
-data_1[25, 7] <- NA
-data_1[7,13] <- NA
+data_1$GR[38] <-  NA
+data_1$G6PDH[12] <-  NA
+data_1$TEAC[6] <-  NA # teac
+data_1$TEAC[1] <-  NA # este es del teac no se para que quitarlo
+data_1$SOD[25] <- NA
+data_1$G6PDH[7] <- NA
 # Revisar
 
 # NORMALIDAD DE LOS DATOS - EVALUACION VISUAL
-
 # SOD bastante aceptables las dos, quizas pie un poco peor
 # cat no es muy normal en tentaculo. Transformar
 # GPx una mierda, muy pocos datos no se que hacer
-# GR mejora con log. Transformar
+# GR transformar log en tentaculo
+# GST no muy bien. transformar las dos
 # DTD bien creo, bastante normal
 # G6PDH en pie mejora con transformacion creo
 # TEAC perfecto
@@ -71,7 +72,7 @@ data_1[7,13] <- NA
 # Modelo con playa: SOD ~ tiempo + playa. Vamos a probar con este
 
 # Prueba normalidad residuos
-m1 <- aov(log(MDA) ~ cultivo + playa, data = filter(data_1, tejido == "Tentaculo"))
+m1 <- aov(log(MDA) ~ cultivo * playa, data = filter(data_1, tejido == "Tentaculo"))
 summary(m1)
 plot(m1, 3)
 
@@ -100,42 +101,54 @@ plot(m1, 3)
 
 #data_1 <- select(data_1, -GPx)
 
-modelos_p <- lapply(colnames(select(data_1, -GPx)[c(7:15)]), function(x){
-  Anova(aov(formula = as.formula(paste0(x, " ~ cultivo + playa")), filter(data_1, tejido == "Pie")), type = 3)})
+modelos_p <- lapply(colnames(select(data_1, -GPx, )[c(7:15)]), function(x){
+  aov(formula = as.formula(paste0(x, " ~ cultivo * playa")), filter(data_1, tejido == "Pie"))})
 
 modelos_t <- lapply(colnames(select(data_1, -GPx)[c(7:15)]), function(x){
-  Anova(aov(formula = as.formula(paste0(x, " ~ cultivo + playa")), filter(select(data_1, -GPx), tejido == "Tentaculo")), type = 3)})
+  aov(formula = as.formula(paste0(x, " ~ cultivo * playa")), filter(data_1, tejido == "Tentaculo"))})
 
-# Transformar log solo GR y G6PDH en tentaculo
+# Transformar log solo GR y G6PDH en tentaculo, y GST en ambos
 
-modelos_t[[3]] <- Anova(aov(log(GR) ~ cultivo + playa, data = filter(data_1, tejido == "Tentaculo")), type = 3)
-modelos_t[[6]] <- Anova(aov(log(G6PDH) ~ cultivo + playa, data = filter(data_1, tejido == "Tentaculo")), type = 3)
+modelos_t[[3]] <- aov(log(GR) ~ cultivo * playa, data = filter(data_1, tejido == "Tentaculo"))
+modelos_t[[4]] <- aov(log(GST) ~ cultivo * playa, data = filter(data_1,tejido == "Tentaculo"))
+
+modelos_p[[4]] <- aov(log(GST) ~ cultivo * playa, data = filter(data_1, tejido == "Pie"))
+modelos_p[[3]] <-  aov(log(GR) ~ cultivo * playa, data = filter(data_1, tejido == "Pie"))
+
+### Pruebas de normalidad y homocedasticidad ----
+sapply(modelos_p, function(x){
+  print(shapiro.test(x$residuals))
+  print(leveneTest(x))
+})
+# GR pie necesita transformacion
+# G6PDH no cumple homocedasticidad. No se puede analizar. Quitar del modelo y ver alternativas no parametricas.
+
 
 ### Evaluacion de modelos ----
-for (i in c(1:9)) {
-  print(colnames(select(data_1, -GPx)[i]))
-  print(modelos_p[i])
+for (i in c(1:8)) {
+  print(colnames(select(data_1, -GPx, -G6PDH)[7:14][i]))
+  print(summary(modelos_p[[i]]))
 }
 # Pie: Diferencias significativas en GPx, GR, GST, G6PDH y MDA
 
-for (i in c(1:9)) {
-  print(colnames(select(data_1, -GPx)[7:15][i]))
-  print(modelos_t[i])
+for (i in c(1:8)) {
+  print(colnames(select(data_1, -GPx, -G6PDH)[7:14][i]))
+  print(summary(modelos_t[[i]]))
 }
 # Tentaculo: diferencia significativas en SOD, CAT, GST, DTD, TEAC y MDA
 
-### TESST POST-HOC ----
+### TESST POST-HOC y graficas ----
 # Rehacemos modelos en clase aov() para el test de tukey
-modelos_p <- lapply(colnames(select(data_1, -GPx)[c(7:15)]), function(x){
-  aov(formula = as.formula(paste0(x, " ~ cultivo + playa")), filter(data_1, tejido == "Pie"))})
+#modelos_p <- lapply(colnames(select(data_1, -GPx)[c(7:15)]), function(x){
+#  aov(formula = as.formula(paste0(x, " ~ cultivo + playa")), filter(data_1, tejido == "Pie"))})
 
-modelos_t <- lapply(colnames(select(data_1, -GPx)[c(7:15)]), function(x){
-  aov(formula = as.formula(paste0(x, " ~ cultivo + playa")), filter(select(data_1, -GPx), tejido == "Tentaculo"))})
+#modelos_t <- lapply(colnames(select(data_1, -GPx)[c(7:15)]), function(x){
+#  aov(formula = as.formula(paste0(x, " ~ cultivo + playa")), filter(select(data_1, -GPx), tejido == "Tentaculo"))})
 
 # Transformar log solo GR y G6PDH en tentaculo
 
-modelos_t[[3]] <- aov(log(GR) ~ cultivo + playa, data = filter(data_1, tejido == "Tentaculo"))
-modelos_t[[6]] <- aov(log(G6PDH) ~ cultivo + playa, data = filter(data_1, tejido == "Tentaculo"))
+#modelos_t[[3]] <- aov(log(GR) ~ cultivo + playa, data = filter(data_1, tejido == "Tentaculo"))
+#modelos_t[[6]] <- aov(log(G6PDH) ~ cultivo + playa, data = filter(data_1, tejido == "Tentaculo"))
 # Bucle de estadisticos de resumen, test port-hoc y grafica
 
 for (n in c(1:9)) { ### PIE
@@ -145,29 +158,36 @@ for (n in c(1:9)) { ### PIE
     summarise(media = mean(get(i), na.rm = T),
               desvest = sd(get(i), na.rm = T),
               error = desvest/sqrt(sum(!is.na(get(i)))))
-  # Test post-hoc Tukey
-  if ((summary(modelos_p[[n]])[[1]][["Pr(>F)"]][2]) <= 0.05) {
-    m.full <- aov(get(i)~ cultivo * playa, data = filter(data_1, tejido == "Pie"))
-    tukey_loop <- TukeyHSD(m.full)
-    cld.tukey <- multcompLetters4(m.full, tukey_loop, reversed = T)
+  # Test post-hoc Tukey # Aqui tengo que añadir la interaccion
+  m.temp <- Anova(modelos_p[[n]], type = "III")
+  if (((m.temp[["Pr(>F)"]][3]) <= 0.05) |  ((m.temp[["Pr(>F)"]][4]) <= 0.05)){
+    tukey_loop <- TukeyHSD(modelos_p[[n]])
+    cld.tukey <- multcompLetters4(modelos_p[[n]], tukey_loop, reversed = T)
     (letras <- rownames_to_column(as.data.frame(cld.tukey$`cultivo:playa`$Letters)))
     colnames(letras) <- c("rowname", "tukey")
     letras <- letras %>% mutate(
       playa = lapply(strsplit(letras$rowname, ":"), `[[`, 2),
       cultivo = lapply(strsplit(letras$rowname, ":"), `[[`, 1)
     ) %>% select(cultivo, playa, tukey)
-    # EN EL CASO DE MDA HACER OVERRIDE MANUAL porque tukey no detecta diferencias
+    # EN EL CASO DE MDA_p hacemos test de fisher porque tukey no detecta diferencias
     if(n == 9){
-      letras$tukey <- c("b", "ab", "b", "ab", "a", "a")
-      tabla_summ <- merge(tabla_summ, letras)
-    } else{tabla_summ <- merge(tabla_summ, letras)}
+      fisher.loop <- LSD.test(modelos_p[[n]], c("cultivo", "playa"))
+      (letras <- rownames_to_column(as.data.frame(fisher.loop$groups)))
+      letras <- letras %>% mutate(
+          playa = lapply(strsplit(letras$rowname, ":"), `[[`, 2),
+          cultivo = lapply(strsplit(letras$rowname, ":"), `[[`, 1),
+          tukey = case_when(groups == "a" ~ "b",
+                            groups == "b" ~ "a",
+                            TRUE ~ "ab")) %>%  select(-MDA, -rowname, -groups)
+    }
+    tabla_summ <- merge(tabla_summ, letras)
   } else {
     tabla_summ$tukey <- c("", "", "", "", "", "")
   }
   # Evalua si hay diferencias sig en cultivo y guarda prob y nivel de significacion
-  if ((summary(modelos_p[[n]])[[1]][["Pr(>F)"]][1]) <= 0.05){
+  if ((m.temp[["Pr(>F)"]][2]) <= 0.05){
     diferencias  <-  TRUE
-    prob <- summary(modelos_p[[n]])[[1]][["Pr(>F)"]][1]
+    prob <- m.temp[["Pr(>F)"]][2]
     significacion = case_when((prob <= 0.05) & (prob > 0.01) ~ "*",
                               (prob <= 0.01) & (prob > 0.001) ~ "**",
                               (prob <= 0.001) ~ "***",)
@@ -180,7 +200,7 @@ for (n in c(1:9)) { ### PIE
   
   # Guardamos graficas
   (p <- p + annotate("text", x = 1.5, y = 1.3 * (max(tabla_summ$media) + max(tabla_summ$error)), label = "paste(italic(Column))", size = 5, color = "gray30", parse = T))
-  ggsave(paste0("./resultados/1/", i, "_pie.png"), width = 340, height = 510, units = "px", scale = 2, dpi = "retina")
+  ggsave(paste0("./resultados/1/", i, "_pie_v2.png"), width = 340, height = 510, units = "px", scale = 2, dpi = "retina")
 } # PIE
 
 for (n in c(1:9)) { ### TENTACULO
@@ -191,24 +211,24 @@ for (n in c(1:9)) { ### TENTACULO
               desvest = sd(get(i), na.rm = T),
               error = desvest/sqrt(sum(!is.na(get(i)))))
   # Test post-hoc Tukey
-  if ((summary(modelos_t[[n]])[[1]][["Pr(>F)"]][2]) <= 0.05) {
-    m.full <- aov(get(i)~ cultivo * playa, data = filter(data_1, tejido == "Tentaculo"))
-    tukey_loop <- TukeyHSD(m.full)
-    cld.tukey <- multcompLetters4(m.full, tukey_loop, reversed = T)
+  m.temp <- Anova(modelos_t[[n]], type = "III")
+  if (((m.temp[["Pr(>F)"]][3]) <= 0.05) |  ((m.temp[["Pr(>F)"]][4]) <= 0.05)){
+    tukey_loop <- TukeyHSD(modelos_t[[n]])
+    cld.tukey <- multcompLetters4(modelos_t[[n]], tukey_loop, reversed = T)
     (letras <- rownames_to_column(as.data.frame(cld.tukey$`cultivo:playa`$Letters)))
     colnames(letras) <- c("rowname", "tukey")
     letras <- letras %>% mutate(
       playa = lapply(strsplit(letras$rowname, ":"), `[[`, 2),
       cultivo = lapply(strsplit(letras$rowname, ":"), `[[`, 1)
     ) %>% select(cultivo, playa, tukey)
-      tabla_summ <- merge(tabla_summ, letras)
+    tabla_summ <- merge(tabla_summ, letras)
   } else {
     tabla_summ$tukey <- c("", "", "", "", "", "")
   }
   # Evalua si hay diferencias sig en cultivo y guarda prob y nivel de significacion
-  if ((summary(modelos_t[[n]])[[1]][["Pr(>F)"]][1]) <= 0.05){
+  if ((m.temp[["Pr(>F)"]][2]) <= 0.05){
     diferencias  <-  TRUE
-    prob <- summary(modelos_t[[n]])[[1]][["Pr(>F)"]][1]
+    prob <- m.temp[["Pr(>F)"]][2]
     significacion = case_when((prob <= 0.05) & (prob > 0.01) ~ "*",
                               (prob <= 0.01) & (prob > 0.001) ~ "**",
                               (prob <= 0.001) ~ "***",)
@@ -222,6 +242,14 @@ for (n in c(1:9)) { ### TENTACULO
   # Guardamos graficas
   (p <- p + annotate("text", x = 1.5, y = 1.3 * (max(tabla_summ$media) + max(tabla_summ$error)), label = "paste(italic(Tentacle))", size = 5, color = "gray30", parse = T) +
       theme(legend.position = "right"))
-  ggsave(paste0("./resultados/1/", i, "_tent.png"), width = 510, height = 510, units = "px", scale = 2, dpi = "retina")
+  ggsave(paste0("./resultados/1/", i, "_tent_v2.png"), width = 510, height = 510, units = "px", scale = 2, dpi = "retina")
 } # TENTACULO
 
+### g6pdh ----
+
+m.p <- Anova(aov(log(G6PDH) ~ cultivo * playa, data = filter(data_1, tejido == "Pie")), type = 3)
+leveneTest(aov(log(G6PDH) ~ cultivo * playa, data = filter(data_1, tejido == "Tentaculo")))
+
+
+m.t <- Anova(aov(log(G6PDH) ~ cultivo * playa, data = filter(data_1, tejido == "Tentaculo")), type = 3)
+m.t
