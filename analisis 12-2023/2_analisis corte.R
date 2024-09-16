@@ -27,11 +27,11 @@ data_2 <- filter(datos, cultivo == "cultured") %>%
 
 ggplot(data_2, aes(y = MDA)) +
   geom_boxplot(aes(x = tratamiento, color = tratamiento), alpha = 0) +
-  geom_point(aes(x = tratamiento, color = tratamiento), alpha = 0.9) +
+  geom_point(aes(x = tratamiento, color = tratamiento), alpha = 0.8) +
   facet_wrap(~tejido)
 
 
-# Outilers: comprobar con los modelos y solo quitar si necesarios
+# Outilers: comprobar cMDA# Outilers: comprobar con los modelos y solo quitar si necesarios
 
 #data_2[26,8] <- NA # En catalasa, parece que se va bastante pero no tengo mucha confianza
 #data_2[17,9] <- NA # en gpx, bastante seguro de que es outlier
