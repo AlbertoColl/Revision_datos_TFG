@@ -31,7 +31,8 @@ ggplot(data_2, aes(y = MDA)) +
   facet_wrap(~tejido)
 
 
-# Outilers: comprobar cMDA# Outilers: comprobar con los modelos y solo quitar si necesarios
+# Outilers: comprobar cMDA
+# Outilers: comprobar con los modelos y solo quitar si necesarios
 
 #data_2[26,8] <- NA # En catalasa, parece que se va bastante pero no tengo mucha confianza
 #data_2[17,9] <- NA # en gpx, bastante seguro de que es outlier
