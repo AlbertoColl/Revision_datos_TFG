@@ -9,8 +9,7 @@
 # Las muestras son independientes temporalmente ya que no se trata del mismo animal (mismo cestillo?)
 
 library(tidyverse)
-library(MVN)
-
+library(multcompView)
 
 ### SETUP y filtrado de datos ----
 
@@ -36,7 +35,9 @@ data_2 <- filter(datos, cultivo == "cultured") %>%
 
 ggplot(data_2, aes(y = MDA_p)) +
   geom_boxplot(aes(x = tratamiento, color = tratamiento), alpha = 0) +
-  geom_point(aes(x = tratamiento, color = tratamiento), alpha = 0.8)
+  geom_point(aes(x = tratamiento, color = tratamiento), alpha = 1, size = 2)
+
+ggsave("grafica_ejemplo.eps", device = "eps")
 
 data_2$SOD_p[6] <- NA # FUERA DE RANGO IQ Y PARECE INFLUIR EL ANALISIS
 data_2$CAT_p[16] <- NA # FUERA DE RANGO IQ Y PARECE INFLUIR EL ANALISIS
@@ -86,9 +87,17 @@ for (i in c(1:20)) {
 
 
 ### ACTUALIZAR Y CAMBIAR BUCLE
-for (n in c(1:22)) {
-  i <- colnames(datos[4:25])[[n]]
-  tabla_summ <- datos %>%  group_by(tratamiento) %>% 
+
+# Falta:
+  # Comprobar normas de la revista
+  # Actualizar script de graficas
+  # Actualizar llamada al script en este bucle
+  # Actualizar directorio de salida de las graficas
+
+
+for (n in c(1:20)) {
+  i <- colnames(data_2[6:25])[[n]]
+  tabla_summ <- data_2 %>%  group_by(tratamiento) %>% 
     summarise(media = mean(get(i), na.rm = T),
               desvest = sd(get(i), na.rm = T),
               error = desvest/sqrt(sum(!is.na(get(i)))))
@@ -101,10 +110,10 @@ for (n in c(1:22)) {
   } else {
     tabla_summ$tukey <- c("", "", "", "")
   }
-  (p <- barras_tfm() + labs(subtitle = case_when(str_detect(i, "pie") == T  ~ "Column",
-                                                 str_detect(i, "tent") == T ~ "Tentacle",
+  (p <- barras_tfm() + labs(subtitle = case_when(str_detect(i, "_p") == T  ~ "Column",
+                                                 str_detect(i, "_t") == T ~ "Tentacle",
                                                  TRUE ~ "")))
-  saveRDS(p, paste0("./resultados/graficas4/", i, "_RDS"))
-  ggsave(paste0("./resultados/graficas4/", i, ".png"), width = 90, height = 112.5, units = "mm", dpi = 1000)
+  #saveRDS(p, paste0("./resultados/graficas4/", i, "_RDS"))
+  #ggsave(paste0("./resultados/graficas4/", i, ".png"), width = 90, height = 112.5, units = "mm", dpi = 1000)
 }
 
