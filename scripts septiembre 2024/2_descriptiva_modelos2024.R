@@ -23,19 +23,16 @@ source(file = "./scripts septiembre 2024/0_data_lab.R")
 #source(file = "./analisis 12-2023/0_5_graficas.R")
 
 # Filtrar para Objetivo 2
-data_2 <- filter(datos, cultivo == "cultured") %>% 
-  filter((corte == "dissected") | ((corte == "control") & (madurez == "No"))) %>% 
-  mutate(tratamiento = as.factor(case_when(corte == "control" ~ "control",
-                                           (corte == "dissected") & (madurez == "No") ~ "t1",
-                                           (corte == "dissected") & (madurez == "Si") ~ "t2")))
-
-
+data_2 <- filter(datos, cultivo == "cultured")
 
 ### Exploracion ----
 
-ggplot(data_2, aes(y = MDA_p)) +
-  geom_boxplot(aes(x = tratamiento, color = tratamiento), alpha = 0) +
-  geom_point(aes(x = tratamiento, color = tratamiento), alpha = 1, size = 2)
+ggplot(data_2, aes(y = SOD_p)) +
+  geom_boxplot(aes(x = tiempo:corte, color = tiempo:corte), alpha = 0) +
+  geom_point(aes(x = tiempo:corte, color = tiempo:corte), alpha = 1, size = 2) +
+  facet_grid(~playa)
+# Problema: salobreña sigue una tendencia diferente en algunas enzimas como la catalasa
+
 
 ggsave("grafica_ejemplo.eps", device = "eps")
 
