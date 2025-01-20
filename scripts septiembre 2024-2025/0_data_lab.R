@@ -1,6 +1,6 @@
 ### ORTIMAR - Objetivos 1 y 2
 # Lectura y limpieza de datos
-# Septiembre 2024 - revision para publicacion
+# Enero 2025 - revision para publicacion
 
 library(tidyverse)
 

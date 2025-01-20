@@ -4,9 +4,13 @@
 
 # El objetivo es comparar los parametros entre los controles cultivados (cultivo si, corte no, madurez no), los cortados (corte si, madurez no), y los cortados t2 (corte si, madurez si) para ver el efecto de esta manipulacion a corto y largo plazo en cultivo.
 
+# Vamos a hacer un diseño cuadrado 2x2 dentro de las anemonas cultivadas: la variable corte, que tiene 2 niveles (dissected y control), y la variable tiempo, con niveles 0 y 1. De esa manera esperamos ver el efecto del corte a largo plazo.
+
 # La hipotesis nula H0 es que no hay diferencias entre el estado oxidativo entre anemonas cortadas y no cortadas. La hipotesis alternativa H1 es que sí que hay diferencias, a corto o largo plazo respecto al control.
 
 # Las muestras son independientes temporalmente ya que no se trata del mismo animal (mismo cestillo?)
+
+# ESTE SCRIPT ES LA VERSION JUNTADO PLAYAS
 
 library(tidyverse)
 library(multcompView)
