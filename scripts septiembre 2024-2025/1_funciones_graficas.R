@@ -1,138 +1,105 @@
-### Analisis estadistico TFG 1                                          Funciones de generacion de graficas
+### Revision Analisis TFM - Alberto Coll Fernandez
+# Definicion de graficas
+# Comenzado: 24/01/2023
+# Terminado 24/01/2023
 
-# Alberto Coll Fernandez                                                   Comienzo: 23/03/2022                                                       Fin: 28/03/23
 
-# Problemas y aspectos a resolver:                                                  - Podria hacer otra version de la grafica de interaccion y barras             para los casos en los que no incluya la playa en el modelo, sobre           todo en el caso de interaccion que creo que ayudaria mucho a                hacerla mas visual                                                        - Deberia hacer version de las graficas para el modelo simplificado           de corte * playa
-
-### SETUP ----
+## SETUP ----
 library(tidyverse)
 library(ggthemr)
 
-# Directorio en laboratorio: C:/Users/Usuario/Documents/TFG Alberto Coll
+setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG") # Lab
+source(file = "./scripts septiembre 2024-2025/0_data_lab.R")
 
-# Directorio en portatil: D:/collf/Documents/GitHub/TFG-Alberto-Coll
-
-setwd("D:/collf/Documents/GitHub/TFG-Alberto-Coll")
-
-# Llamamos el script de lectura
-#source(file = "./scripts/0_data_lab.R") # Laboratorio
-source(file = "./scripts/0_data_home.R") # En casa
-datos <- datos %>% filter(cultivo == "Si")
-
-ggthemr("fresh")
-# Definimos el tema de las graficas
-theme_ortimar <- function(){
+## Definicion del tema y formato de las graficas ----
+theme_tfm <- function(){
   theme(panel.background = element_rect(fill = "gray99"),
-        axis.text = element_text(size = 10),
-        plot.title = element_text(size = 18),
-        strip.text.x = element_text(size = 15, face = "bold", vjust = 0),
-        axis.title = element_text(size = 14),
+        axis.text = element_text(size = 9),
+        plot.subtitle = element_text(size = 12, face = "bold", hjust = 0.5, vjust = -.5),
+        plot.title = element_text(hjust = 0.5),
+        strip.text.x = element_text(size = 12, face = "bold", vjust = 0),
+        axis.title = element_text(size = 12),
+        legend.position = "none",
+        panel.grid = element_blank(),
+        axis.line = element_line(colour = "gray10"),
+        axis.ticks = element_line(color = "gray10"))
         #strip.background = element_rect(colour = "black")
-        
-  )
 }
 
-### Gráfica de barras ----
+## Definicion de grafica de barras ----
 
-# Esta es la definitiva, con manipulacion de strings para poner los titulos bien, usnado get(), str_split(), str_detect()
-barras <- function(){
-  ggplot(data = tabla_summ, aes(x = corte, fill = playa, y = media)) +
-    geom_errorbar(aes(ymax = media + error, ymin = media - error,
-                      group = playa), width = 0.7, color = "gray25",
-                  position = position_dodge(width = 0.9)) +
-    geom_col(position = position_dodge(width = 0.9)) +
-    #geom_text(aes(label = Letters, y = media + error + (media * .1), group = playa),
-     #         position = position_dodge(width = 0.9), vjust = 0.1) +
-    facet_wrap(~tiempo, labeller = as_labeller(c("0" = "First sampling", "1" = "Second sampling"))) +
-    labs(fill = "Sampling point:") +
-      #caption = "\na,b,c: differences across sampling points    *: differences between treatments    +: differences between samplings") +
+
+# Este es el corazon del codigo que genera las graficas. Itera los nombres de las variables, y para cada una te da su media, desviacion estandar y error para usar en las graficas. Una vez tengas las funciones de las graficas hechas, se añaden al bucle. Es necesario ponerlo en otro script, en el de descriptiva o de analisis.
+
+barras_tfm <- function(){
+  ggplot() +
+    geom_errorbar(data = tabla_summ, aes(x = tratamiento, ymax = media + error, ymin = media- error), width = 0.7, color = "gray55") +
+    geom_col(data = tabla_summ, aes(x = tratamiento, y = media, fill = tratamiento, color = tratamiento),  alpha = 0.1, linewidth = 1) +
+    #geom_point(data = datos, aes(x = tratamiento, y = get(i), color = tratamiento), alpha = 0.7, size = 2) +
+    geom_text(data = tabla_summ, aes(x = tratamiento, y = media + error, label = tukey), color = "grey5", vjust = -0.8, size = 3.5, fontface = "bold") +
     ylab(case_when(
-      i == "proteina_t" | i == "proteina_p"  ~ "protein mg / ml",
-      i == "MDA_t" | i == "MDA_p" ~ "MDA μM ",
-      i == "TEAC_t" | i == "TEAC_p"~ "Trolox equivalent μM",
-      i == "GR_t" | i == "GR_p" ~ "mU / mg  of protein",
-      i == "GST_t" | i == "GST_p" ~ "mU / mg  of protein",
-      i == "DTD_t" | i == "DTD_p" ~ "mU / mg  of protein",
+      i == "clorofila.total" ~ "chlorophyll μg/tissue g",
+      i == "proteina.tent" | i == "proteina.pie"  ~ " protein mg / ml",
+      i == "MDA.pie.2" | i == "MDA.tent.2" ~ "μM  MDA",
+      i == "TEAC.pie" | i == "TEAC.tent"~ "Trolox equivalent μM",
+      i == "GST.pie" | i == "GST.tent" ~ "mU / mg  of protein",
+      i == "DTD.pie" | i == "DTD.tent" ~ "mU / mg  of protein",
+      i == "GR.pie" | i == "GR.tent" ~ "mU / mg  of protein",
+      i == "GPx.pie" | i == "GPx.tent" ~ "mU / mg  of protein",
       TRUE ~ "U / mg  of protein")) +
-    xlab("Treatment") +
-    scale_fill_manual(values = c("#414066", "#69B4AB", "#FBBC4C")) +
-    scale_x_discrete(labels = c("Control", "Dissected")) +
-    theme_ortimar()
+    xlab("Condition") + # Omitir?
+    scale_color_manual(values = c("#0c8890", "#54B65D","#E56A1C", "#FBBC4C")) +
+    scale_x_discrete(labels = c('C','LS','BW', "IMTA")) +
+    ylim(0,110) +
+    #ylim(c(0, 1.4*(max(tabla_summ$media) + max(tabla_summ$error)))) +
+    theme_tfm()
+  
 }
 
-
-barras2 <- function(){
-  ggplot(data = tabla_summ, aes(x = tiempo, fill = playa, y = media, group = corte)) +
-    geom_errorbar(aes(ymax = media + error, ymin = media*0.99,
-                      group = corte), width = 0.7, color = "gray35",
-                  position = position_dodge(width = 0.9)) +
-    geom_col(aes(alpha = corte), position = position_dodge(width = 0.9)) +
-    geom_text(aes(label = Letters, y = media + error + (media * .1), group = corte), position = position_dodge(width = 0.9), vjust = 0.1) +
-    facet_wrap(~playa)+
-    labs(title = paste(case_when(
-      i == "proteina_t" | i == "proteina_p"  ~ "Protein content",
-      i == "MDA_t" | i == "MDA_p" ~ "MDA concentration",
-      i == "TEAC_t" | i == "TEAC_p"~ "Trolox equivalent antioxidant capacity (TEAC)",
-      TRUE ~ paste(str_split(i, "_")[[1]][1], "activity")), case_when(
-        str_detect(i, "_p") == TRUE ~ "on pedal disk\n",
-        TRUE ~ "on tentacle\n")),
-      fill = "Sampling point:",
-      caption = "\na,b,c: differences across sampling points    *: differences between treatments    +: differences between samplings") +
+barras_articulo <- function(){
+  ggplot() +
+    geom_errorbar(data = tabla_summ, aes(x = tratamiento, ymax = media + error, ymin = media- error), width = 0.7, color = "gray55") +
+    geom_col(data = tabla_summ, aes(x = tratamiento, y = media, fill = tratamiento, color = tratamiento),  alpha = 0.1, linewidth = 1) +
+    #geom_point(data = datos, aes(x = tratamiento, y = get(i), color = tratamiento), alpha = 0.7, size = 2) +
+    geom_text(data = tabla_summ, aes(x = tratamiento, y = media + error, label = tukey), color = "grey5", vjust = -0.8, size = 3.5, fontface = "bold") +
+    facet_wrap(~tejido) +
     ylab(case_when(
-      i == "proteina_t" | i == "proteina_p"  ~ "protein mg / ml",
-      i == "MDA_t" | i == "MDA_p" ~ "MDA μM ",
+      i == "proteina" ~ " protein mg / ml",
+      i == "MDA" ~ "μM  MDA",
+      i == "TEAC"~ "Trolox equivalent μM",
+      i == "GST" ~ "mU / mg  of protein",
+      i == "DTD" ~ "mU / mg  of protein",
+      i == "GR" ~ "mU / mg  of protein",
+      i == "GPx" ~ "mU / mg  of protein",
+      TRUE ~ "U / mg  of protein")) +
+    xlab("Condition") + # Omitir?
+    scale_color_manual(values = c("#0c8890", "#54B65D","#E56A1C", "#FBBC4C")) +
+    scale_x_discrete(labels = c('C','LS','BW', "IMTA")) +
+    ylim(c(0, 1.4*(max(tabla_summ$media) + max(tabla_summ$error)))) +
+    theme_tfm()
+  
+}
+
+ggthemr("light")
+barras_tfg <- function(){
+  ggplot() +
+    geom_errorbar(data = tabla_summ, aes(x = tiempo, ymax = media + error, ymin = media- error, color = tratamiento), width = 0.3, position = position_dodge(width = 0.9), linewidth = 1) +
+    geom_col(data = tabla_summ, aes(x = tiempo, y = media, fill = tratamiento, color = tratamiento),  alpha = 0.4, linewidth = 1, position = "dodge2") +
+    geom_text(data = tabla_summ, aes(x = tiempo, y = media + error, label = tukey, group = tratamiento), color = "grey5", vjust=-0.8, size = 3.5, fontface = "bold", , position = position_dodge(width = 0.9)) +
+    ylab(case_when(
+      i == "proteina_t" | i == "proteina_p"  ~ " protein mg / ml",
+      i == "MDA_t" | i == "MDA_p" ~ "μM  MDA",
       i == "TEAC_t" | i == "TEAC_p"~ "Trolox equivalent μM",
-      i == "GR_t" | i == "GR_p" ~ "mU / mg  of protein",
       i == "GST_t" | i == "GST_p" ~ "mU / mg  of protein",
       i == "DTD_t" | i == "DTD_p" ~ "mU / mg  of protein",
+      i == "GR_t" | i == "GR_p" ~ "mU / mg  of protein",
+      i == "GPx_t" | i == "GPx_p" ~ "mU / mg  of protein",
       TRUE ~ "U / mg  of protein")) +
-    xlab("Treatment") +
-    scale_fill_manual(values = c("#414066", "#69B4AB", "#FBBC4C")) +
-    scale_x_discrete(labels = c("First", "Second")) +
-    scale_alpha_manual(values = c(1, .95)) +
-    #guides(alpha = "none") +
-    theme_ortimar() +
+    xlab("") + # Omitir?
+    scale_color_manual(values = c("#62bba5", "#ffb84d", "#37816E", "#F59300" ), labels = c("Control", "Dissected") ) +
+    scale_fill_manual(values = c("#62bba5", "#ffb84d", "#37816E", "#F59300" ), labels = c("Control", "Dissected")) +
+    scale_x_discrete(labels = c("t0", "t1")) + #cambiar al apropiado
+    ylim(c(0, 1.4*(max(tabla_summ$media) + max(tabla_summ$error)))) +
     theme(legend.position = "bottom",
-          legend.direction = "horizontal")
-}
-### Gráfica de interacción ----
-
-# Version actualizada, la damos por mas o menos finalizada. Realmente para ver resultados de interaccion es la mejor grafica pero puede ser algo liosa con tanta playa
-
-interact <- function(){
-  ggplot(data = tabla_summ, aes(x = tiempo, y = media, color = playa:corte, shape = playa:corte)) +
-    geom_errorbar(aes(ymax = media + error, ymin = media - error, group = corte), width = .15, position = position_dodge(width = .25)) +
-    geom_point(size = 4.5, alpha = .8, position = position_dodge(width = .25)) +
-    geom_line(aes(group = corte, linetype = corte), linewidth = 1.5, position = position_dodge(width = .25)) +
-    # geom_text(aes(label = Letters, y = media, group = playa),              position = position_jitter(width = 0.05), color = "gray5",              check_overlap = TRUE, hjust = -0.5, vjust = -0.5) +
-    facet_wrap(~playa) +
-    #labs(title = paste(case_when(
-#      i == "proteina_t" | i == "proteina_p"  ~ "Protein content",
-#      i == "MDA_t" | i == "MDA_p" ~ "MDA concentration",
-#      i == "TEAC_t" | i == "TEAC_p"~ "Trolox equivalent antioxidant capacity (TEAC)",
-#      TRUE ~ paste(str_split(i, "_")[[1]][1], "activity")), case_when(
-#        str_detect(i, "_p") == TRUE ~ "on pedal disk\n",
-#        TRUE ~ "on tentacle\n"))) +
-      #caption = "\na,b,c: differences across sampling points    *: differences between treatments    +: differences between samplings") +
-    ylab(case_when(
-      i == "proteina_t" | i == "proteina_p"  ~ "protein mg / ml",
-      i == "MDA_t" | i == "MDA_p" ~ "MDA μM ",
-      i == "TEAC_t" | i == "TEAC_p"~ "Trolox equivalent μM",
-      i == "GR_t" | i == "GR_p" ~ "mU / mg  of protein",
-      i == "GST_t" | i == "GST_p" ~ "mU / mg  of protein",
-      i == "DTD_t" | i == "DTD_p" ~ "mU / mg  of protein",
-      TRUE ~ "U / mg  of protein")) +
-    xlab("Sampling") +
-    scale_color_manual(name = "Sampling point\n and treatment",
-                       values = c("#414066", "#414066", "#69B4AB", "#69B4AB", "#FBBC4C", "#FBBC4C"),
-                       labels = c("Calahonda control", "Calahonda dissected", "Almuñécar control", "Almuñécar dissected", "Salobreña control", "Salobreña dissected")) +
-    scale_shape_manual(name = "Sampling point\n and treatment",
-                       values = c(16, 17, 16, 17, 16, 17),
-                       labels = c("Calahonda control", "Calahonda dissected", "Almuñécar control", "Almuñécar dissected", "Salobreña control", "Salobreña dissected")) +
-    guides(linetype = "none") +
-    scale_x_discrete(labels = c("First", "Second")) +
-    theme_ortimar() +
-    theme(legend.position = "bottom", legend.direction = "horizontal",
-          legend.text = element_text(size = 8),
-          legend.title = element_text(size = 10))
-}
+          legend.title = element_blank())
+    }

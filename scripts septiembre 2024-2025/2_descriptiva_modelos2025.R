@@ -17,6 +17,7 @@
 library(tidyverse)
 library(multcompView)
 library(car)
+library(rstatix)
 
 ### SETUP y filtrado de datos ----
 
@@ -27,7 +28,7 @@ library(car)
 # En laboratorio
 setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG") # Lab
 source(file = "./scripts septiembre 2024-2025/0_data_lab.R")
-#source(file = "./analisis 12-2023/0_5_graficas.R")
+source(file = "./scripts septiembre 2024-2025/1_funciones_graficas.R")
 
 # Filtrar: solo anemonas cultivadas
 data_2 <- filter(datos, cultivo == "cultured")
@@ -137,12 +138,12 @@ for (n in c(1:20)) {
   } else {
     tabla_summ$tukey <- c("", "", "", "")
   }
+  tabla_summ <- tabla_summ %>% separate_wider_delim(`corte:tiempo`, ":", names = c("tratamiento", "tiempo"), cols_remove=F)
   j = j + 3
   if (n != 5){
   (p <- barras_tfg() + labs(subtitle = case_when(str_detect(i, "_p") == T  ~ "Column",
                                                  str_detect(i, "_t") == T ~ "Tentacle",
                                                  TRUE ~ "")))
-  saveRDS(p, paste0("./resultados/graficas2025/", i, "_RDS"))
   ggsave(paste0("./resultados/graficas2025/", i, ".png"), width = 90, height = 112.5, units = "mm", dpi = 1000)}
 }
 
