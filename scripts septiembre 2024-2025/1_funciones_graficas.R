@@ -98,7 +98,7 @@ barras_tfg <- function(){
     xlab("") + # Omitir?
     scale_color_manual(values = c("#62bba5", "#ffb84d", "#37816E", "#F59300" ), labels = c("Control", "Dissected") ) +
     scale_fill_manual(values = c("#62bba5", "#ffb84d", "#37816E", "#F59300" ), labels = c("Control", "Dissected")) +
-    scale_x_discrete(labels = c("t0", "t1")) + #cambiar al apropiado
+    scale_x_discrete(labels = c("t1", "t2")) + #cambiar al apropiado
     ylim(c(0, 1.4*(max(tabla_summ$media) + max(tabla_summ$error)))) +
     theme(legend.position = "bottom",
           legend.title = element_blank())
