@@ -19,6 +19,7 @@ library(tidyverse)
 library(multcompView)
 library(car)
 library(rstatix)
+library(ggpubr)
 
 ### SETUP y filtrado de datos ----
 
@@ -36,38 +37,50 @@ data_2 <- filter(datos, cultivo == "cultured")
 
 ### Exploracion ----
 
-ggplot(data_2, aes(y = G6PDH_p)) +
+ggplot(data_2, aes(y = CAT_t)) +
   geom_boxplot(aes(x = tiempo:corte, color = tiempo:corte), alpha = 0) +
   geom_point(aes(x = tiempo:corte, color = tiempo:corte), alpha = 1, size = 2)
 # Problema: salobreña sigue una tendencia diferente en algunas enzimas como la catalasa
+
+# Deteccion de outliers en SOD_t y CAT_t para normalidad de residuos
+view(data_2 %>% 
+  group_by(corte:tiempo) %>%
+  identify_outliers(CAT_t))
+
+# Se eliminan:
+data_2$SOD_t[7] <- NA
+data_2$SOD_t[3] <- NA
+data_2$CAT_t[35] <- NA # La funcion ha identificado otro, pero su eliminacion no afecta a la normalidad de residuos, este si.
+
 
 ### Ajuste de modelos ----
 
 # Ajuste de modelos ANOVA con rstatix
 modelos <- lapply(colnames(data_2[c(5:24)]), function(x){
   anova_test(formula = as.formula(paste0(x, " ~ corte * tiempo")), data_2)})
-
 (anova_results <- reduce(modelos, full_join) %>% 
     add_column(.before = 1, variable = rep(colnames(data_2[c(5:24)]), each = 3)) %>% 
     adjust_pvalue(method = "BH"))
 
 
-# Test de Levene y Shapiro se pueden computar igual
+# Test de Levenese computa exactamente igual
 modelos_levene <- lapply(colnames(data_2[c(5:24)]), function(x){
   levene_test(formula = as.formula(paste0(x, " ~ corte * tiempo")), data_2)})
-
 (levene_results <- reduce(modelos_levene, full_join) %>% 
     add_column(.before = 1, variable = colnames(data_2[c(5:24)])))
 
-modelos_shapiro <- lapply(data_2[c(5:24)], function(x){
-  shapiro_test(x, data_2)})
+# Para el test de Shapiro-Wilks se ajustan lm para extraer residuos
+
+modelos_lm <- lapply(colnames(data_2[c(5:24)]), function(x){
+  lm(formula = as.formula(paste0(x, " ~ corte * tiempo")), data_2)})
+modelos_shapiro <- lapply(modelos_lm, function(x){
+  shapiro_test(residuals(x))})
 (shapiro_results <- reduce(modelos_shapiro, full_join) %>% 
     add_column(.before = 1, parametro = colnames(data_2[c(5:24)])))
 
 
-
-# No se cumple normalidad de residuos en el caso de:
-# GPx_p, GST_t, DTD_t, G6PDH_p, y G6PDH_t
+# Sin filtrar, no se cumple normalidad de residuos en el caso de:
+# SOD_t, CAT_t
 
 ### Bucle de construccion de graficas ----
 
@@ -80,31 +93,23 @@ modelos_shapiro <- lapply(data_2[c(5:24)], function(x){
   # Actualizar llamada al script en este bucle
   # Actualizar directorio de salida de las graficas
 
-p_valor_adjust_cor <- append(p_valor_adjust, 1,14)
-
-
-j <- 1
 for (n in c(1:20)) {
   i <- colnames(data_2[5:24])[[n]]
-  tabla_summ <- data_2 %>%  group_by(corte:tiempo) %>% 
-    summarise(media = mean(get(i), na.rm = T),
-              desvest = sd(get(i), na.rm = T),
-              error = desvest/sqrt(sum(!is.na(get(i)))))
-  
-  if (((p_valor_adjust_cor[j]) <= .05)|((p_valor_adjust_cor[j+1]) <= .05)|((p_valor_adjust_cor[j+2]) <= .05)) {
-    tukey_loop <- TukeyHSD(modelos[[n]])
-    cld.tukey <- multcompLetters4(modelos[[n]], tukey_loop, reversed = T)
-    
+  tabla_summ <- data_2 %>% group_by(corte:tiempo) %>% 
+    get_summary_stats(i, type = "mean_se")
+  if (any(filter(as.tibble(anova_results), variable == i)$p.adj <= 0.05, na.rm = T)){
+    model <- aov(as.formula(paste0(i, " ~ corte * tiempo")), data_2)
+    tukey_loop <- TukeyHSD(model)
+    cld.tukey <- multcompLetters4(model, tukey_loop, reversed = T)
     (letras <- rownames_to_column(as.data.frame(cld.tukey$`corte:tiempo`$Letters)))
     colnames(letras) <- c("corte:tiempo", "tukey")
     tabla_summ <- merge(tabla_summ, letras)
-    tabla_summ$`corte:tiempo` <- factor(tabla_summ$`corte:tiempo`, levels = c("control:0", "dissected:0", "control:1", "dissected:1"))
-  } else {
-    tabla_summ$tukey <- c("", "", "", "")
+  } else {if (n != 5){
+
+    tabla_summ$tukey <- c("", "", "", "")}
   }
   tabla_summ <- tabla_summ %>% separate_wider_delim(`corte:tiempo`, ":", names = c("tratamiento", "tiempo"), cols_remove=F)
-  j = j + 3
-  if (n != 5){
+    if (n != 5){
   (p <- barras_tfg() + labs(subtitle = case_when(str_detect(i, "_p") == T  ~ "Column",
                                                  str_detect(i, "_t") == T ~ "Tentacle",
                                                  TRUE ~ "")))
@@ -122,3 +127,71 @@ data_2 %>%
 data_2 %>% 
   group_by(tiempo) %>% 
   t_test(DTD_t ~ corte, p.adjust.method = "BH")
+
+
+### ANOVA DE 3 VIAS----
+
+# El modelo mas completo seria hacer primero anova de 3 vias para ver si hay interaccion entre el factor playa y el resto de variables (corte y yiempo). Es decir, ¿hay una relacion distinta entre corte y tiempo para los individuos procedentes de cada playa?
+
+# Si la hay, se puede descomponer en anovas de 2 vias para los diferentes niveles de playa
+# Si no la hay, se determina si existe alguna interaccion de 2 vias.
+
+# Voy a probar con catalasa que es una enzima en la que habia muchos resultados interesantes
+
+data_2 %>%
+  group_by(playa, corte, tiempo) %>%
+  get_summary_stats(CAT_p, type = "mean_se")
+# Exploracion
+(bxp <- ggboxplot(data_2, x = "tiempo", y = "SOD_p", 
+  color = "corte", palette = "jco", facet.by = "playa"))
+
+# Normalidad de residuos general
+model_3  <- lm(SOD_p ~ playa*corte*tiempo, data = data_2)
+ggqqplot(residuals(model_3))
+shapiro_test(residuals(model_3))
+
+# Normalidad de residuos por grupo
+data_2 %>%
+  group_by(playa, corte, tiempo) %>%
+  shapiro_test(SOD_p)
+ggqqplot(data_2, "SOD_p", ggtheme = theme_bw()) +
+  facet_grid(corte + tiempo ~ playa, labeller = "label_both")
+
+# Levene
+data_2 %>% levene_test(SOD_p ~ playa*corte*tiempo)
+
+## Computacion del ANOVA
+res.aov <- data_2 %>% anova_test(SOD_p ~ playa*corte*tiempo)
+res.aov
+
+# Hay una interaccion significativa a 3 vias, es decir, el efecto del corte y del tiempo sobre los niveles de catalasa pedia son diferentes en organismos de diferentes playas.
+
+# Eso quiere decir que se puede analizar este modelo estadistico por separado para cada nivel del factor playa, descomponiendo asi la interaccion
+
+# Vamos a agfrupar por playa y ver si hay interaccion a dos vias en alguna de ellas. Utilizamos los residuos del modelo completo para mas potencia estadistica
+modelolm_3  <- lm(CAT_p ~ playa*corte*tiempo, data = data_2)
+data_2 %>%
+  group_by(playa) %>%
+  anova_test(CAT_p ~ corte*tiempo, error = modelolm_3)
+
+# Hay interaccion significativa a p = 0.016 en salobreña. Asi que vamos a descomponerla de nuevo en efectos simples
+
+treatment.effect <- data_2 %>%
+  group_by(playa, tiempo) %>%
+  anova_test(CAT_p ~ corte, error = modelolm_3)
+treatment.effect %>% as.tibble() %>% filter(playa == "Salobreña")
+
+# No hay efecto significativo del corte en las anémonas de Calahonda
+# Hay un efecto significativo del corte en las anémonas de Almuñecar, tanto a corto como a largo plazo.
+# Hay un efecto signitifactivo del corte a largo plazo en las anémonas de Salobreña
+
+
+pwc <- data_2 %>%
+  group_by(playa, tiempo) %>%
+  emmeans_test(CAT_p ~ corte, p.adjust.method = "bonferroni") %>%
+  select(-df, -statistic, -p) # Remove details
+# Show comparison results for male at high risk
+pwc %>% filter(playa == "Salobreña", tiempo == "1")
+
+# Presentacion de resultados
+
