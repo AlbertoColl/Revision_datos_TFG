@@ -111,3 +111,14 @@ tabla_summ$tukey <- replace_na(tabla_summ$tukey, "")
   
 # Presentacion de resultados
 
+#### Anova de 3 vias con correción BH ----
+
+#Pivotamos los datos a formato largo para poder agrupar por variable y eliminamos NAs
+
+data_2_long <- data_2 %>% pivot_longer(!c(individuo, playa, corte, cultivo, tiempo), names_to = "variable", values_to = "valor", values_drop_na = TRUE)
+
+# FALTA AQUI HACER LAS ASUNCIONES PARA TODAS LAS VARIABLES
+# Computamos los anovas agrupando por variable y aplicamos correción de BH
+res.aov <- data_2_long %>% group_by(variable) %>% anova_test(valor ~ playa*corte*tiempo) %>% adjust_pvalue(method = "BH")
+
+# A continuación habria que ir a cada variable una a una y hacer los pertinentes test post hoc, ir incorporando en un informe de markdown.
