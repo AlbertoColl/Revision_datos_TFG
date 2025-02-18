@@ -15,29 +15,100 @@ library(ggpubr)
 
 ### SETUP y filtrado de datos ----
 
-# En portatil (arreglar)
-# setwd("D:/collf/Documents/GitHub/Revision_datos_TFG") # Casa
-#source(file = "./scripts enero24/0_data_home.R")
+#setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
+setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
 
-# En laboratorio
-setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG") # Lab
+
 source(file = "./scripts septiembre 2024-2025/0_data_lab.R")
 source(file = "./scripts septiembre 2024-2025/1_funciones_graficas.R")
 
 # Filtrar: solo anemonas cultivadas
 data_2 <- filter(datos, cultivo == "cultured")
 
-### Superoxido dismutasa PIE----
+
+#### Anova de 3 vias con correción BH ----
+
+#Pivotamos los datos a formato largo para poder agrupar por variable y eliminamos NAs
+
+data_2_long <- data_2 %>% pivot_longer(!c(individuo, playa, corte, cultivo, tiempo), names_to = "variable", values_to = "valor", values_drop_na = TRUE)
+data_2_long <- filter(data_2_long, variable != "GPx_t")
+data_2_long <- filter(data_2_long, variable != "GPx_p")
+
+data_2_long$variable <- as.factor(data_2_long$variable)
+
+# Asunciones del ANOVA
+for (i in levels(data_2_long$variable)) {
+  modelo_completo  <- lm(valor ~ playa*corte*tiempo, data = filter(data_2_long, variable == i))
+  print(i)
+  print(shapiro_test(residuals(modelo_completo)))
+  print(data_2 %>% levene_test(get(i) ~ playa*corte*tiempo))
+} # Solo GPx_p viola normalidad de residuos y aun asi es una enzima que se va a volver a medir o excluir del analisis.
+
+
+# Computamos los anovas agrupando por variable y aplicamos correción de BH
+res.aov <- data_2_long %>% group_by(variable) %>% anova_test(valor ~ playa*corte*tiempo) %>% adjust_pvalue(method = "BH")
+res.aov
+
+objetos_ortimar <- list(res.aov)
+# A continuación habria que ir a cada variable una a una y hacer los pertinentes test post hoc, ir incorporando en un informe de markdown.
+
+### Catalasa_pie ----
+
+# No hay interaccion a 3 vias con la correcion de BH
+# No hay interacciones a dos vias
+# Hay efecto principal del corte y de la playa: es decir, las playas tienen niveles diferentes de catalasa y el corte hace que se modifiquen, pero lo hacen igual para todas las playas e igual a corto y largo plazo.
+
+# Grafica
+tabla_summ <- data_2 %>%
+  group_by(playa, corte, tiempo) %>%
+  get_summary_stats(CAT_p, type = "mean_se")
+
+(p.cat_p <- ggplot(sumstat_catp) +
+  geom_errorbar(aes(x = tiempo, ymax = mean + se, ymin = mean- se, color = corte), width = 0.3, position = position_dodge(width = 0.9), linewidth = 1) +
+  geom_col(aes(x = tiempo, y = mean, color = corte, fill = corte), alpha = 0.4, linewidth = 1, position = "dodge2") +
+  facet_wrap(~playa))
+
+objetos_ortimar <- objetos_ortimar %>% append(list(p.cat_p))
+
+
+### Catalasa_tent ----
+
+#  Hay interaccion a 3 vias con la correcion de BH
+
+# Descomposicion por playas con alfa = 0.05 / 3 = 0.016667
+modelo_completo  <- lm(CAT_t ~ playa*corte*tiempo, data = data_2)
+view(data_2 %>%
+  group_by(playa) %>%
+  anova_test(CAT_p ~ corte*tiempo, error = modelo_completo) %>% 
+  adjust_pvalue(method = "bonferroni")) # fijarse en el alfa entre 3
+
+# En Calahonda no hay diferencias significativas
+# En Almuñécar hay efecto del corte
+# En Salobreña hay interaccion entre corte y tiempo
+
+# Descomposición corte y tiempo en Salobreña:
+
+efecto.tratamiento <- data_2 %>%
+  group_by(playa, tiempo) %>%
+  anova_test(CAT_t ~ corte, error = modelo_completo)
+efecto.tratamiento %>% as.tibble() %>% filter(playa == "Salobreña")
+# Hay efecto significativo del corte a largo plazo a nivel alfa 0.05/2 efectos = 0.025
+
+
+
+
+### Ejemplo superoxido dismutasa PIE----
+if(FALSE){
 # Exploracion
 data_2 %>%
   group_by(playa, corte, tiempo) %>%
-  get_summary_stats(SOD_p, type = "mean_se")
+  get_summary_stats(CAT_p, type = "mean_se")
 (bxp <- ggboxplot(data_2, x = "tiempo", y = "SOD_p", 
                   color = "corte", palette = "frontiers", facet.by = "playa",
                   title = "Superoxido dismutasa columnar"))
 
 # Normalidad de residuos general
-modelo_completo  <- lm(SOD_p ~ playa*corte*tiempo, data = data_2)
+modelo_completo  <- lm(CAT_t ~ playa*corte*tiempo, data = data_2)
 ggqqplot(residuals(modelo_completo))
 shapiro_test(residuals(modelo_completo))
 
@@ -67,7 +138,7 @@ data_2 %>%
   group_by(playa) %>%
   anova_test(SOD_p ~ corte*tiempo, error = modelo_completo)
 
-# Hay interaccion significativa a alga = 0.025 solo salobreña. En Calahonda y Almuñecar no hay efectos significativos.
+# Hay interaccion significativa a alfa = 0.025 solo salobreña. En Calahonda y Almuñecar no hay efectos significativos.
 
 # Descomposicion en Salobreña (tukey?)
 
@@ -110,15 +181,4 @@ tabla_summ$tukey <- replace_na(tabla_summ$tukey, "")
 
   
 # Presentacion de resultados
-
-#### Anova de 3 vias con correción BH ----
-
-#Pivotamos los datos a formato largo para poder agrupar por variable y eliminamos NAs
-
-data_2_long <- data_2 %>% pivot_longer(!c(individuo, playa, corte, cultivo, tiempo), names_to = "variable", values_to = "valor", values_drop_na = TRUE)
-
-# FALTA AQUI HACER LAS ASUNCIONES PARA TODAS LAS VARIABLES
-# Computamos los anovas agrupando por variable y aplicamos correción de BH
-res.aov <- data_2_long %>% group_by(variable) %>% anova_test(valor ~ playa*corte*tiempo) %>% adjust_pvalue(method = "BH")
-
-# A continuación habria que ir a cada variable una a una y hacer los pertinentes test post hoc, ir incorporando en un informe de markdown.
+}

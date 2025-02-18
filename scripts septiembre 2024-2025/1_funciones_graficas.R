@@ -8,7 +8,8 @@
 library(tidyverse)
 library(ggthemr)
 
-setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG") # Lab
+#setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
+setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
 source(file = "./scripts septiembre 2024-2025/0_data_lab.R")
 
 ## Definicion del tema y formato de las graficas ----
@@ -28,9 +29,7 @@ theme_tfm <- function(){
 
 ## Definicion de grafica de barras ----
 
-
-# Este es el corazon del codigo que genera las graficas. Itera los nombres de las variables, y para cada una te da su media, desviacion estandar y error para usar en las graficas. Una vez tengas las funciones de las graficas hechas, se añaden al bucle. Es necesario ponerlo en otro script, en el de descriptiva o de analisis.
-
+if(FALSE){ # Aqui estan la funcion que utilicé para mi TFM y para su publicacion asociada, pero se pueden extrapolar a cualquier diseño de tipo ANOVA de una via
 barras_tfm <- function(){
   ggplot() +
     geom_errorbar(data = tabla_summ, aes(x = tratamiento, ymax = media + error, ymin = media- error), width = 0.7, color = "gray55") +
@@ -79,7 +78,9 @@ barras_articulo <- function(){
     theme_tfm()
   
 }
+}
 
+# Esta es la que actualmente estoy usando
 ggthemr("light")
 barras_tfg <- function(){
   ggplot(tabla_summ) +

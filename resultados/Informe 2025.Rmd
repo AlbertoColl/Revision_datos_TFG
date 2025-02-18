@@ -1,0 +1,118 @@
+---
+title: "**ORTIMAR**"
+subtitle: "**Informe del análisis estadístico**"
+author: "Alberto Coll Fernández"
+date: "17/02/2025"
+output:
+  pdf_document: default
+  fontsize: 12pt
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(multcompView)
+library(car)
+library(rstatix)
+library(ggpubr)
+
+#setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
+knitr::opts_knit$set(root.dir = "D:/collf/Documents/GitHub/Revision_datos_TFG")
+
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax
+for authoring HTML, PDF, and MS Word documents. For more details on
+using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that
+includes both content as well as the output of any embedded R code
+chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to
+prevent printing of the R code that generated the plot.
+
+## Diseño experimental e hipótesis
+
+En el ensayo se experimentó a seccionar a las anémonas como método de
+inducción de la reproducción asexual del organismo. Se tienen muestras
+de un grupo cotrol y un grupo experimental seccionado, en dos puntos del
+tiempo diferentes (a las pocas semanas de haber regenerado, y a los
+cuatro meses). Además, se emplearon anémonas procedentes de tres
+entornos naturales diferentes, que en el análisis exploratorio mostraron
+indicios de una respuestas diferente a esta inducción.
+
+## Elección del modelo
+
+En un principio se iba a utilizar un ANOVA de 2-vías para examinar la
+interacción entre las variables **corte** y **tiempo**, con el objetivo
+de examinar los efectos a corto y largo plazo de este método sobre una
+serie de marcadores de bienestar. Puesto que cada muestra es un
+individuo diferente, no debería haber problemas de medidas repetidas
+asociadas a la variable **tiempo**.
+
+Sin embargo, el análisis exploratorio de los datos dio bastantes
+indicios de que algunos de los parámetros escogidos como marcadores
+siguen una tendencia diferente en función del punto de origen de los
+organismos. Por tanto, se incorporó esta variable en forma de un ANOVA
+de tres vías entre las variables **corte**, **tiempo** y **playa**.
+
+## ANOVA de 3-vías
+
+A continuación se muestran los resultados de los ANOVAs de 3-vías para
+todas las variables del estudio, aplicando la correción de
+Benjamin-Hochberg a los p-valores por el elevado número de test
+estadísticos realizados.
+
+```{r anova3way, echo=FALSE}
+res.aov
+```
+
+## Análisis post-hoc
+
+Al hacer un ANOVA de 3-vías, los análisis post-hoc son diferentes
+dependiendo de la existencia o no de una interacción significativa a 3
+vías y a 2 vías. Por ello, es necesario evaluar todas las variables caso
+por caso.
+
+# CAT columnar
+
+```{r CAT_p anova3, echo=FALSE}
+res.aov %>% as.tibble() %>% filter(variable == "CAT_p")
+```
+
+En la catalasa columnar no hay interacción significativa entre las tres variables tras ajustar los p-valores, a un nivel de significación de alfa = 0.05. Tampoco aparecen interacciones significativas a dos vías. Sin embargo, si que aparece un efecto significativo de la playa de origen y del corte sobre la actividad catalasa.
+
+Para explorar esas diferencias, realizamos un test de Tukey
+
+
+# CAT tentacular
+
+```{r CAT_t anova3, echo=FALSE}
+res.aov %>% as.tibble() %>% filter(variable == "CAT_t")
+```
+
+En la catalasa columnar hay interacción significativa entre las tres variables tras ajustar los p-valores, a un nivel de significación de alfa = 0.05.
+
+```{r CAT_t anova2, echo=FALSE}
+modelo_completo  <- lm(CAT_t ~ playa*corte*tiempo, data = data_2)
+(data_2 %>%
+  group_by(playa) %>%
+  anova_test(CAT_p ~ corte*tiempo, error = modelo_completo) %>% 
+  adjust_pvalue(method = "bonferroni")) #O fijarse en el alfa entre 3
+```
+En Calahonda, no hay ningun efecto significativo. En Almuécar, hay un efecto significativo del corte. En
