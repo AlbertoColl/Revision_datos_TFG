@@ -8,8 +8,8 @@
 library(tidyverse)
 library(ggthemr)
 
-#setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
-setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
+setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
+#setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
 source(file = "./scripts septiembre 2024-2025/0_data_lab.R")
 
 ## Definicion del tema y formato de las graficas ----

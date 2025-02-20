@@ -15,8 +15,8 @@ library(ggpubr)
 
 ### SETUP y filtrado de datos ----
 
-#setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
-setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
+setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
+#setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
 
 
 source(file = "./scripts septiembre 2024-2025/0_data_lab.R")
@@ -44,6 +44,8 @@ for (i in levels(data_2_long$variable)) {
   print(data_2 %>% levene_test(get(i) ~ playa*corte*tiempo))
 } # Solo GPx_p viola normalidad de residuos y aun asi es una enzima que se va a volver a medir o excluir del analisis.
 
+# No tiene sentido analizar la normalidad de residuos por grupo si son 3 puntos por grupo. Por la experiencia sabemos que estas variables se comportarse de forma normal
+
 
 # Computamos los anovas agrupando por variable y aplicamos correción de BH
 res.aov <- data_2_long %>% group_by(variable) %>% anova_test(valor ~ playa*corte*tiempo) %>% adjust_pvalue(method = "BH")
@@ -57,13 +59,14 @@ objetos_ortimar <- list(res.aov)
 # No hay interaccion a 3 vias con la correcion de BH
 # No hay interacciones a dos vias
 # Hay efecto principal del corte y de la playa: es decir, las playas tienen niveles diferentes de catalasa y el corte hace que se modifiquen, pero lo hacen igual para todas las playas e igual a corto y largo plazo.
+# ¿Como representamos esto?
 
 # Grafica
 tabla_summ <- data_2 %>%
   group_by(playa, corte, tiempo) %>%
   get_summary_stats(CAT_p, type = "mean_se")
 
-(p.cat_p <- ggplot(sumstat_catp) +
+(p.cat_p <- ggplot(tabla_summ) +
   geom_errorbar(aes(x = tiempo, ymax = mean + se, ymin = mean- se, color = corte), width = 0.3, position = position_dodge(width = 0.9), linewidth = 1) +
   geom_col(aes(x = tiempo, y = mean, color = corte, fill = corte), alpha = 0.4, linewidth = 1, position = "dodge2") +
   facet_wrap(~playa))

@@ -6,8 +6,8 @@ library(tidyverse)
 
 # Importacion ----
 
-#setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
-setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
+setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
+#setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
 
 datos <- read.csv2("./datos/TFG_datos_2024.csv", numerals = "warn.loss", encoding = "latin1")%>% 
   mutate(playa = as.factor(playa), cultivo = as.factor(cultivo), 
