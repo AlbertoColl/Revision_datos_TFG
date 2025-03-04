@@ -33,6 +33,8 @@ data_2 <- filter(datos, cultivo == "cultured")
 data_2_long <- data_2 %>% pivot_longer(!c(individuo, playa, corte, cultivo, tiempo), names_to = "variable", values_to = "valor", values_drop_na = TRUE)
 data_2_long <- filter(data_2_long, variable != "GPx_t")
 data_2_long <- filter(data_2_long, variable != "GPx_p")
+data_2_long <- filter(data_2_long, variable != "proteina_p")
+data_2_long <- filter(data_2_long, variable != "proteina_")
 
 data_2_long$variable <- as.factor(data_2_long$variable)
 
@@ -83,11 +85,11 @@ modelo_completo  <- lm(CAT_t ~ playa*corte*tiempo, data = data_2)
 view(data_2 %>%
   group_by(playa) %>%
   anova_test(CAT_p ~ corte*tiempo, error = modelo_completo) %>% 
-  adjust_pvalue(method = "bonferroni")) # fijarse en el alfa entre 3
+  adjust_pvalue(method = "BH")) # fijarse en el alfa entre 3
 
 # En Calahonda no hay diferencias significativas
 # En Almuñécar hay efecto del corte
-# En Salobreña hay interaccion entre corte y tiempo
+# En Salobreña no hay NADA
 
 # Descomposición corte y tiempo en Salobreña:
 
@@ -176,11 +178,8 @@ tabla_summ$tukey <- replace_na(tabla_summ$tukey, "")
 (bxp <- ggboxplot(data_2, x = "tiempo", y = "SOD_p", 
                   fill = "corte", color = "corte", alpha = 0.85, palette = "frontiers", facet.by = "playa",
                   title = "Superoxido dismutasa columnar"))
-(bp <- ggbarplot(tabla_summ, x = "tiempo", y = "mean", fill = "corte", color = "corte", alpha = 0.9, facet.by = "playa", position = position_dodge2()) +
-    geom_text(tabla_summ, aes(x = tiempo, y = mean+se, label = tukey, group = corte, )))
-      
-      
-    ) x = "tiempo", y = "mean", label = "tukey", grouping.vars = "corte", facet.by = "playa"))
+(bp <- ggbarplot(tabla_summ, x = "tiempo", y = "mean", fill = "corte", color = "corte", alpha = 0.9, facet.by = "playa", position = position_dodge2()))
+    #geom_text(tabla_summ, aes(x = tiempo, y = mean+se, label = tukey, group = corte, )))
 
   
 # Presentacion de resultados
