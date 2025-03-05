@@ -102,6 +102,13 @@ efecto.tratamiento %>% as.tibble() %>% filter(playa == "Salobreña")
 
 
 
+
+### natural ----
+
+
+
+
+
 ### Ejemplo superoxido dismutasa PIE----
 if(FALSE){
 # Exploracion
