@@ -30,7 +30,7 @@ data_1 <- filter(datos, corte != "dissected", tiempo != 1)
 
 ### Exploracion ----
 
-ggplot(data_1, aes(y = G6PDH_p)) +
+ggplot(data_1, aes(y = MDA_t)) +
   geom_boxplot(aes(x = playa, color = playa), alpha = 0) +
   geom_point(aes(x = playa, color = playa), alpha = 1, size = 2) +
   facet_wrap(~cultivo)
@@ -49,9 +49,8 @@ data_1$Fbasica_t[5]  <- NA # Outlier extremo y afecta a normalidad
 data_1$Fbasica_t[9]  <- NA # Outlier extremo y afecta a normalidad
 data_1$Lisozima_p[1]  <- NA # Outlier extremo y afecta a normalidad
 
-data_1$G6PDH_p[7] # La grafica de residuos vs ajustados los marca
-data_1$G6PDH_p[9] # La grafica de residuos vs ajustados los marca
-
+data_1$G6PDH_p[7] <- NA # Segun grafica de residuos vs ajustados
+data_1$G6PDH_p[9] <- NA # Segun grafica de residuos vs ajustados
 
 
 ### Ajuste de modelos ----
@@ -145,3 +144,72 @@ data_2 %>%
   t_test(DTD_t ~ corte, p.adjust.method = "BH")
 
 
+
+
+
+### PRUEBA 2: 3X3 ----
+# Filtrado de datos
+data_1.2 <- filter(datos, corte != "dissected") %>% 
+  mutate(tratamiento = case_when(cultivo == "wild" ~ "wild",
+                                 cultivo != "wild" & tiempo == 0 ~ "t0",
+                                 cultivo != "wild" & tiempo == 1 ~ "t1")) %>% 
+  select(-cultivo, -tiempo, -corte) %>% relocate(tratamiento, .after = playa)
+data_1.2$tratamiento <- factor(data_1.2$tratamiento, levels = c("wild", "t0", "t1")) # Reordenar niveles
+
+
+# Exploracion y outliers
+ggplot(data_1.2, aes(y = MDA_t)) +
+  geom_boxplot(aes(x = tratamiento, color = tratamiento), alpha = 0) +
+  geom_point(aes(x = tratamiento, color = tratamiento), alpha = 1, size = 2) +
+  facet_wrap(~playa)
+
+view(data_1.2 %>% 
+       #group_by(tratamiento:playa) %>%
+       identify_outliers(G6PDH_p))
+
+# Graficas de diagnostico
+plot(modelos_lm[[14]])
+
+
+# Eliminar valores extremos e influyentes
+data_1.2$Fbasica_p[11]  <- NA # Outlier extremo y afecta a normalidad
+data_1.2$Lisozima_p[1]  <- NA # Outlier extremo y afecta a normalidad
+data_1.2$Fbasica_t[5]  <- NA # Outlier extremo y afecta a normalidad
+data_1.2$Fbasica_t[9]  <- NA # Outlier extremo y afecta a normalidad
+data_1.2$SOD_p[1] <-  NA # Posible outlier, afecta a normalidad
+
+data_1.2$G6PDH_p[9] <- NA # Afecta a homocedasticidad
+data_1.2$G6PDH_p[7] <- NA # Afecta a homocedasticidad
+data_1.2$G6PDH_p[4] <- NA # Afecta a normalidad
+data_1.2$G6PDH_t[12] <- NA # Segun grafica de residuos vs ajustados
+
+
+
+# Ajuste de modelos ANOVA con rstatix
+modelos <- lapply(colnames(data_1.2[c(4:30)]), function(x){
+  anova_test(formula = as.formula(paste0(x, " ~ playa * tratamiento")), data_1.2)})
+(anova_results <- reduce(modelos, full_join) %>% 
+    add_column(.before = 1, variable = rep(colnames(data_1.2[c(4:30)]), each = 3)) %>% 
+    adjust_pvalue(method = "BH"))
+
+
+# Test de Levene
+modelos_levene <- lapply(colnames(data_1.2[c(4:30)]), function(x){
+  levene_test(formula = as.formula(paste0(x, " ~ playa * tratamiento")), data_1.2)})
+(levene_results <- reduce(modelos_levene, full_join) %>% 
+    add_column(.before = 1, variable = colnames(data_1.2[c(4:30)])))
+
+# Test de Shapiro-Wilks
+
+modelos_lm <- lapply(colnames(data_1.2[c(4:30)]), function(x){
+  lm(formula = as.formula(paste0(x, " ~ playa * tratamiento")), data_1.2)})
+modelos_shapiro <- lapply(modelos_lm, function(x){
+  shapiro_test(residuals(x))})
+(shapiro_results <- reduce(modelos_shapiro, full_join) %>% 
+    add_column(.before = 1, parametro = colnames(data_1.2[c(4:30)])))
+
+# Sin filtrar, no se cumple normalidad de residuos en el caso de:
+# Fbasica_p (resuelto), Lisozima_p (resuelto), Fbasica_t (resuelto), SOD_p (resuelto), G6PDH_p (resuelto), G6PDH_t (resuelto) 
+
+# No hay homocedasticidad en:
+# G6PDH_p (resuelto), Mielo_p
