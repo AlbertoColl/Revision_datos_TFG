@@ -112,7 +112,8 @@ modelos_shapiro <- lapply(modelos_lm, function(x){
 for (n in c(1:27)) {
   i <- colnames(data_2[5:31])[[n]]
   tabla_summ <- data_2 %>% group_by(corte:tiempo) %>% 
-    get_summary_stats(i, type = "mean_se")
+    get_summary_stats(i, type = "mean_se") %>% 
+    separate_wider_delim(`corte:tiempo`, ":", names = c("tratamiento", "tiempo"), cols_remove=F)
   if (any(filter(as.tibble(anova_results), variable == i)$p.adj <= 0.05, na.rm = T)){
     model <- aov(as.formula(paste0(i, " ~ corte * tiempo")), data_2)
     tukey_loop <- TukeyHSD(model)
@@ -130,6 +131,14 @@ for (n in c(1:27)) {
                                                  TRUE ~ "")))
   ggsave(paste0("./resultados/graficas2025/", i, ".png"), width = 90, height = 112.5, units = "mm", dpi = 1000)}
 }
+
+
+
+
+
+
+
+
 
 # En los casos en los que hay interacción, descomponer el efecto y analizar por separado mediante t test.
 data_2 %>% 

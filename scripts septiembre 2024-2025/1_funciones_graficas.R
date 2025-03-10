@@ -86,7 +86,7 @@ barras_tfg <- function(){
   ggplot(tabla_summ) +
     geom_errorbar(aes(x = tiempo, ymax = mean + se, ymin = mean- se, color = tratamiento), width = 0.3, position = position_dodge(width = 0.9), linewidth = 1) +
     geom_col(aes(x = tiempo, y = mean, color = tratamiento, fill = tratamiento), alpha = 0.4, linewidth = 1, position = "dodge2") +
-    geom_text(aes(x = tiempo, y = mean + se, label = tukey, group = tratamiento), color = "grey5", vjust=-0.8, size = 3.5, fontface = "bold", , position = position_dodge(width = 0.9)) +
+    #geom_text(aes(x = tiempo, y = mean + se, label = tukey, group = tratamiento), color = "grey5", vjust=-0.8, size = 3.5, fontface = "bold", , position = position_dodge(width = 0.9)) +
     ylab(case_when(
       i == "proteina_t" | i == "proteina_p"  ~ " protein mg / ml",
       i == "MDA_t" | i == "MDA_p" ~ "μM  MDA",
