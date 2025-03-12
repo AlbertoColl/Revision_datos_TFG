@@ -27,7 +27,7 @@ library(ggpubr)
 
 # En portatil (arreglar)
 # setwd("D:/collf/Documents/GitHub/Revision_datos_TFG") # Casa
-#source(file = "./scripts enero24/0_data_home.R")
+# source(file = "./scripts enero24/0_data_home.R")
 
 # En laboratorio
 setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG") # Lab
@@ -77,7 +77,7 @@ modelos <- lapply(colnames(data_2[c(5:31)]), function(x){
     adjust_pvalue(method = "BH"))
 
 
-# Test de Levenese computa exactamente igual
+# Test de Levene se computa exactamente igual
 modelos_levene <- lapply(colnames(data_2[c(5:31)]), function(x){
   levene_test(formula = as.formula(paste0(x, " ~ corte * tiempo")), data_2)})
 (levene_results <- reduce(modelos_levene, full_join) %>% 
@@ -124,10 +124,9 @@ for (n in c(1:27)) {
   } else {if (n != 5){
     tabla_summ$tukey <- c("", "", "", "")}
   }
-  tabla_summ <- tabla_summ %>% separate_wider_delim(`corte:tiempo`, ":", names = c("tratamiento", "tiempo"), cols_remove=F)
-    if (n != 5){
-  (p <- barras_tfg() + labs(subtitle = case_when(str_detect(i, "_p") == T  ~ "Column",
-                                                 str_detect(i, "_t") == T ~ "Tentacle",
+  if (n != 5){
+  (p <- barras_tfg() + labs(subtitle = case_when(str_detect(i, "_p") == T  ~ "A",
+                                                 str_detect(i, "_t") == T ~ "B",
                                                  TRUE ~ "")))
   ggsave(paste0("./resultados/graficas2025/", i, ".png"), width = 90, height = 112.5, units = "mm", dpi = 1000)}
 }
@@ -148,131 +147,136 @@ data_2 %>%
 data_2 %>% 
   group_by(tiempo) %>% 
   t_test(GST_t ~ corte, p.adjust.method = "BH")
+
 data_2 %>% 
   group_by(tiempo) %>% 
   t_test(DTD_t ~ corte, p.adjust.method = "BH")
 
 
-### Separacion por playas - CALAHONDA ----
-
-data_2c <- filter(datos, cultivo == "cultured", playa == "Calahonda")
-
-ggplot(data_2c, aes(y = CAT_t)) +
-  geom_boxplot(aes(x = tiempo:corte, color = tiempo:corte), alpha = 0) +
-  geom_point(aes(x = tiempo:corte, color = tiempo:corte), alpha = 1, size = 2)
-
-data_2c$SOD_p[11] # Sospechoso, se va mucho de la tendencia con los otros dos puntos
-
-data_2c <- data_2c %>%   select(-GPx_t, -GPx_p)
-
-
-modelos_c <- lapply(colnames(data_2c[c(5:29)]), function(x){
-  anova_test(formula = as.formula(paste0(x, " ~ corte * tiempo")), data_2c)})
-(anova_results_c <- reduce(modelos_c, full_join) %>% 
-    add_column(.before = 1, variable = rep(colnames(data_2c[c(5:29)]), each = 3)) %>% 
-    adjust_pvalue(method = "BH"))
-
-
-# Test de Levene se computa exactamente igual
-modelos_levene_c <- lapply(colnames(data_2c[c(5:29)]), function(x){
-  levene_test(formula = as.formula(paste0(x, " ~ corte * tiempo")), data_2c)})
-(levene_results_c <- reduce(modelos_levene_c, full_join) %>% 
-    add_column(.before = 1, variable = colnames(data_2c[c(5:29)])))
-
-# Para el test de Shapiro-Wilks se ajustan lm para extraer residuos
-
-modelos_lm_c <- lapply(colnames(data_2c[c(5:29)]), function(x){
-  lm(formula = as.formula(paste0(x, " ~ corte * tiempo")), data_2c)})
-modelos_shapiro_c <- lapply(modelos_lm_c, function(x){
-  shapiro_test(residuals(x))})
-(shapiro_results_c <- reduce(modelos_shapiro_c, full_join) %>% 
-    add_column(.before = 1, parametro = colnames(data_2c[c(5:29)])))
-
-
-# Problemas con normalidad en:
-# ninguno
-
-#Problemas con homocesdaticidad en:
-# CAT_t -> no se resuelve, es leve
-
-### Separacion por playas - SALOBREÑA ----
-
-data_2s <- filter(datos, cultivo == "cultured", playa == "Salobreña")
-
-ggplot(data_2s, aes(y = CAT_t)) +
-  geom_boxplot(aes(x = tiempo:corte, color = tiempo:corte), alpha = 0) +
-  geom_point(aes(x = tiempo:corte, color = tiempo:corte), alpha = 1, size = 2)
-
-data_2s <- data_2s %>%   select(-GPx_t, -GPx_p)
-
-
-modelos_s <- lapply(colnames(data_2s[c(5:29)]), function(x){
-  anova_test(formula = as.formula(paste0(x, " ~ corte * tiempo")), data_2s)})
-(anova_results_s <- reduce(modelos_s, full_join) %>% 
-    add_column(.before = 1, variable = rep(colnames(data_2s[c(5:29)]), each = 3)) %>% 
-    adjust_pvalue(method = "BH"))
-
-
-# Test de Levene se computa exactamente igual
-modelos_levene_s <- lapply(colnames(data_2s[c(5:29)]), function(x){
-  levene_test(formula = as.formula(paste0(x, " ~ corte * tiempo")), data_2s)})
-(levene_results_s <- reduce(modelos_levene_s, full_join) %>% 
-    add_column(.before = 1, variable = colnames(data_2s[c(5:29)])))
-
-# Para el test de Shapiro-Wilks se ajustan lm para extraer residuos
-
-modelos_lm_s <- lapply(colnames(data_2s[c(5:29)]), function(x){
-  lm(formula = as.formula(paste0(x, " ~ corte * tiempo")), data_2s)})
-modelos_shapiro_s <- lapply(modelos_lm_s, function(x){
-  shapiro_test(residuals(x))})
-(shapiro_results_s <- reduce(modelos_shapiro_s, full_join) %>% 
-    add_column(.before = 1, parametro = colnames(data_2s[c(5:29)])))
-
-
-# Problemas con normalidad en:
-# CAT_t, proteina_t
-
-
-
-#Problemas con homocesdaticidad en:
-# Mielo_p
-
-### Separacion por playas - ALMUÑECAR ----
-
-data_2a <- filter(datos, cultivo == "cultured", playa == "Almuñecar")
-
-ggplot(data_2a, aes(y = CAT_t)) +
-  geom_boxplot(aes(x = tiempo:corte, color = tiempo:corte), alpha = 0) +
-  geom_point(aes(x = tiempo:corte, color = tiempo:corte), alpha = 1, size = 2)
-
-data_2a <- data_2a %>%   select(-GPx_t, -GPx_p)
-
-
-modelos_a <- lapply(colnames(data_2a[c(5:29)]), function(x){
-  anova_test(formula = as.formula(paste0(x, " ~ corte * tiempo")), data_2a)})
-(anova_results_a <- reduce(modelos_a, full_join) %>% 
-    add_column(.before = 1, variable = rep(colnames(data_2a[c(5:29)]), each = 3)) %>% 
-    adjust_pvalue(method = "BH"))
-
-
-# Test de Levene se computa exactamente igual
-modelos_levene_a <- lapply(colnames(data_2a[c(5:29)]), function(x){
-  levene_test(formula = as.formula(paste0(x, " ~ corte * tiempo")), data_2a)})
-(levene_results_a <- reduce(modelos_levene_a, full_join) %>% 
-    add_column(.before = 1, variable = colnames(data_2a[c(5:29)])))
-
-# Para el test de Shapiro-Wilks se ajustan lm para extraer residuos
-
-modelos_lm_a <- lapply(colnames(data_2a[c(5:29)]), function(x){
-  lm(formula = as.formula(paste0(x, " ~ corte * tiempo")), data_2a)})
-modelos_shapiro_a <- lapply(modelos_lm_a, function(x){
-  shapiro_test(residuals(x))})
-(shapiro_results_a <- reduce(modelos_shapiro_a, full_join) %>% 
-    add_column(.before = 1, parametro = colnames(data_2a[c(5:29)])))
-
-
-# Problemas con normalidad en:
-# 
-
-#Problemas con homocesdaticidad en:
-#
+# Separacion por playas, no usada
+if(FALSE){
+  ### Separacion por playas - CALAHONDA ----
+  
+  data_2c <- filter(datos, cultivo == "cultured", playa == "Calahonda")
+  
+  ggplot(data_2c, aes(y = CAT_t)) +
+    geom_boxplot(aes(x = tiempo:corte, color = tiempo:corte), alpha = 0) +
+    geom_point(aes(x = tiempo:corte, color = tiempo:corte), alpha = 1, size = 2)
+  
+  data_2c$SOD_p[11] # Sospechoso, se va mucho de la tendencia con los otros dos puntos
+  
+  data_2c <- data_2c %>%   select(-GPx_t, -GPx_p)
+  
+  
+  modelos_c <- lapply(colnames(data_2c[c(5:29)]), function(x){
+    anova_test(formula = as.formula(paste0(x, " ~ corte * tiempo")), data_2c)})
+  (anova_results_c <- reduce(modelos_c, full_join) %>% 
+      add_column(.before = 1, variable = rep(colnames(data_2c[c(5:29)]), each = 3)) %>% 
+      adjust_pvalue(method = "BH"))
+  
+  
+  # Test de Levene se computa exactamente igual
+  modelos_levene_c <- lapply(colnames(data_2c[c(5:29)]), function(x){
+    levene_test(formula = as.formula(paste0(x, " ~ corte * tiempo")), data_2c)})
+  (levene_results_c <- reduce(modelos_levene_c, full_join) %>% 
+      add_column(.before = 1, variable = colnames(data_2c[c(5:29)])))
+  
+  # Para el test de Shapiro-Wilks se ajustan lm para extraer residuos
+  
+  modelos_lm_c <- lapply(colnames(data_2c[c(5:29)]), function(x){
+    lm(formula = as.formula(paste0(x, " ~ corte * tiempo")), data_2c)})
+  modelos_shapiro_c <- lapply(modelos_lm_c, function(x){
+    shapiro_test(residuals(x))})
+  (shapiro_results_c <- reduce(modelos_shapiro_c, full_join) %>% 
+      add_column(.before = 1, parametro = colnames(data_2c[c(5:29)])))
+  
+  
+  # Problemas con normalidad en:
+  # ninguno
+  
+  #Problemas con homocesdaticidad en:
+  # CAT_t -> no se resuelve, es leve
+  
+  ### Separacion por playas - SALOBREÑA ----
+  
+  data_2s <- filter(datos, cultivo == "cultured", playa == "Salobreña")
+  
+  ggplot(data_2s, aes(y = CAT_t)) +
+    geom_boxplot(aes(x = tiempo:corte, color = tiempo:corte), alpha = 0) +
+    geom_point(aes(x = tiempo:corte, color = tiempo:corte), alpha = 1, size = 2)
+  
+  data_2s <- data_2s %>%   select(-GPx_t, -GPx_p)
+  
+  
+  modelos_s <- lapply(colnames(data_2s[c(5:29)]), function(x){
+    anova_test(formula = as.formula(paste0(x, " ~ corte * tiempo")), data_2s)})
+  (anova_results_s <- reduce(modelos_s, full_join) %>% 
+      add_column(.before = 1, variable = rep(colnames(data_2s[c(5:29)]), each = 3)) %>% 
+      adjust_pvalue(method = "BH"))
+  
+  
+  # Test de Levene se computa exactamente igual
+  modelos_levene_s <- lapply(colnames(data_2s[c(5:29)]), function(x){
+    levene_test(formula = as.formula(paste0(x, " ~ corte * tiempo")), data_2s)})
+  (levene_results_s <- reduce(modelos_levene_s, full_join) %>% 
+      add_column(.before = 1, variable = colnames(data_2s[c(5:29)])))
+  
+  # Para el test de Shapiro-Wilks se ajustan lm para extraer residuos
+  
+  modelos_lm_s <- lapply(colnames(data_2s[c(5:29)]), function(x){
+    lm(formula = as.formula(paste0(x, " ~ corte * tiempo")), data_2s)})
+  modelos_shapiro_s <- lapply(modelos_lm_s, function(x){
+    shapiro_test(residuals(x))})
+  (shapiro_results_s <- reduce(modelos_shapiro_s, full_join) %>% 
+      add_column(.before = 1, parametro = colnames(data_2s[c(5:29)])))
+  
+  
+  # Problemas con normalidad en:
+  # CAT_t, proteina_t
+  
+  
+  
+  #Problemas con homocesdaticidad en:
+  # Mielo_p
+  
+  ### Separacion por playas - ALMUÑECAR ----
+  
+  data_2a <- filter(datos, cultivo == "cultured", playa == "Almuñecar")
+  
+  ggplot(data_2a, aes(y = CAT_t)) +
+    geom_boxplot(aes(x = tiempo:corte, color = tiempo:corte), alpha = 0) +
+    geom_point(aes(x = tiempo:corte, color = tiempo:corte), alpha = 1, size = 2)
+  
+  data_2a <- data_2a %>%   select(-GPx_t, -GPx_p)
+  
+  
+  modelos_a <- lapply(colnames(data_2a[c(5:29)]), function(x){
+    anova_test(formula = as.formula(paste0(x, " ~ corte * tiempo")), data_2a)})
+  (anova_results_a <- reduce(modelos_a, full_join) %>% 
+      add_column(.before = 1, variable = rep(colnames(data_2a[c(5:29)]), each = 3)) %>% 
+      adjust_pvalue(method = "BH"))
+  
+  
+  # Test de Levene se computa exactamente igual
+  modelos_levene_a <- lapply(colnames(data_2a[c(5:29)]), function(x){
+    levene_test(formula = as.formula(paste0(x, " ~ corte * tiempo")), data_2a)})
+  (levene_results_a <- reduce(modelos_levene_a, full_join) %>% 
+      add_column(.before = 1, variable = colnames(data_2a[c(5:29)])))
+  
+  # Para el test de Shapiro-Wilks se ajustan lm para extraer residuos
+  
+  modelos_lm_a <- lapply(colnames(data_2a[c(5:29)]), function(x){
+    lm(formula = as.formula(paste0(x, " ~ corte * tiempo")), data_2a)})
+  modelos_shapiro_a <- lapply(modelos_lm_a, function(x){
+    shapiro_test(residuals(x))})
+  (shapiro_results_a <- reduce(modelos_shapiro_a, full_join) %>% 
+      add_column(.before = 1, parametro = colnames(data_2a[c(5:29)])))
+  
+  
+  # Problemas con normalidad en:
+  # 
+  
+  #Problemas con homocesdaticidad en:
+  #  
+  
+}
