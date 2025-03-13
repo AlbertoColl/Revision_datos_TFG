@@ -17,19 +17,22 @@
 
 # Update 05/3: AL final del script he hecho los analisis separando por playa y no salen muy bonitos, volvemos a perder tamaño de muestra y la interpretacion suele ser identica o muy similar a los resultados agrupando playas.
 
+# Update 13/3: He creado las funciones posthoc tree y table maker para sacar el display de las diferencias significativas y para añadir la tabla ANOVA a la grafica con patchwork. Me falta hacer que ambos ejes y tengan el mismo tamaño en pie y tentaculo, y luego pequeños ajustes de cara a publicacion.
+
 library(tidyverse)
 library(multcompView)
 library(car)
 library(rstatix)
-library(ggpubr)
+library(gt)
+library(patchwork)
 
 ### SETUP y filtrado de datos ----
 
-#setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
-setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
+setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
+#setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
 
-#source(file = "./scripts septiembre 2024-2025/0_data_lab.R")
-source(file = "./scripts septiembre 2024-2025/0_data_laptop.R")
+source(file = "./scripts septiembre 2024-2025/0_data_lab.R")
+#source(file = "./scripts septiembre 2024-2025/0_data_laptop.R")
 
 source(file = "./scripts septiembre 2024-2025/1_funciones_graficas.R")
 
@@ -39,8 +42,8 @@ data_2 <- filter(datos, cultivo == "cultured")
 ### Exploracion ----
 
 ggplot(data_2, aes(y = Fbasica_p)) +
-  geom_boxplot(aes(x = tiempo:corte, color = tiempo:corte), alpha = 0) +
-  geom_point(aes(x = tiempo:corte, color = tiempo:corte), alpha = 1, size = 2)
+  geom_boxplot(aes(x = time:section, color = time:section), alpha = 0) +
+  geom_point(aes(x = time:section, color = time:section), alpha = 1, size = 2)
 
 # Deteccion de outliers en SOD_t y CAT_t para normalidad de residuos
 # view(data_2 %>%  group_by(corte:tiempo) %>%  identify_outliers(CAT_t))
@@ -67,7 +70,7 @@ data_2$Lisozima_p[2] <- NA # outlier extremo
 
 # Ajuste de modelos ANOVA con rstatix
 modelos <- lapply(colnames(data_2[c(5:31)]), function(x){
-  anova_test(formula = as.formula(paste0(x, " ~ corte * tiempo")), data_2)})
+  anova_test(formula = as.formula(paste0(x, " ~ section * time")), data_2)})
 (anova_results <- reduce(modelos, full_join) %>% 
     add_column(.before = 1, variable = rep(colnames(data_2[c(5:31)]), each = 3)) %>% 
     adjust_pvalue(method = "BH"))
@@ -75,14 +78,14 @@ modelos <- lapply(colnames(data_2[c(5:31)]), function(x){
 
 # Test de Levene se computa exactamente igual
 modelos_levene <- lapply(colnames(data_2[c(5:31)]), function(x){
-  levene_test(formula = as.formula(paste0(x, " ~ corte * tiempo")), data_2)})
+  levene_test(formula = as.formula(paste0(x, " ~ section * time")), data_2)})
 (levene_results <- reduce(modelos_levene, full_join) %>% 
     add_column(.before = 1, variable = colnames(data_2[c(5:31)])))
 
 # Para el test de Shapiro-Wilks se ajustan lm para extraer residuos
 
 modelos_lm <- lapply(colnames(data_2[c(5:31)]), function(x){
-  lm(formula = as.formula(paste0(x, " ~ corte * tiempo")), data_2)})
+  lm(formula = as.formula(paste0(x, " ~ section * time")), data_2)})
 modelos_shapiro <- lapply(modelos_lm, function(x){
   shapiro_test(residuals(x))})
 (shapiro_results <- reduce(modelos_shapiro, full_join) %>% 
@@ -96,74 +99,82 @@ modelos_shapiro <- lapply(modelos_lm, function(x){
 
 ### Construccion de graficas ----
 
-# Funcion post-hoc
+# Funcion post-hoc para asignar asteriscos y letras
 
-posthoc <- function(){
-  if (any(filter(as.tibble(anova_results), variable == i)$p.adj <= 0.05, na.rm = T)){
-    print("There is at least one significative effect")
-    if (filter(as.tibble(anova_results), variable == i)$p.adj[3] <= 0.05){
-      print("Interaction is significative")
+posthoc_tree <- function(){
+  letras <- c("", "", "", "")
+  pvalues <- filter(as_tibble(anova_results), variable == i)$p.adj
+  if (any(pvalues <= 0.05, na.rm = T)){
+    if (pvalues[3] <= 0.05){
+      t.results <-data_2 %>% 
+        group_by(time) %>% 
+        t_test(as.formula(paste0(i, " ~ section")), p.adjust.method = "BH")
+      if(t.results[1,]$p <= 0.05){
+        letras[c(1,3)] <- case_when(
+          tabla_summ[1,]$mean < tabla_summ[3,]$mean ~ c("", "*"),
+          tabla_summ[1,]$mean > tabla_summ[3,]$mean ~ c("*", ""))} 
+      if(t.results[2,]$p <= 0.05){
+        letras[c(2,4)] <- case_when(
+          tabla_summ[2,]$mean < tabla_summ[4,]$mean ~ c("", "*"),
+          tabla_summ[2,]$mean > tabla_summ[4,]$mean ~ c("*", ""))} 
+      #Se pueden añadir tiers con case_when()
+      print("Interacion is significant. Grouped t-test performed.")
+      return(letras)
     }
     else{
       print("Interaction is not significative")
-      if (any(filter(as.tibble(anova_results), variable == i)$p.adj[-3] <= 0.05, na.rm = F)){
-        print("One main effect is significative")
-      }
-      else{
-        print("Two main effects are significative")
-      }
-    }
-    
-  }
-  else{print("There is no significative effects")}
+      letras <- case_when(
+        pvalues[1] <= 0.05 & pvalues[2] <= 0.05 ~ c("b", "a", "c", "b"),
+        pvalues[1] <= 0.05 & tabla_summ[1,]$mean < tabla_summ[3,]$mean ~ c("a", "a", "b", "b"),
+        pvalues[1] <= 0.05 & tabla_summ[1,]$mean > tabla_summ[3,]$mean~ c("b", "b", "a", "a"),
+        pvalues[2] <= 0.05 & tabla_summ[1,]$mean < tabla_summ[2,]$mean ~ c("a", "b", "a", "b"),
+        pvalues[2] <= 0.05 & tabla_summ[1,]$mean > tabla_summ[2,]$mean~ c("b", "a", "b", "a"))
+      print("Interacion is not significant. Simple main effects computed.")
+      return(letras)}}
+  else{
+    print("There is no significative effects")
+    return(letras)}
   
 }
+table_maker <- function(){
+  t <- anova_results %>% as_tibble() %>%
+    filter(variable == i) %>%
+    select(-variable, -DFn, -DFd, -p, -`p<.05`, -ges) %>%
+    mutate(sign. = case_when(
+      p.adj <= 0.001 ~ "***",
+      p.adj <= 0.01 ~ "**",
+      p.adj <= 0.05 ~ "*",
+      TRUE ~ "ns")) %>% 
+    gt() %>% 
+    cols_label(
+      Effect = md("**Effect**"),
+      `F` = md("**F statistic**"),
+      p.adj = md("**p value**"),
+      sign. = md("")) %>% 
+    tab_header(title = md("Two-way ANOVA Table"))
+  return(t)
+}
 
-### ACTUALIZAR Y CAMBIAR BUCLE
+
+# Bucle de construccion de graficas
 
 for (n in c(1:27)) {
   i <- colnames(data_2[5:31])[[n]]
-  tabla_summ <- data_2 %>% group_by(corte:tiempo) %>% 
+  tabla_summ <- data_2 %>% group_by(section:time) %>% 
     get_summary_stats(i, type = "mean_se") %>% 
-    separate_wider_delim(`corte:tiempo`, ":", names = c("tratamiento", "tiempo"), cols_remove=F)
-  if (any(filter(as.tibble(anova_results), variable == i)$p.adj <= 0.05, na.rm = T)){
-    model <- aov(as.formula(paste0(i, " ~ corte * tiempo")), data_2)
-    tukey_loop <- TukeyHSD(model)
-    cld.tukey <- multcompLetters4(model, tukey_loop, reversed = T)
-    (letras <- rownames_to_column(as.data.frame(cld.tukey$`corte:tiempo`$Letters)))
-    colnames(letras) <- c("corte:tiempo", "tukey")
-    tabla_summ <- merge(tabla_summ, letras)
-  } else {if (n != 5){
-    tabla_summ$tukey <- c("", "", "", "")}
-  }
+    separate_wider_delim(`section:time`, ":", names = c("tratamiento", "time"), cols_remove=F)
+  if((n %% 2) != 0) {# Memoria del limite
+    limite_t = 1.3*(max(tabla_summ$mean) + max(tabla_summ$se))}
+  if (n != 5){tabla_summ$letras <- posthoc_tree()}
   if (n != 5){
-  (p <- barras_tfg() + labs(subtitle = case_when(str_detect(i, "_p") == T  ~ "A",
-                                                 str_detect(i, "_t") == T ~ "B",
-                                                 TRUE ~ "")))
-  ggsave(paste0("./resultados/graficas2025/", i, ".png"), width = 90, height = 112.5, units = "mm", dpi = 1000)}
+  (p <- barras_tfg() +
+     ylim(c(0,
+            max(limite_t, (max(tabla_summ$mean) + max(tabla_summ$se))))))
+     #labs(subtitle = case_when(str_detect(i, "_p") == T  ~ "A",                                                 str_detect(i, "_t") == T ~ "B",                                                 TRUE ~ "")))
+    (t <- table_maker())
+    (pt <- p/wrap_table(t, panel = "full", space = "fixed"))
+  ggsave(paste0("./resultados/graficas2025/contabla/", i, ".png"), width = 100, height = 140, units = "mm", dpi = 1000)}
 }
-
-
-
-
-
-
-
-
-
-# En los casos en los que hay interacción, descomponer el efecto y analizar por separado mediante t test.
-data_2 %>% 
-  group_by(tiempo) %>% 
-  t_test(CAT_t ~ corte, p.adjust.method = "BH")
-
-data_2 %>% 
-  group_by(tiempo) %>% 
-  t_test(GST_t ~ corte, p.adjust.method = "BH")
-
-data_2 %>% 
-  group_by(tiempo) %>% 
-  t_test(DTD_t ~ corte, p.adjust.method = "BH")
-
 
 # Separacion por playas, no usada
 if(FALSE){

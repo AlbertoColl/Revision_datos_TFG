@@ -8,11 +8,11 @@
 library(tidyverse)
 library(ggthemr)
 
-#setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
-setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
+setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
+#setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
 
-#source(file = "./scripts septiembre 2024-2025/0_data_lab.R")
-source(file = "./scripts septiembre 2024-2025/0_data_laptop.R")
+source(file = "./scripts septiembre 2024-2025/0_data_lab.R")
+#source(file = "./scripts septiembre 2024-2025/0_data_laptop.R")
 
 ## Definicion del tema y formato de las graficas ----
 theme_tfm <- function(){
@@ -86,9 +86,9 @@ barras_articulo <- function(){
 ggthemr("light")
 barras_tfg <- function(){
   ggplot(tabla_summ) +
-    geom_errorbar(aes(x = tiempo, ymax = mean + se, ymin = mean- se, color = tratamiento), width = 0.3, position = position_dodge(width = 0.9), linewidth = 1) +
-    geom_col(aes(x = tiempo, y = mean, color = tratamiento, fill = tratamiento), alpha = 0.4, linewidth = 1, position = "dodge2") +
-    geom_text(aes(x = tiempo, y = mean + se, label = tukey, group = tratamiento), color = "grey5", vjust=-0.8, size = 3.5, fontface = "bold", , position = position_dodge(width = 0.9)) +
+    geom_errorbar(aes(x = time, ymax = mean + se, ymin = mean- se, color = tratamiento), width = 0.3, position = position_dodge(width = 0.9), linewidth = 1) +
+    geom_col(aes(x = time, y = mean, color = tratamiento, fill = tratamiento), alpha = 0.4, linewidth = 1, position = "dodge2") +
+    geom_text(aes(x = time, y = mean + se, label = letras, group = tratamiento), color = "grey5", vjust=-0.8, size = 3.5, fontface = "bold", , position = position_dodge(width = 0.9)) +
     ylab(case_when(
       i == "proteina_t" | i == "proteina_p"  ~ " protein mg / ml",
       i == "MDA_t" | i == "MDA_p" ~ "μM  MDA",
@@ -99,10 +99,9 @@ barras_tfg <- function(){
       i == "GPx_t" | i == "GPx_p" ~ "mU / mg  of protein",
       TRUE ~ "U / mg  of protein")) +
     xlab("Time point") + # Omitir?
-    scale_color_manual(values = c("#49AB93","#F59300" ), labels = c("Control", "Dissected") ) +
-    scale_fill_manual(values = c("#49AB93","#F59300" ), labels = c("Control", "Dissected") ) +
-    scale_x_discrete(labels = c("t0", "t1")) + #cambiar al apropiado
-    ylim(c(0, 1.3*(max(tabla_summ$mean) + max(tabla_summ$se)))) +
-    theme(legend.position = "bottom",
+    scale_color_manual(values = c("#49AB93","#F59300" ), labels = c("Control", "Treatment") ) +
+    scale_fill_manual(values = c("#49AB93","#F59300" ), labels = c("Control", "Treatment") ) +
+    scale_x_discrete(labels = c("T0", "T1")) + #cambiar al apropiado
+    theme(legend.position = "top",
           legend.title = element_blank())
     }
