@@ -25,13 +25,12 @@ library(ggpubr)
 
 ### SETUP y filtrado de datos ----
 
-# En portatil (arreglar)
-# setwd("D:/collf/Documents/GitHub/Revision_datos_TFG") # Casa
-# source(file = "./scripts enero24/0_data_home.R")
+#setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
+setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
 
-# En laboratorio
-setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG") # Lab
-source(file = "./scripts septiembre 2024-2025/0_data_lab.R")
+#source(file = "./scripts septiembre 2024-2025/0_data_lab.R")
+source(file = "./scripts septiembre 2024-2025/0_data_laptop.R")
+
 source(file = "./scripts septiembre 2024-2025/1_funciones_graficas.R")
 
 # Filtrar: solo anemonas cultivadas
@@ -42,12 +41,9 @@ data_2 <- filter(datos, cultivo == "cultured")
 ggplot(data_2, aes(y = Fbasica_p)) +
   geom_boxplot(aes(x = tiempo:corte, color = tiempo:corte), alpha = 0) +
   geom_point(aes(x = tiempo:corte, color = tiempo:corte), alpha = 1, size = 2)
-# Problema: salobreña sigue una tendencia diferente en algunas enzimas como la catalasa
 
 # Deteccion de outliers en SOD_t y CAT_t para normalidad de residuos
-view(data_2 %>% 
-  group_by(corte:tiempo) %>%
-  identify_outliers(CAT_t))
+# view(data_2 %>%  group_by(corte:tiempo) %>%  identify_outliers(CAT_t))
 
 # Se eliminan:
 data_2$SOD_t[7] <- NA
@@ -98,16 +94,32 @@ modelos_shapiro <- lapply(modelos_lm, function(x){
 # No hay homocedasticidad en:
 # Fbasica_t (solucionado)
 
-### Bucle de construccion de graficas ----
+### Construccion de graficas ----
 
+# Funcion post-hoc
+
+posthoc <- function(){
+  if (any(filter(as.tibble(anova_results), variable == i)$p.adj <= 0.05, na.rm = T)){
+    print("There is at least one significative effect")
+    if (filter(as.tibble(anova_results), variable == i)$p.adj[3] <= 0.05){
+      print("Interaction is significative")
+    }
+    else{
+      print("Interaction is not significative")
+      if (any(filter(as.tibble(anova_results), variable == i)$p.adj[-3] <= 0.05, na.rm = F)){
+        print("One main effect is significative")
+      }
+      else{
+        print("Two main effects are significative")
+      }
+    }
+    
+  }
+  else{print("There is no significative effects")}
+  
+}
 
 ### ACTUALIZAR Y CAMBIAR BUCLE
-
-# Falta:
-  # Comprobar normas de la revista
-  # Actualizar script de graficas
-  # Actualizar llamada al script en este bucle
-  # Actualizar directorio de salida de las graficas
 
 for (n in c(1:27)) {
   i <- colnames(data_2[5:31])[[n]]
