@@ -8,11 +8,11 @@
 library(tidyverse)
 library(ggthemr)
 
-#setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
-setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
+setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
+#setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
 
-#source(file = "./scripts septiembre 2024-2025/0_data_lab.R")
-source(file = "./scripts septiembre 2024-2025/0_data_laptop.R")
+source(file = "./scripts septiembre 2024-2025/0_data_lab.R")
+#source(file = "./scripts septiembre 2024-2025/0_data_laptop.R")
 
 ## Definicion del tema y formato de las graficas ----
 theme_tfm <- function(){
@@ -88,21 +88,21 @@ barras_tfg <- function(){
   ggplot(tabla_summ) +
     geom_errorbar(aes(x = time, ymax = mean + se, ymin = mean- se, color = tratamiento), width = 0.3, position = position_dodge(width = 0.9), linewidth = 1, show.legend = F) +
     geom_col(aes(x = time, y = mean, color = tratamiento, fill = tratamiento), alpha = 0.4, linewidth = 1, position = "dodge2") +
-    geom_text(aes(x = time, y = mean + se, label = letras, group = tratamiento), color = "grey5", vjust=-0.8, size = ifelse("*" %in% tabla_summ$letras, 5.5, 3.5), fontface = "bold", , position = position_dodge(width = 0.9)) +
+    geom_text(aes(x = time, y = mean + se, label = letras, group = tratamiento), color = "grey5", vjust=-0.8, size = ifelse("*" %in% tabla_summ$letras, 5.5, 3.5), fontface = "bold", position = position_dodge(width = 0.9)) +
     ylab(case_when(
-      i == "proteina_t" | i == "proteina_p"  ~ " protein mg / ml",
-      i == "MDA_t" | i == "MDA_p" ~ "μM  MDA",
-      i == "TEAC_t" | i == "TEAC_p"~ "Trolox equivalent μM",
-      i == "GST_t" | i == "GST_p" ~ "mU / mg  of protein",
-      i == "DTD_t" | i == "DTD_p" ~ "mU / mg  of protein",
-      i == "GR_t" | i == "GR_p" ~ "mU / mg  of protein",
-      i == "GPx_t" | i == "GPx_p" ~ "mU / mg  of protein",
+      
+      str_detect(i, "proteina") == TRUE  ~ " protein mg / ml",
+      str_detect(i, "MDA") == TRUE ~ "μM  MDA",
+      str_detect(i, "TEAC") == TRUE ~ "Trolox equivalent μM",
+      str_detect(i, "Lisozima") == TRUE ~ "ng/mg of protein Eq. HEWL",
+      str_detect(i, "Mielo") == TRUE ~ "mU * 10^2 / mg  of protein",
+      any(str_detect(i, c("GST", "DTD", "GR", "GPx", "Facida", "Fbasica"))) == T ~ "mU / mg  of protein",
       TRUE ~ "U / mg  of protein")) +
-    xlab("Time point") + # Omitir?
+    xlab(NULL) + # Omitir?
     scale_color_manual(values = c("#49AB93","#F59300" ), labels = c("Control", "Sectioned") ) +
     scale_fill_manual(values = c("#49AB93","#F59300" ), labels = c("Control", "Sectioned") ) +
     scale_x_discrete(labels = c("T0", "T1")) + #cambiar al apropiado
-    theme(legend.position = "top",
-          plot.tag.position = c(0.85, 0.85),
+    theme(legend.position = "bottom",
+          plot.tag.position = c(0.8, 0.95),
           legend.title = element_blank())
     }

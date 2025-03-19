@@ -28,11 +28,11 @@ library(patchwork)
 
 ### SETUP y filtrado de datos ----
 
-#setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
-setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
+setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
+#setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
 
-#source(file = "./scripts septiembre 2024-2025/0_data_lab.R")
-source(file = "./scripts septiembre 2024-2025/0_data_laptop.R")
+source(file = "./scripts septiembre 2024-2025/0_data_lab.R")
+#source(file = "./scripts septiembre 2024-2025/0_data_laptop.R")
 
 source(file = "./scripts septiembre 2024-2025/1_funciones_graficas.R")
 
@@ -123,7 +123,6 @@ posthoc_tree <- function(){
       return(letras)
     }
     else{
-      print("Interaction is not significative")
       letras <- case_when(
         pvalues[1] <= 0.05 & pvalues[2] <= 0.05 ~ c("b", "a", "c", "b"),
         pvalues[1] <= 0.05 & tabla_summ[1,]$mean < tabla_summ[3,]$mean ~ c("a", "a", "b", "b"),
@@ -182,6 +181,7 @@ for (n in c(1:27)) {
   (p <- barras_tfg() +
      ylim(c(0,
             max(limite_t, (max(tabla_summ$mean) + max(tabla_summ$se))))) +
+     #PROBABLEMENTE PUEDO QUITAR ESTO
      labs(tag = case_when(str_detect(i, "_p") == T  ~ "Column",                                                 str_detect(i, "_t") == T ~ "Tentacle",
                                TRUE ~ "")))
     (t <- table_maker())
@@ -189,6 +189,107 @@ for (n in c(1:27)) {
   ggsave(paste0("./resultados/graficas2025/contabla/", i, ".png"), width = 100, height = 140, units = "mm", dpi = 1000)
   saveRDS(pt, file = paste0("./resultados/graficas2025/contabla/", i, ".rds"))}
 }
+
+### Construccion de figuras con patchwork ----
+
+plots <- sapply(colnames(data_2[5:31])[-c(5,6)], function(x){readRDS(paste0("./resultados/graficas2025/contabla/", x, ".rds"))})
+
+## ARTWORK SIZING ELSEVIER
+# Double column page: 190 width x 142.5 height
+# One and half: 140 width x 105 height
+# One column: 90 width x 67.5 height
+# Min size: 30 width x 22.5 height
+
+# SOD
+(pSOD <- wrap_plots(c(plots[2], plots[1])) +
+    plot_annotation(tag_levels = list(c("A. Column", "", "B. Tentacle", "")),
+                    title = "SOD activity") +
+    theme(plot.tag = element_text(size = 7),
+          plot.title = element_text(size = 10, )))
+ggsave("./resultados/graficas2025/finales/1_SOD.png", width = 190, height = 142.5, units = "mm", dpi = 1000)
+ggsave("./resultados/graficas2025/finales/1_SOD.eps", width = 190, height = 142.5, units = "mm", dpi = 1000, device = cairo_ps) # Para la revista
+
+# CAT
+(pCAT <- wrap_plots(c(plots[4], plots[3])) +
+    plot_annotation(tag_levels = list(c("A. Column", "", "B. Tentacle", "")),
+                    title = "CAT activity") +
+    theme(plot.tag = element_text(size = 7),
+          plot.title = element_text(size = 10, )))
+ggsave("./resultados/graficas2025/finales/2_CAT.png", width = 190, height = 142.5, units = "mm", dpi = 1000)
+ggsave("./resultados/graficas2025/finales/2_CAT.eps", width = 190, height = 142.5, units = "mm", dpi = 1000, device = cairo_ps) # Para la revista
+
+# GR
+(pGR <- wrap_plots(c(plots[6], plots[5])) +
+    plot_annotation(tag_levels = list(c("A. Column", "", "B. Tentacle", "")),
+                    title = "GR activity") +
+    theme(plot.tag = element_text(size = 7),
+          plot.title = element_text(size = 10, )))
+ggsave("./resultados/graficas2025/finales/3_GR.png", width = 190, height = 142.5, units = "mm", dpi = 1000)
+ggsave("./resultados/graficas2025/finales/3_GR.eps", width = 190, height = 142.5, units = "mm", dpi = 1000, device = cairo_ps) # Para la revista
+
+# GST
+(pGST <- wrap_plots(c(plots[7], plots[8])) +
+    plot_annotation(tag_levels = list(c("A. Column", "", "B. Tentacle", "")),
+                    title = "GST activity") +
+    theme(plot.tag = element_text(size = 7),
+          plot.title = element_text(size = 10, )))
+ggsave("./resultados/graficas2025/finales/4_GST.png", width = 190, height = 142.5, units = "mm", dpi = 1000)
+ggsave("./resultados/graficas2025/finales/4_GST.eps", width = 190, height = 142.5, units = "mm", dpi = 1000, device = cairo_ps) # Para la revista
+
+# DTD
+(pDTD <- wrap_plots(c(plots[10], plots[9])) +
+    plot_annotation(tag_levels = list(c("A. Column", "", "B. Tentacle", "")),
+                    title = "DTD activity") +
+    theme(plot.tag = element_text(size = 7),
+          plot.title = element_text(size = 10, )))
+ggsave("./resultados/graficas2025/finales/5_DTD.png", width = 190, height = 142.5, units = "mm", dpi = 1000)
+ggsave("./resultados/graficas2025/finales/5_DTD.eps", width = 190, height = 142.5, units = "mm", dpi = 1000, device = cairo_ps) # Para la revista
+
+# TEAC
+(pTEAC <- wrap_plots(c(plots[15], plots[16])) +
+    plot_annotation(tag_levels = list(c("A. Column", "", "B. Tentacle", "")),
+                    title = "Total antioxidant capacity (TEAC)") +
+    theme(plot.tag = element_text(size = 7),
+          plot.title = element_text(size = 10, )))
+ggsave("./resultados/graficas2025/finales/6_TEAC.png", width = 190, height = 142.5, units = "mm", dpi = 1000)
+ggsave("./resultados/graficas2025/finales/6_TEAC.eps", width = 190, height = 142.5, units = "mm", dpi = 1000, device = cairo_ps) # Para la revista
+
+# MDA
+(pMDA <- wrap_plots(c(plots[17], plots[18])) +
+    plot_annotation(tag_levels = list(c("A. Column", "", "B. Tentacle", "")),
+                    title = "Malondialdehyde concentration") +
+    theme(plot.tag = element_text(size = 7),
+          plot.title = element_text(size = 10, )))
+ggsave("./resultados/graficas2025/finales/7_MDA.png", width = 190, height = 142.5, units = "mm", dpi = 1000)
+ggsave("./resultados/graficas2025/finales/7_MDA.eps", width = 190, height = 142.5, units = "mm", dpi = 1000, device = cairo_ps) # Para la revista
+
+# F. Acida
+(pAP <- wrap_plots(c(plots[19], plots[20])) +
+    plot_annotation(tag_levels = list(c("A. Column", "", "B. Tentacle", "")),
+                    title = "Acid Phosphatase") +
+    theme(plot.tag = element_text(size = 7),
+          plot.title = element_text(size = 10, )))
+ggsave("./resultados/graficas2025/finales/8_AP.png", width = 190, height = 142.5, units = "mm", dpi = 1000)
+ggsave("./resultados/graficas2025/finales/8_AP.eps", width = 190, height = 142.5, units = "mm", dpi = 1000, device = cairo_ps) # Para la revista
+
+# F. Alcalina
+(pAlP <- wrap_plots(c(plots[22], plots[21])) +
+    plot_annotation(tag_levels = list(c("A. Column", "", "B. Tentacle", "")),
+                    title = "Alkaline Phosphatase") +
+    theme(plot.tag = element_text(size = 7),
+          plot.title = element_text(size = 10, )))
+ggsave("./resultados/graficas2025/finales/9_AlP.png", width = 190, height = 142.5, units = "mm", dpi = 1000)
+ggsave("./resultados/graficas2025/finales/9_AlP.eps", width = 190, height = 142.5, units = "mm", dpi = 1000, device = cairo_ps) # Para la revista
+
+
+# Mieloperoxidasa
+(pMPx <- wrap_plots(c(plots[24], plots[23])) +
+    plot_annotation(tag_levels = list(c("A. Column", "", "B. Tentacle", "")),
+                    title = "Mieloperoxidase") +
+    theme(plot.tag = element_text(size = 7),
+          plot.title = element_text(size = 10, )))
+ggsave("./resultados/graficas2025/finales/10_MPx.png", width = 190, height = 142.5, units = "mm", dpi = 1000)
+ggsave("./resultados/graficas2025/finales/10_MPx.eps", width = 190, height = 142.5, units = "mm", dpi = 1000, device = cairo_ps) # Para la revista
 
 ### Separacion por playas, no usada ----
 if(FALSE){
@@ -318,11 +419,3 @@ if(FALSE){
   
 }
 
-### Construccion de figuras con patchwork ----
-
-plots <- sapply(colnames(data_2[5:31])[-c(5,6)], function(x){readRDS(paste0("./resultados/graficas2025/contabla/", x, ".rds"))})
-
-(pSOD <- wrap_plots(plots[1:2]) +
-    labs(title = "SOD activity") +
-    theme(plot.title = element_text(hjust = -3.07))) # -2.4 left aligned
-ggsave("./resultados/graficas2025/contabla/_SOD.png", width = 200, height = 150, units = "mm", dpi = 1000)
