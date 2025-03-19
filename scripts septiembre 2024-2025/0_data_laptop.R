@@ -13,17 +13,17 @@ setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
 # Cambiar corte a sectioning o treatment
 datos <- read.csv2("./datos/TFG_datos_2024.csv", numerals = "warn.loss", encoding = "latin1")%>% 
   mutate(playa = as.factor(playa), cultivo = as.factor(cultivo), 
-         corte = as.factor(corte), tiempo = as.factor(madurez)) %>% 
-  select(-madurez)
+         section = as.factor(corte), time = as.factor(madurez)) %>% 
+  select(-madurez, -corte) %>% relocate(section, .after = cultivo)
 
 
 datos$playa <- factor(datos$playa, levels = c("Calahonda", "Almuñecar", "Salobreña")) # Reordenar niveles
 
 
 # Poner in english los nombres de los niveles
-datos$corte <- factor(datos$corte, levels = c("No", "Si"), labels = c("control", "dissected"))
+datos$section <- factor(datos$section, levels = c("No", "Si"), labels = c("control", "dissected"))
 datos$cultivo <- factor(datos$cultivo, levels = c("No", "Si"), labels = c("wild", "cultured"))
-datos$tiempo <- factor(datos$tiempo, levels = c("No", "Si"), labels = c("0", "1"))
+datos$time <- factor(datos$time, levels = c("No", "Si"), labels = c("0", "1"))
 
 
 # Limpieza de datos ----

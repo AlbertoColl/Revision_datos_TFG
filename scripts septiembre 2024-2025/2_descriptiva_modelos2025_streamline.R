@@ -28,11 +28,11 @@ library(patchwork)
 
 ### SETUP y filtrado de datos ----
 
-setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
-#setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
+#setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
+setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
 
-source(file = "./scripts septiembre 2024-2025/0_data_lab.R")
-#source(file = "./scripts septiembre 2024-2025/0_data_laptop.R")
+#source(file = "./scripts septiembre 2024-2025/0_data_lab.R")
+source(file = "./scripts septiembre 2024-2025/0_data_laptop.R")
 
 source(file = "./scripts septiembre 2024-2025/1_funciones_graficas.R")
 
@@ -41,27 +41,32 @@ data_2 <- filter(datos, cultivo == "cultured")
 
 ### Exploracion ----
 
-ggplot(data_2, aes(y = Fbasica_p)) +
+ggplot(data_2, aes(y = MDA_p)) +
   geom_boxplot(aes(x = time:section, color = time:section), alpha = 0) +
   geom_point(aes(x = time:section, color = time:section), alpha = 1, size = 2)
 
-# Deteccion de outliers en SOD_t y CAT_t para normalidad de residuos
-# view(data_2 %>%  group_by(corte:tiempo) %>%  identify_outliers(CAT_t))
+# Deteccion de outliers
+view(data_2 %>%  group_by(section:time) %>%  identify_outliers(MDA_p))
 
 # Se eliminan:
-data_2$SOD_t[7] <- NA
-data_2$SOD_t[3] <- NA
+data_2$SOD_t[7] <- NA #para normalidad
+data_2$SOD_t[3] <- NA #para normalidad
+
 data_2$CAT_t[35] <- NA # La funcion ha identificado otro, pero su eliminacion no afecta a la normalidad de residuos, este si.
+
 data_2$Mielo_p[26] <- NA
 data_2$Mielo_t[18] <- NA #Sospechoso, y afecta a normalidad
+
 data_2$Facida_p[30] # sospechoso, outlier no extremo
+
 data_2$Fbasica_p[12] <- NA # outlier extremo
 data_2$Fbasica_t[9] <- NA # Afecta a homocedasticidad
+
 data_2$Lisozima_p[33] <- NA # outlier extremo
 data_2$Lisozima_p[34] <- NA # outlier extremo
 data_2$Lisozima_p[2] <- NA # outlier extremo
 
-
+data_2$MDA_p[29] <- NA # Outlier no extremo pero parece que puede afectar al resultado del analisis y afecta a la varianza del grupo.
 
 ### Ajuste de modelos ----
 
@@ -110,13 +115,9 @@ posthoc_tree <- function(){
         group_by(time) %>% 
         t_test(as.formula(paste0(i, " ~ section")), p.adjust.method = "BH")
       if(t.results[1,]$p <= 0.05){
-        letras[c(1,3)] <- case_when(
-          tabla_summ[1,]$mean < tabla_summ[3,]$mean ~ c("", "*"),
-          tabla_summ[1,]$mean > tabla_summ[3,]$mean ~ c("*", ""))} 
+        letras[c(1,3)] <- c("", "*")} 
       if(t.results[2,]$p <= 0.05){
-        letras[c(2,4)] <- case_when(
-          tabla_summ[2,]$mean < tabla_summ[4,]$mean ~ c("", "*"),
-          tabla_summ[2,]$mean > tabla_summ[4,]$mean ~ c("*", ""))} 
+        letras[c(2,4)] <- c("", "*")} 
       #Se pueden añadir tiers con case_when()
       print("Interacion is significant. Grouped t-test performed.")
       return(letras)
@@ -144,16 +145,27 @@ table_maker <- function(){
       p.adj <= 0.001 ~ "***",
       p.adj <= 0.01 ~ "**",
       p.adj <= 0.05 ~ "*",
-      TRUE ~ "ns")) %>% 
+      TRUE ~ "ns"),
+      p.adj = trunc(p.adj*10^4)/10^4) %>% 
     gt() %>% 
     cols_label(
       Effect = md("**Effect**"),
       `F` = md("**F statistic**"),
       p.adj = md("**p value**"),
       sign. = md("")) %>% 
-    tab_header(title = md("Two-way ANOVA Table"))
+    tab_header(title = md("Two-way ANOVA Table")) %>% 
+    tab_options(
+      heading.title.font.size = "medium",
+      #column_labels.font.weight = "bold",
+      table.font.size = "small",
+      column_labels.font.size = "medium") %>% 
+    tab_style(
+      style = cell_text(color = "red3", weight = "normal"),
+      locations = cells_body(
+        columns = p.adj,
+        rows = p.adj <= 0.05))
   return(t)
-}
+} # My beautiful beautiful daughter Table_maker()
 
 
 # Bucle de construccion de graficas
@@ -169,14 +181,16 @@ for (n in c(1:27)) {
   if (n != 5){
   (p <- barras_tfg() +
      ylim(c(0,
-            max(limite_t, (max(tabla_summ$mean) + max(tabla_summ$se))))))
-     #labs(subtitle = case_when(str_detect(i, "_p") == T  ~ "A",                                                 str_detect(i, "_t") == T ~ "B",                                                 TRUE ~ "")))
+            max(limite_t, (max(tabla_summ$mean) + max(tabla_summ$se))))) +
+     labs(tag = case_when(str_detect(i, "_p") == T  ~ "Column",                                                 str_detect(i, "_t") == T ~ "Tentacle",
+                               TRUE ~ "")))
     (t <- table_maker())
     (pt <- p/wrap_table(t, panel = "full", space = "fixed"))
-  ggsave(paste0("./resultados/graficas2025/contabla/", i, ".png"), width = 100, height = 140, units = "mm", dpi = 1000)}
+  ggsave(paste0("./resultados/graficas2025/contabla/", i, ".png"), width = 100, height = 140, units = "mm", dpi = 1000)
+  saveRDS(pt, file = paste0("./resultados/graficas2025/contabla/", i, ".rds"))}
 }
 
-# Separacion por playas, no usada
+### Separacion por playas, no usada ----
 if(FALSE){
   ### Separacion por playas - CALAHONDA ----
   
@@ -303,3 +317,12 @@ if(FALSE){
   #  
   
 }
+
+### Construccion de figuras con patchwork ----
+
+plots <- sapply(colnames(data_2[5:31])[-c(5,6)], function(x){readRDS(paste0("./resultados/graficas2025/contabla/", x, ".rds"))})
+
+(pSOD <- wrap_plots(plots[1:2]) +
+    labs(title = "SOD activity") +
+    theme(plot.title = element_text(hjust = -3.07))) # -2.4 left aligned
+ggsave("./resultados/graficas2025/contabla/_SOD.png", width = 200, height = 150, units = "mm", dpi = 1000)
