@@ -8,11 +8,11 @@
 library(tidyverse)
 library(ggthemr)
 
-setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
-#setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
+#setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
+setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
 
-source(file = "./scripts septiembre 2024-2025/0_data_lab.R")
-#source(file = "./scripts septiembre 2024-2025/0_data_laptop.R")
+#source(file = "./scripts septiembre 2024-2025/0_data_lab.R")
+source(file = "./scripts septiembre 2024-2025/0_data_laptop.R")
 
 ## Definicion del tema y formato de las graficas ----
 theme_tfm <- function(){
@@ -85,7 +85,7 @@ barras_articulo <- function(){
 # Esta es la que actualmente estoy usando
 ggthemr("light")
 barras_tfg <- function(){
-  ggplot(tabla_summ) +
+  return(ggplot(tabla_summ) +
     geom_errorbar(aes(x = time, ymax = mean + se, ymin = mean- se, color = tratamiento), width = 0.3, position = position_dodge(width = 0.9), linewidth = 1, show.legend = F) +
     geom_col(aes(x = time, y = mean, color = tratamiento, fill = tratamiento), alpha = 0.4, linewidth = 1, position = "dodge2") +
     geom_text(aes(x = time, y = mean + se, label = letras, group = tratamiento), color = "grey5", vjust=-0.8, size = ifelse("*" %in% tabla_summ$letras, 5.5, 3.5), fontface = "bold", position = position_dodge(width = 0.9)) +
@@ -103,6 +103,5 @@ barras_tfg <- function(){
     scale_fill_manual(values = c("#49AB93","#F59300" ), labels = c("Control", "Sectioned") ) +
     scale_x_discrete(labels = c("T0", "T1")) + #cambiar al apropiado
     theme(legend.position = "bottom",
-          plot.tag.position = c(0.8, 0.95),
-          legend.title = element_blank())
+    legend.title = element_blank()))
     }
