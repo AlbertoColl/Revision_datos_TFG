@@ -46,15 +46,19 @@ ggplot(data_2, aes(y = GPx_p)) +
   geom_point(aes(x = time:section, color = time:section), alpha = 1, size = 2)
 
 # Deteccion de outliers
-view(data_2 %>%  group_by(section:time) %>%  identify_outliers(GPx_p))
+view(data_2 %>%  group_by(section:time) %>%  identify_outliers(GPx_t))
 
-data_2$GPx_t[9] <- NA #HOMOCEDASTICIDAD
+data_2$GPx_t[9] <- NA # Afecta a homcedasticidad y es extremo
+
 data_2$GPx_t[6] <- NA #HOMOCEDASTICIDAD
-data_2$GPx_t[8] <- NA #HOMOCEDASTICIDAD
-data_2$GPx_t[33] <- NA#posible
+data_2$GPx_t[2] <- NA
+data_2$GPx_t[33] <- NA #posible
 
-data_2$GPx_p[2] <- NA
-
+data_2$GPx_p[2] <- NA # outlier extremo
+data_2$GPx_p[15] <- NA # extremo
+data_2$GPx_p[17] <- NA
+data_2$GPx_p[30] <- NA
+data_2$GPx_p[33] <- NA
 
 # Se eliminan:
 data_2$SOD_t[7] <- NA #para normalidad
@@ -169,7 +173,7 @@ table_maker <- function(){
     tab_style(
       style = cell_text(color = "red3", weight = "normal"),
       locations = cells_body(
-        columns = p.adj,
+        columns = c(p.adj, sign.),
         rows = p.adj <= 0.05))
   return(t)
 } # My beautiful beautiful daughter Table_maker()
@@ -183,18 +187,14 @@ for (n in c(1:27)) {
     separate_wider_delim(`section:time`, ":", names = c("tratamiento", "time"), cols_remove=F)
   if((n %% 2) != 0) {# Memoria del limite
     limite_t = 1.3*(max(tabla_summ$mean) + max(tabla_summ$se))}
-  if (n != 5){tabla_summ$letras <- posthoc_tree()}
-  if (n != 5){
-    (p <- barras_tfg() +
-     ylim(c(0,
-            max(limite_t, (max(tabla_summ$mean) + max(tabla_summ$se))))))
-    
-    #(pt <- p/wrap_table(t, panel = "full", space = "fixed")) #Vamos a wrap tables later
-    saveRDS(p, file = paste0("./resultados/graficas2025/contabla/", i, ".rds"))
-    ggsave(paste0("./resultados/graficas2025/contabla/", i, ".png"), width = 80, height = 90, units = "mm", dpi = 1000)
-    (t <- table_maker())
-    saveRDS(t, file = paste0("./resultados/graficas2025/contabla/tabla", i, ".rds"))
-  }
+  tabla_summ$letras <- posthoc_tree()
+  (p <- barras_tfg() +
+      ylim(c(0, max(limite_t, (max(tabla_summ$mean) + max(tabla_summ$se))))))
+  #(pt <- p/wrap_table(t, panel = "full", space = "fixed")) #Vamos a wrap tables later
+  saveRDS(p, file = paste0("./resultados/graficas2025/contabla/", i, ".rds"))
+  ggsave(paste0("./resultados/graficas2025/contabla/", i, ".png"), width = 80, height = 90, units = "mm", dpi = 1000)
+  (t <- table_maker())
+  saveRDS(t, file = paste0("./resultados/graficas2025/contabla/tabla", i, ".rds"))
 }
 
 ### Construccion de figuras con patchwork ----
@@ -257,10 +257,12 @@ guides_build_mod <- function (guides, theme){
 environment(guides_build_mod) <- asNamespace('patchwork')
 assignInNamespace("guides_build", guides_build_mod, ns = "patchwork")
 
-# Aqui empieza lo mio
-plots <- lapply(colnames(data_2[5:31])[-c(5,6)], function(x){readRDS(paste0("./resultados/graficas2025/contabla/", x, ".rds"))})
 
-tables <- lapply(colnames(data_2[5:31])[-c(5,6)], function(x){readRDS(paste0("./resultados/graficas2025/contabla/tabla", x, ".rds"))})
+
+# Aqui empieza lo mio
+plots <- lapply(colnames(data_2[5:31]), function(x){readRDS(paste0("./resultados/graficas2025/contabla/", x, ".rds"))})
+
+tables <- lapply(colnames(data_2[5:31]), function(x){readRDS(paste0("./resultados/graficas2025/contabla/tabla", x, ".rds"))})
 
 ## ARTWORK SIZING ELSEVIER
 # Double column page: 190 width x 142.5 height
@@ -268,11 +270,13 @@ tables <- lapply(colnames(data_2[5:31])[-c(5,6)], function(x){readRDS(paste0("./
 # One column: 90 width x 67.5 height
 # Min size: 30 width x 22.5 height
 
-# SOD
 
 design <- 
   c(area(1,1,3,4), 
     area(4,1,4,4))
+
+
+# SOD
 (pSOD <- plots[[2]] + plots[[1]] + plot_annotation(tag_levels = "A") + 
   plot_layout(guides = "collect") &
   theme(legend.position = "bottom",
@@ -284,9 +288,159 @@ design <-
     theme(plot.tag = element_text(size = 7),
           plot.title = element_text(size = 10)))
 ggsave("./resultados/graficas2025/finales/1_SOD_pt.png", width = 190, height = 142.5, units = "mm", dpi = 1000)
+ggsave("./resultados/graficas2025/finales/1_SOD_pt.eps", width = 190, height = 142.5, units = "mm", dpi = 1000, device = cairo_ps) # Para la revista
 
 
+# CAT
+(pCAT <- plots[[4]] + plots[[3]] + plot_annotation(tag_levels = "A") + 
+    plot_layout(guides = "collect") &
+    theme(legend.position = "bottom",
+          plot.tag.position = c(0.95, 0.95)))
+(tCAT <- wrap_table(tables[[4]], panel = "body", space = "fixed") + plot_spacer() + wrap_table(tables[[3]], panel = "body", space = "fixed"))
+(ptCAT <- pCAT / (tCAT) + plot_layout(design = design, tag_level = "new") +
+    plot_annotation(title = "CAT activity",
+                    tag_levels = list(c("A", "B", "", ""))) +
+    theme(plot.tag = element_text(size = 7),
+          plot.title = element_text(size = 10)))
+ggsave("./resultados/graficas2025/finales/2_CAT_pt.png", width = 190, height = 142.5, units = "mm", dpi = 1000)
+ggsave("./resultados/graficas2025/finales/2_CAT_pt.eps", width = 190, height = 142.5, units = "mm", dpi = 1000, device = cairo_ps) # Para la revista
 
+
+# GPx
+(pGPx <- plots[[6]] + plots[[5]] + plot_annotation(tag_levels = "A") + 
+    plot_layout(guides = "collect") &
+    theme(legend.position = "bottom",
+          plot.tag.position = c(0.95, 0.95)))
+(tGPx <- wrap_table(tables[[6]], panel = "body", space = "fixed") + plot_spacer() + wrap_table(tables[[5]], panel = "body", space = "fixed"))
+(ptGPx <- pGPx / (tGPx) + plot_layout(design = design, tag_level = "new") +
+    plot_annotation(title = "GPx activity",
+                    tag_levels = list(c("A", "B", "", ""))) +
+    theme(plot.tag = element_text(size = 7),
+          plot.title = element_text(size = 10)))
+ggsave("./resultados/graficas2025/finales/3_GPx_pt.png", width = 190, height = 142.5, units = "mm", dpi = 1000)
+ggsave("./resultados/graficas2025/finales/3_GPx_pt.eps", width = 190, height = 142.5, units = "mm", dpi = 1000, device = cairo_ps) # Para la revista
+
+
+# GR
+(pGR <- plots[[8]] + plots[[7]] + plot_annotation(tag_levels = "A") + 
+    plot_layout(guides = "collect") &
+    theme(legend.position = "bottom",
+          plot.tag.position = c(0.95, 0.95)))
+(tGR <- wrap_table(tables[[8]], panel = "body", space = "fixed") + plot_spacer() + wrap_table(tables[[7]], panel = "body", space = "fixed"))
+(ptGR <- pGR / (tGR) + plot_layout(design = design, tag_level = "new") +
+    plot_annotation(title = "GR activity",
+                    tag_levels = list(c("A", "B", "", ""))) +
+    theme(plot.tag = element_text(size = 7),
+          plot.title = element_text(size = 10)))
+ggsave("./resultados/graficas2025/finales/4_GR_pt.png", width = 190, height = 142.5, units = "mm", dpi = 1000)
+ggsave("./resultados/graficas2025/finales/4_GR_pt.eps", width = 190, height = 142.5, units = "mm", dpi = 1000, device = cairo_ps) # Para la revista
+
+# GST
+(pGST <- plots[[9]] + plots[[10]] + plot_annotation(tag_levels = "A") + 
+    plot_layout(guides = "collect") &
+    theme(legend.position = "bottom",
+          plot.tag.position = c(0.95, 0.95)))
+(tGST <- wrap_table(tables[[9]], panel = "body", space = "fixed") + plot_spacer() + wrap_table(tables[[10]], panel = "body", space = "fixed"))
+(ptGST <- pGST / (tGST) + plot_layout(design = design, tag_level = "new") +
+    plot_annotation(title = "GST activity",
+                    tag_levels = list(c("A", "B", "", ""))) +
+    theme(plot.tag = element_text(size = 7),
+          plot.title = element_text(size = 10)))
+ggsave("./resultados/graficas2025/finales/5_GST_pt.png", width = 190, height = 142.5, units = "mm", dpi = 1000)
+ggsave("./resultados/graficas2025/finales/5_GST_pt.eps", width = 190, height = 142.5, units = "mm", dpi = 1000, device = cairo_ps) # Para la revista
+
+
+# DTD
+(pDTD <- plots[[12]] + plots[[11]] + plot_annotation(tag_levels = "A") + 
+    plot_layout(guides = "collect") &
+    theme(legend.position = "bottom",
+          plot.tag.position = c(0.95, 0.95)))
+(tDTD <- wrap_table(tables[[12]], panel = "body", space = "fixed") + plot_spacer() + wrap_table(tables[[11]], panel = "body", space = "fixed"))
+(ptDTD <- pDTD / (tDTD) + plot_layout(design = design, tag_level = "new") +
+    plot_annotation(title = "DTD activity",
+                    tag_levels = list(c("A", "B", "", ""))) +
+    theme(plot.tag = element_text(size = 7),
+          plot.title = element_text(size = 10)))
+ggsave("./resultados/graficas2025/finales/6_DTD_pt.png", width = 190, height = 142.5, units = "mm", dpi = 1000)
+ggsave("./resultados/graficas2025/finales/6_DTD_pt.eps", width = 190, height = 142.5, units = "mm", dpi = 1000, device = cairo_ps) # Para la revista
+
+
+# TEAC
+(pTEAC <- plots[[17]] + plots[[18]] + plot_annotation(tag_levels = "A") + 
+    plot_layout(guides = "collect") &
+    theme(legend.position = "bottom",
+          plot.tag.position = c(0.95, 0.95)))
+(tTEAC <- wrap_table(tables[[17]], panel = "body", space = "fixed") + plot_spacer() + wrap_table(tables[[18]], panel = "body", space = "fixed"))
+(ptTEAC <- pTEAC / (tTEAC) + plot_layout(design = design, tag_level = "new") +
+    plot_annotation(title = "Total Antioxidant Capacity (TEAC)",
+                    tag_levels = list(c("A", "B", "", ""))) +
+    theme(plot.tag = element_text(size = 7),
+          plot.title = element_text(size = 10)))
+ggsave("./resultados/graficas2025/finales/7_TEAC_pt.png", width = 190, height = 142.5, units = "mm", dpi = 1000)
+ggsave("./resultados/graficas2025/finales/7_TEAC_pt.eps", width = 190, height = 142.5, units = "mm", dpi = 1000, device = cairo_ps) # Para la revista
+
+
+# MDA
+(pMDA <- plots[[19]] + plots[[20]] + plot_annotation(tag_levels = "A") + 
+    plot_layout(guides = "collect") &
+    theme(legend.position = "bottom",
+          plot.tag.position = c(0.95, 0.95)))
+(tMDA <- wrap_table(tables[[19]], panel = "body", space = "fixed") + plot_spacer() + wrap_table(tables[[20]], panel = "body", space = "fixed"))
+(ptMDA <- pMDA / (tMDA) + plot_layout(design = design, tag_level = "new") +
+    plot_annotation(title = "Malondialdehyde (MDA) levels",
+                    tag_levels = list(c("A", "B", "", ""))) +
+    theme(plot.tag = element_text(size = 7),
+          plot.title = element_text(size = 10)))
+ggsave("./resultados/graficas2025/finales/8_MDA_pt.png", width = 190, height = 142.5, units = "mm", dpi = 1000)
+ggsave("./resultados/graficas2025/finales/8_MDA_pt.eps", width = 190, height = 142.5, units = "mm", dpi = 1000, device = cairo_ps) # Para la revista
+
+
+# F Acida
+(pFA <- plots[[21]] + plots[[22]] + plot_annotation(tag_levels = "A") + 
+    plot_layout(guides = "collect") &
+    theme(legend.position = "bottom",
+          plot.tag.position = c(0.95, 0.95)))
+(tFA <- wrap_table(tables[[21]], panel = "body", space = "fixed") + plot_spacer() + wrap_table(tables[[22]], panel = "body", space = "fixed"))
+(ptFA <- pFA / (tFA) + plot_layout(design = design, tag_level = "new") +
+    plot_annotation(title = "Acid Phosphatase activity",
+                    tag_levels = list(c("A", "B", "", ""))) +
+    theme(plot.tag = element_text(size = 7),
+          plot.title = element_text(size = 10)))
+ggsave("./resultados/graficas2025/finales/9_FA_pt.png", width = 190, height = 142.5, units = "mm", dpi = 1000)
+ggsave("./resultados/graficas2025/finales/9_FA_pt.eps", width = 190, height = 142.5, units = "mm", dpi = 1000, device = cairo_ps) # Para la revista
+
+
+# F Alcalina
+(pFAl <- plots[[24]] + plots[[23]] + plot_annotation(tag_levels = "A") + 
+    plot_layout(guides = "collect") &
+    theme(legend.position = "bottom",
+          plot.tag.position = c(0.95, 0.95)))
+(tFAl <- wrap_table(tables[[24]], panel = "body", space = "fixed") + plot_spacer() + wrap_table(tables[[23]], panel = "body", space = "fixed"))
+(ptFAl <- pFAl / (tFAl) + plot_layout(design = design, tag_level = "new") +
+    plot_annotation(title = "Alkaline Phosphatase activity",
+                    tag_levels = list(c("A", "B", "", ""))) +
+    theme(plot.tag = element_text(size = 7),
+          plot.title = element_text(size = 10)))
+ggsave("./resultados/graficas2025/finales/10_FAl_pt.png", width = 190, height = 142.5, units = "mm", dpi = 1000)
+ggsave("./resultados/graficas2025/finales/10_FAl_pt.eps", width = 190, height = 142.5, units = "mm", dpi = 1000, device = cairo_ps) # Para la revista
+
+
+# MPx
+(pMPx <- plots[[26]] + plots[[25]] + plot_annotation(tag_levels = "A") + 
+    plot_layout(guides = "collect") &
+    theme(legend.position = "bottom",
+          plot.tag.position = c(0.95, 0.95)))
+(tMPx <- wrap_table(tables[[26]], panel = "body", space = "fixed") + plot_spacer() + wrap_table(tables[[25]], panel = "body", space = "fixed"))
+(ptMPx <- pMPx / (tMPx) + plot_layout(design = design, tag_level = "new") +
+    plot_annotation(title = "Mieloperoxidase activity",
+                    tag_levels = list(c("A", "B", "", ""))) +
+    theme(plot.tag = element_text(size = 7),
+          plot.title = element_text(size = 10)))
+ggsave("./resultados/graficas2025/finales/11_MPx_pt.png", width = 190, height = 142.5, units = "mm", dpi = 1000)
+ggsave("./resultados/graficas2025/finales/11_MPx_pt.eps", width = 190, height = 142.5, units = "mm", dpi = 1000, device = cairo_ps) # Para la revista
+
+
+if (FALSE) {
 # INTENTO ANTERIOR
 (pSOD <- wrap_plt_SOD(pSOD <- wrap_plots(c(plots[2], plots[1])) +
     plot_annotation(tag_levels = list(c("A", "", "B", "")),
@@ -379,7 +533,7 @@ ggsave("./resultados/graficas2025/finales/9_AlP.eps", width = 190, height = 142.
           plot.title = element_text(size = 10, )))
 ggsave("./resultados/graficas2025/finales/10_MPx.png", width = 190, height = 142.5, units = "mm", dpi = 1000)
 ggsave("./resultados/graficas2025/finales/10_MPx.eps", width = 190, height = 142.5, units = "mm", dpi = 1000, device = cairo_ps) # Para la revista
-
+}
 ### Separacion por playas, no usada ----
 if(FALSE){
   ### Separacion por playas - CALAHONDA ----
