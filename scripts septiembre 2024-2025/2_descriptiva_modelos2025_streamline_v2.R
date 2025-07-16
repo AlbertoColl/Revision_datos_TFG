@@ -49,10 +49,10 @@ ggplot(data_2, aes(y = GPx_p)) +
 view(data_2 %>%  group_by(section:time) %>%  identify_outliers(GPx_t))
 
 data_2$GPx_t[9] <- NA # Afecta a homcedasticidad y es extremo
-
 data_2$GPx_t[6] <- NA #HOMOCEDASTICIDAD
 data_2$GPx_t[2] <- NA
 data_2$GPx_t[33] <- NA #posible
+# Quitar el otro dato  #4 para l GPx tentacular
 
 data_2$GPx_p[2] <- NA # outlier extremo
 data_2$GPx_p[15] <- NA # extremo
@@ -63,6 +63,8 @@ data_2$GPx_p[33] <- NA
 # Se eliminan:
 data_2$SOD_t[7] <- NA #para normalidad
 data_2$SOD_t[3] <- NA #para normalidad
+# Quitar la  #35 tambien
+
 
 data_2$CAT_t[35] <- NA # La funcion ha identificado otro, pero su eliminacion no afecta a la normalidad de residuos, este si.
 
