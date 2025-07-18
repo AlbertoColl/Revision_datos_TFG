@@ -99,9 +99,9 @@ barras_tfg <- function(){
       any(str_detect(i, c("GST", "DTD", "GR", "GPx", "Facida", "Fbasica"))) == T ~ "mU / mg  of protein",
       TRUE ~ "U / mg  of protein")) +
     xlab(NULL) + # Omitir?
-    scale_color_manual(values = c("#49AB93","#F59300" ), labels = c("Control", "Sectioned") ) +
-    scale_fill_manual(values = c("#49AB93","#F59300" ), labels = c("Control", "Sectioned") ) +
-    scale_x_discrete(labels = c("T0", "T1")) + #cambiar al apropiado
+    scale_color_manual(values = c("#49AB93","#FFA51F" ), labels = c("Control", "Sectioned") ) +
+    scale_fill_manual(values = c("#49AB93","#FFA51F" ), labels = c("Control", "Sectioned") ) +
+    scale_x_discrete(labels = c("T1", "T2")) + #cambiar al apropiado
     theme(legend.position = "bottom",
     legend.title = element_blank()))
     }

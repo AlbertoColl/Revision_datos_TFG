@@ -182,7 +182,7 @@ for (n in c(1:27)) {
      ylim(c(0,
             max(limite_t, (max(tabla_summ$mean) + max(tabla_summ$se))))) +
      #PROBABLEMENTE PUEDO QUITAR ESTO
-     labs(tag = case_when(str_detect(i, "_p") == T  ~ "Column",                                                 str_detect(i, "_t") == T ~ "Tentacle",
+     labs(tag = case_when(str_detect(i, "_p") == T  ~ "A",                                                 str_detect(i, "_t") == T ~ "B",
                                TRUE ~ "")))
     (t <- table_maker())
     (pt <- p/wrap_table(t, panel = "full", space = "fixed"))
@@ -202,7 +202,7 @@ plots <- sapply(colnames(data_2[5:31])[-c(5,6)], function(x){readRDS(paste0("./r
 
 # SOD
 (pSOD <- wrap_plots(c(plots[2], plots[1])) +
-    plot_annotation(tag_levels = list(c("A. Column", "", "B. Tentacle", "")),
+    plot_annotation(tag_levels = list(c("Column", "", "Tentacle", "")),
                     title = "SOD activity") +
     theme(plot.tag = element_text(size = 7),
           plot.title = element_text(size = 10, )))
