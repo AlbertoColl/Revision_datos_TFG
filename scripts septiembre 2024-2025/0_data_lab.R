@@ -9,13 +9,18 @@ library(tidyverse)
 setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
 #setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
 
-datos <- read.csv2("./datos/TFG_datos_2024.csv", numerals = "warn.loss", encoding = "latin1")%>% 
+datos <- read.csv2("./datos/TFG_datos_2025.csv", numerals = "warn.loss", encoding = "latin1")%>% 
   mutate(playa = as.factor(playa), cultivo = as.factor(cultivo), 
          section = as.factor(corte), time = as.factor(madurez)) %>% 
   select(-madurez, -corte) %>% relocate(section, .after = cultivo)
 
-
+datos_long <- read.csv2("./datos/TFG_datos_2025_long.csv", numerals = "warn.loss", encoding = "latin1")%>% 
+  mutate(playa = as.factor(playa), cultivo = as.factor(cultivo), 
+         section = as.factor(corte), time = as.factor(madurez)) %>% 
+  select(-madurez, -corte) %>% relocate(section, .after = cultivo)
 datos$playa <- factor(datos$playa, levels = c("Calahonda", "Almuñecar", "Salobreña")) # Reordenar niveles
+datos_long$playa <- factor(datos$playa, levels = c("Calahonda", "Almuñecar", "Salobreña")) # Reordenar niveles
+
 
 
 # Poner in english los nombres de los niveles
