@@ -8,11 +8,10 @@ library(ggpubr)
 library(patchwork)
 
 ### SETUP ----
-setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
-#setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
+#setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
+setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
 
-source(file = "./scripts septiembre 2024-2025/0_data_lab.R")
-#source(file = "./scripts septiembre 2024-2025/0_data_laptop.R")
+source(file = "./scripts septiembre 2024-2025/0_lectura.R")
 
 data <- filter(datos_long, cultivo == "Si") %>%
   mutate(grupo = time:section)
@@ -54,22 +53,28 @@ data$Lisozima[38] <- NA # outlier extremo
 
 data$MDA[65] <- NA # Outlier no extremo pero parece que puede afectar al resultado del analisis y afecta a la varianza del grupo.
 
-### Modelo de grafica ----
-
-ggboxplot(data, x = "time", y = "CAT", color = "grupo", fill = "grupo", alpha = 0.15, width = 0.5, add = c("jitter", "mean"), add.params = list(shape = 1), facet.by = "tejido", ylab = "U/mg protein", panel.labs = list(tejido = c("Column", "Tentacle"))) +
-  theme_test() + labs(color = "Treatment")+ labs_pubr() + 
-  scale_x_discrete(labels = c("T1", "T2")) +
-  scale_fill_manual(values = c("#12A3F8","#E64B35FF","#0571B0","#BE2F36")) +
-  scale_color_manual(values = c("#12A3F8","#E64B35FF","#0571B0","#BE2F36"), labels = c("Control T1", "Sectioned T1","Control T2", "Sectioned T2")) + guides(fill = "none") +
-  theme(axis.title.x=element_blank(),
-        axis.text.x = element_text(size = 9))
+### Plot building ----
 
 # Paleta (unificar con PCA)
-c("#12A3F8","#E64B35FF","#0571B0","#BE2F36")
+#c("#12A3F8","#E64B35FF","#0571B0","#BE2F36")
 
-### Automatizacion ----
+# Funcion de grafica
+f.boxplot <- function(x){
+  ggboxplot(data, x = "time", y = x, color = "grupo", fill = "grupo", alpha = 0.15, width = 0.5, add = c("jitter", "mean"), add.params = list(shape = 1), facet.by = "tejido", ylab = "U/mg protein", panel.labs = list(tejido = c("Column", "Tentacle"))) +
+    theme_test() + labs(color = "Treatment")+ labs_pubr() + 
+    scale_x_discrete(labels = c("T1", "T2")) +
+    scale_fill_manual(values = c("#12A3F8","#E64B35FF","#0571B0","#BE2F36")) +
+    scale_color_manual(values = c("#12A3F8","#E64B35FF","#0571B0","#BE2F36"), labels = c("Control T1", "Sectioned T1","Control T2", "Sectioned T2")) + guides(fill = "none") +
+    ylim(0, 1.2*max(data %>% select(x), na.rm = T)) +
+    theme(axis.title.x=element_blank(),
+          axis.text.x = element_text(size = 9))
+    
+  
+  filename = sprintf("%s.png", x)
+  filenamesvg = sprintf("%s.svg", x)
+  
+  ggsave(filename, path = "./resultados/graficas2025/boxplot")
+  ggsave(filenamesvg, path = "./resultados/graficas2025/boxplot", device = "svg")
+}
 
-# Hacerlo con sapply()
-# Intentar hacerlo con doo() pero saldria en dataframe
-# Resignarse y hacerlo en bucle
-
+plots <- sapply(colnames(data[6:18]), f.boxplot)

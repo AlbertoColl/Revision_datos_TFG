@@ -42,7 +42,7 @@ datos <- datos %>%
          GPx_p = ifelse(GPx_p < 0, NA, GPx_p))  # hay datos de gpx negativos
 
 
-ggboxplot(filter(datos_long2, tejido == "Tentaculo", cultivo == "Si"), x = "group", y = "TEAC", color = "section", add = "jitter")
+#ggboxplot(filter(datos_long2, tejido == "Tentaculo", cultivo == "Si"), x = "group", y = "TEAC", color = "section", add = "jitter")
 
 datos_long2$CAT[41] <- NA
 datos_long2$MDA[31] <- NA
