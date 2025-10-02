@@ -3,9 +3,7 @@
 # Febrero 2025 - revision para publicacion
 
 library(tidyverse)
-library(rstatix)
 library(ggpubr)
-library(patchwork)
 
 ### SETUP ----
 #setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
@@ -60,21 +58,39 @@ data$MDA[65] <- NA # Outlier no extremo pero parece que puede afectar al resulta
 
 # Funcion de grafica
 f.boxplot <- function(x){
-  ggboxplot(data, x = "time", y = x, color = "grupo", fill = "grupo", alpha = 0.15, width = 0.5, add = c("jitter", "mean"), add.params = list(shape = 1), facet.by = "tejido", ylab = "U/mg protein", panel.labs = list(tejido = c("Column", "Tentacle"))) +
-    theme_test() + labs(color = "Treatment")+ labs_pubr() + 
+  ggboxplot(data, x = "time", y = x, color = "grupo", fill = "grupo", alpha = 0.15, width = 0.5, add = "mean", add.params = list(shape = 1), facet.by = "tejido", panel.labs = list(tejido = c("Column", "Tentacle"))) +
+    theme_minimal() + labs(color = "Treatment") +
+    #geom_point(data = data, mapping =aes(x = time, y = get(x), color = grupo), alpha = 0.2, position = position_jitterdodge(seed = 42)) +
+    ylab(case_when(x == "MDA" ~ "MDA (μM)",
+                   x == "TEAC" ~ "TEAC (Trolox equivalent μM)",
+                   x == "SOD" ~ "SOD (U / mg  of protein)",
+                   x == "CAT" ~ "CAT (U / mg  of protein)",
+                   x == "Mielo" ~ "MPx (mU 10^2 / mg of protein)",
+                   x == "GPx" ~ "GPx (mU / mg  of protein)",
+                   x == "GR" ~ "GR (mU / mg  of protein)",
+                   x == "GST" ~ "GST (mU / mg  of protein)",
+                   x == "DTD" ~ "NQO1 (mU / mg  of protein)",
+                   x == "Facida" ~ "Acid phosphatase (mU / mg  of protein)",
+                   x == "Fbasica" ~ "Alkaline phosphatase (mU / mg  of protein)")) +
+    labs_pubr() + 
     scale_x_discrete(labels = c("T1", "T2")) +
     scale_fill_manual(values = c("#12A3F8","#E64B35FF","#0571B0","#BE2F36")) +
     scale_color_manual(values = c("#12A3F8","#E64B35FF","#0571B0","#BE2F36"), labels = c("Control T1", "Sectioned T1","Control T2", "Sectioned T2")) + guides(fill = "none") +
     ylim(0, 1.2*max(data %>% select(x), na.rm = T)) +
     theme(axis.title.x=element_blank(),
-          axis.text.x = element_text(size = 9))
+          axis.text.x = element_text(size = 9),
+          axis.title.y = element_text(size = 11),
+          axis.line = element_line(color = "gray5"),
+          panel.background = element_rect(color = "gray80"),
+          strip.text = element_text(face = "bold"),
+          strip.background = element_rect(color = "gray60"))
     
   
   filename = sprintf("%s.png", x)
   filenamesvg = sprintf("%s.svg", x)
   
-  ggsave(filename, path = "./resultados/graficas2025/boxplot")
-  ggsave(filenamesvg, path = "./resultados/graficas2025/boxplot", device = "svg")
+  ggsave(filename, path = "./resultados/graficas2025/boxplot", width = 7, height = 3.5, units = "in")
+  ggsave(filenamesvg, path = "./resultados/graficas2025/boxplot", device = "svg",width = 7, height = 3.5, units = "in")
 }
 
 plots <- sapply(colnames(data[6:18]), f.boxplot)
