@@ -9,6 +9,8 @@ library(factoextra)
 library(ggpubr)
 library(patchwork)
 library(PCAtest)
+library(GGally)
+
 
 # SETUP y Carga de datos ----
 #setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
@@ -18,7 +20,8 @@ source(file = "./scripts septiembre 2024-2025/0_lectura.R")
 
 datos_2 <- datos_long %>%  filter(cultivo == "Si")
 
-# PCA conjunto ----
+if(FALSE){
+  # PCA conjunto ----
 datos_pca_full <- datos_2 %>%
   select(c(6:18), -proteina)
 
@@ -63,12 +66,14 @@ summary(pc_full)
           legend.text = element_text(face = "italic", size = 40/.pt),
           plot.title = element_blank()))
 
+}
 # PCA columnar ----
 datos_pca_p <- datos_2 %>% filter(tejido == "Pie") %>% 
   select(c(6:18), -proteina, -G6PDH)
 
-colnames(datos_pca_p) <- c("SOD", "CAT", "GPx", "GR", "GST", "DTD", "TEAC", "MDA", "Acid.phospatase", "Alkaline.phosphatase", "MPx")
+colnames(datos_pca_p) <- c("SOD", "CAT", "GPx", "GR", "GST", "DTD", "TEAC", "MDA", "AP", "ALP", "MPx")
 
+ggpairs(datos_pca_p)
 # Test de permutacion de Vieira
 pca_per <- PCAtest(datos_pca_p)
 
@@ -102,7 +107,7 @@ summary(pc_pie)
                            invisible="quali") +
     scale_color_manual(labels = c("Control T1", "Control T2", "Section T1", "Section T2"), values = c("#92C5DE", "#0571B0", "#F4A582", "#D6604D")) +
     scale_fill_manual(labels = c("Control T1", "Control T2", "Section T1", "Section T2"), values = c("#92C5DE", "#0571B0", "#F4A582", "#D6604D")) +
-    #ylab("PC2 (27.6%)") + xlab("PC1 (57.3%)") +
+    ylab("PC2 (18.8%)") + xlab("PC1 (33.1%)") +
     theme_pubr() +
     labs_pubr() +
     theme(legend.position = "bottom",
@@ -110,11 +115,19 @@ summary(pc_pie)
           legend.text = element_text(face = "italic", size = 40/.pt),
           plot.title = element_blank()))
 
+(c1 <- fviz_contrib(pc_pie, choice = "var", axes = 1, sort.val = "desc") + ylab("Contribution %") + labs(title = "Column - Contribution to PC1") +
+    theme(axis.title.x = element_blank(),
+          axis.text.x = element_text(size = 12)))
+
+(c2 <- fviz_contrib(pc_pie, choice = "var", axes = 2, sort.val = "desc") + ylab("Contribution %") + labs(title = "Column - Contribution to PC2") +
+    theme(axis.title.x = element_blank(),
+          axis.text.x = element_text(size = 12)))
+
 # PCA tentacular ----
 datos_pca_t <- datos_long2 %>%  filter(cultivo == "Si", tejido == "Tentaculo") %>% 
   select(c(6:18), -proteina, -G6PDH)
 
-colnames(datos_pca_t) <- c("SOD", "CAT", "GPx", "GR", "GST", "DTD", "TEAC", "MDA", "Acid.phospatase", "Alkaline.phosphatase", "MPx")
+colnames(datos_pca_t) <- c("SOD", "CAT", "GPx", "GR", "GST", "DTD", "TEAC", "MDA", "AP", "ALP", "MPx")
 
 # Test de permutacion de Vieira
 pca_per <- PCAtest(datos_pca_t)
@@ -122,7 +135,7 @@ pca_per <- PCAtest(datos_pca_t)
 #Empirical Psi = 11.3702, Max null Psi = 7.5203, Min null Psi = 2.0428, p-value = 0
 #Empirical Phi = 0.3215, Max null Phi = 0.2615, Min null Phi = 0.1363, p-value = 0
 
-#PC 1 is significant and accounts for 34% (95%-CI:27.2-46) of the total variation
+#PC 1 is significant and accounts for 35% (95%-CI:28.4-47.5) of the total variation
 
 #Variables CAT, GR, GST, DTD, acid phosphatase, alkaline phosphatase and MPx have significant loadings on PC 1
 
@@ -145,10 +158,19 @@ summary(pc_tent)
                              invisible="quali") +
     scale_color_manual(labels = c("Control T1", "Control T2", "Section T1", "Section T2"), values = c("#92C5DE", "#0571B0", "#F4A582", "#D6604D")) +
     scale_fill_manual(labels = c("Control T1", "Control T2", "Section T1", "Section T2"), values = c("#92C5DE", "#0571B0", "#F4A582", "#D6604D")) +
-    #ylab("PC2 (27.6%)") + xlab("PC1 (57.3%)") +
+    ylab("PC2 (15.8%)") + xlab("PC1 (35%)") +
     theme_pubr() +
     labs_pubr() +
     theme(legend.position = "bottom",
           legend.title = element_blank(),
           legend.text = element_text(face = "italic", size = 40/.pt),
           plot.title = element_blank()))
+
+(c3 <- fviz_contrib(pc_tent, choice = "var", axes = 1, sort.val = "desc") + ylab("Contribution %") + labs(title = "Tentacle - Contribution to PC1") +
+    theme(axis.title.x = element_blank(),
+          axis.text.x = element_text(size = 12)))
+# Figuras ----
+(p <- ((biplot_p+biplot_t+plot_layout(guides = "collect")) / (c1+c2+c3)) + plot_annotation(tag_levels = 'A') + plot_layout(heights = c(3, 1)) & theme(legend.position = "bottom"))
+
+ggsave(p, filename = "./resultados/graficas2025/pca.svg", width = 250, height = 200, units = "mm", dpi = 1000)
+ggsave(p, filename = "./resultados/graficas2025/pca.png", width = 250, height = 200, units = "mm", dpi = 1000)
