@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ImageData>
+  <Annotation>
+    <LineColour>65535</LineColour>
+    <LineWidth>3</LineWidth>
+    <ShowLine>False</ShowLine>
+    <ScaleBarLengthMode>user defined</ScaleBarLengthMode>
+    <ScaleBarUserDefLength>12</ScaleBarUserDefLength>
+    <AnnotationHidden>no</AnnotationHidden>
+    <LineDrawMode>Edit</LineDrawMode>
+    <ArrowLabelText>
+    </ArrowLabelText>
+  </Annotation>
+  <ImageCalibration OnePixel="0.076199998855590825" unit="Microns" Magnification="100x" />
+  <ImageInformation>
+    <ImageDescription />
+    <ImageNotes />
+    <Time>11:29</Time>
+    <ImageName>T24-1203-009</ImageName>
+    <Date>12/11/2025</Date>
+  </ImageInformation>
+</ImageData>

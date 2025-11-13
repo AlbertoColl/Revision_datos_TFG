@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ImageData>
+  <Annotation>
+    <LineColour>65535</LineColour>
+    <LineWidth>3</LineWidth>
+    <ShowLine>False</ShowLine>
+  </Annotation>
+  <ImageCalibration OnePixel="1" unit="Pixels" Magnification="" />
+  <ImageInformation>
+    <ImageDescription />
+    <ImageNotes />
+    <Time>19:21</Time>
+    <ImageName>T0-1194-40x001</ImageName>
+    <Date>06/11/2025</Date>
+  </ImageInformation>
+</ImageData>

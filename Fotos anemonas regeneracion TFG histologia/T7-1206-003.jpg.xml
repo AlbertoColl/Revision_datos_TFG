@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ImageData>
+  <Annotation>
+    <LineColour>65535</LineColour>
+    <LineWidth>3</LineWidth>
+    <ShowLine>False</ShowLine>
+    <ScaleBarLengthMode>user defined</ScaleBarLengthMode>
+    <ScaleBarUserDefLength>25</ScaleBarUserDefLength>
+    <AnnotationHidden>no</AnnotationHidden>
+    <LineDrawMode>Edit</LineDrawMode>
+    <ArrowLabelText>
+    </ArrowLabelText>
+  </Annotation>
+  <ImageCalibration OnePixel="0.19049999713897706" unit="Microns" Magnification="40x" />
+  <ImageInformation>
+    <ImageDescription />
+    <ImageNotes />
+    <Time>12:00</Time>
+    <ImageName>T7-1206-003</ImageName>
+    <Date>12/11/2025</Date>
+  </ImageInformation>
+</ImageData>
