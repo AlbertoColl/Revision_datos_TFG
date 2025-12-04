@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<DXBasicAnnotationSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.leica.com">
+  <IsShowBasicAnnotation>false</IsShowBasicAnnotation>
+  <IsBurnIn>false</IsBurnIn>
+  <HasPendingBurnIn>false</HasPendingBurnIn>
+  <HasPendingImageDescription>false</HasPendingImageDescription>
+  <PendingImageDescription />
+  <IsShowBasicImageName>false</IsShowBasicImageName>
+  <IsShowBasicImageDes>false</IsShowBasicImageDes>
+  <IsShowBasicImageDate>false</IsShowBasicImageDate>
+  <IsShowBasicImageTime>false</IsShowBasicImageTime>
+  <IsShowBasicLine>false</IsShowBasicLine>
+  <IsAutoSizeEnabled>true</IsAutoSizeEnabled>
+  <ArrowLineLabelText />
+  <LineWidth>1.5625</LineWidth>
+  <EndBarLength>31.25</EndBarLength>
+  <ImageSize>
+    <Width>1600</Width>
+    <Height>1200</Height>
+  </ImageSize>
+  <ImageDescription>mdjfihurcyio6</ImageDescription>
+  <Alpha>0</Alpha>
+  <RotationAngle>0</RotationAngle>
+  <IsShowZoomFactor>false</IsShowZoomFactor>
+  <ZoomFactor>0</ZoomFactor>
+  <IsShowActualSize>false</IsShowActualSize>
+  <IsSnapToOrigin>false</IsSnapToOrigin>
+  <RenderMode>Normal</RenderMode>
+  <LabelFont>
+    <Size>21.875</Size>
+    <Name>Arial</Name>
+    <Style>Regular</Style>
+  </LabelFont>
+  <LineColour>-65536</LineColour>
+  <LabelTextColor>-1</LabelTextColor>
+  <LabelBackgroundColor>-10144213</LabelBackgroundColor>
+  <ImageNameTool>
+    <Points>
+      <Point2>
+        <X>40.000000596046448</X>
+        <Y>1164.0000008046627</Y>
+      </Point2>
+    </Points>
+  </ImageNameTool>
+  <ImageDescriptionTool>
+    <Points>
+      <Point2>
+        <X>1559.9999994039536</X>
+        <Y>1164.0000008046627</Y>
+      </Point2>
+    </Points>
+  </ImageDescriptionTool>
+  <ImageDateTimeTool>
+    <Points>
+      <Point2>
+        <X>1559.9999994039536</X>
+        <Y>35.999999195337296</Y>
+      </Point2>
+    </Points>
+  </ImageDateTimeTool>
+  <BasicLineTool xsi:nil="true" />
+  <Calibration>
+    <Units>µm</Units>
+    <MetresPerPixel>1.9049999713897704E-07</MetresPerPixel>
+  </Calibration>
+</DXBasicAnnotationSettings>
