@@ -26,13 +26,13 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="1.3095539"
-     inkscape:cx="696.03857"
-     inkscape:cy="596.0045"
-     inkscape:window-width="1920"
-     inkscape:window-height="974"
-     inkscape:window-x="-11"
-     inkscape:window-y="-11"
+     inkscape:zoom="0.46299722"
+     inkscape:cx="420.08891"
+     inkscape:cy="452.48652"
+     inkscape:window-width="1366"
+     inkscape:window-height="705"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1" />
   <defs
@@ -715,7 +715,7 @@
        transform="matrix(0.41975259,0,0,0.41975259,-150.1904,87.247416)">Sectioned T2</text>
     <g
        id="g13"
-       inkscape:label="MPx"
+       inkscape:label="MPO"
        transform="translate(126.82853,-9.4290525)">
       <rect
          width="35.277779%"
@@ -1348,10 +1348,12 @@
         <text
            transform="rotate(-90,71.15,57.79)"
            text-anchor="middle"
-           style="font-weight:bold;font-size:11px;font-family:Arial;white-space:pre"
+           style="font-weight:bold;font-size:11px;font-family:Arial;white-space:pre;-inkscape-font-specification:'Arial, Bold';font-style:normal;font-stretch:normal;font-variant:normal;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle"
            textLength="158.05"
            lengthAdjust="spacingAndGlyphs"
-           id="text74-8">MPx (mU 10^2 / mg of protein)</text>
+           id="text74-8"><tspan
+             sodipodi:role="line"
+             id="tspan1">MPO (mU 10^2 / mg of protein)</tspan></text>
       </g>
       <text
          x="184.02"
