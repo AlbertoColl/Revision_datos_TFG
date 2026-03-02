@@ -9,7 +9,7 @@
    id="svg1"
    xml:space="preserve"
    sodipodi:docname="Figura histologia 3_placeholder.svg"
-   inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
    inkscape:export-filename="Figura histologia 3.png"
    inkscape:export-xdpi="300"
    inkscape:export-ydpi="300"
@@ -27,15 +27,15 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="0.5"
-     inkscape:cx="114"
-     inkscape:cy="433"
-     inkscape:window-width="1366"
-     inkscape:window-height="697"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     inkscape:zoom="2.8284271"
+     inkscape:cx="346.6591"
+     inkscape:cy="486.66624"
+     inkscape:window-width="1920"
+     inkscape:window-height="974"
+     inkscape:window-x="-11"
+     inkscape:window-y="-11"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g13"
+     inkscape:current-layer="layer1"
      inkscape:export-bgcolor="#ffffffff"><inkscape:page
        x="0"
        y="0"
@@ -159,7 +159,7 @@
          inkscape:label="Mesoglea"><tspan
            x="350"
            y="189.11811"
-           id="tspan12">M</tspan></text><text
+           id="tspan2">M</tspan></text><text
          xml:space="preserve"
          id="text10-8-8"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect10-3-06);display:none;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-dasharray:none;stroke-opacity:1"
@@ -167,7 +167,7 @@
          inkscape:label="Epidermis"><tspan
            x="350"
            y="189.11811"
-           id="tspan13">Ep</tspan></text><path
+           id="tspan3">Ep</tspan></text><path
          style="display:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.838441;stroke-linecap:butt;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker15)"
          d="m 46.821271,170.58284 -2.344877,-1.5218"
          id="path15-3-4"
@@ -187,7 +187,7 @@
          inkscape:label="Gastrodermis"><tspan
            x="350"
            y="189.11811"
-           id="tspan14">Gs</tspan></text><g
+           id="tspan6">Gs</tspan></text><g
          id="g2"
          inkscape:label="tag 6 hroas"
          style="display:inline;fill:#000000;fill-opacity:1"
@@ -212,7 +212,7 @@
              sodipodi:role="line"
              id="tspan10"
              x="119.52431"
-             y="117.44654"></tspan></text></g></g><g
+             y="117.44654" /></text></g></g><g
        id="g13"
        inkscape:label="Imagen 24 h"
        style="display:inline;fill:#000000;fill-opacity:1"
@@ -233,7 +233,7 @@
          inkscape:label="Mesoglea"><tspan
            x="350"
            y="189.11811"
-           id="tspan15">M</tspan></text><text
+           id="tspan7">M</tspan></text><text
          xml:space="preserve"
          id="text10-4"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect10-7);display:inline;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-dasharray:none;stroke-opacity:1"
@@ -241,7 +241,7 @@
          inkscape:label="Mesoglea"><tspan
            x="350"
            y="189.11811"
-           id="tspan16">M</tspan></text><text
+           id="tspan8">M</tspan></text><text
          xml:space="preserve"
          id="text10-8-8-6-3"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect10-3-06-4-0);display:inline;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-dasharray:none;stroke-opacity:1"
@@ -249,7 +249,7 @@
          inkscape:label="Gastrodermis"><tspan
            x="350"
            y="189.11811"
-           id="tspan17">Gs</tspan></text><text
+           id="tspan9">Gs</tspan></text><text
          xml:space="preserve"
          id="text10-8-8-6-3-1"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect10-3-06-4-0-5);display:inline;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-dasharray:none;stroke-opacity:1"
@@ -257,7 +257,7 @@
          inkscape:label="Gastrodermis"><tspan
            x="350"
            y="189.11811"
-           id="tspan18">Gs</tspan></text><text
+           id="tspan12">Gs</tspan></text><text
          xml:space="preserve"
          id="text10-8-8-6-3-2"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect10-3-06-4-0-4);display:inline;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-dasharray:none;stroke-opacity:1"
@@ -265,7 +265,7 @@
          inkscape:label="Gastrodermis"><tspan
            x="350"
            y="189.11811"
-           id="tspan19">Ep</tspan></text><text
+           id="tspan13">Ep</tspan></text><text
          xml:space="preserve"
          id="text10-8-8-6-3-2-8"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#rect10-3-06-4-0-4-2);display:inline;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-dasharray:none;stroke-opacity:1"
@@ -273,7 +273,7 @@
          inkscape:label="Gastrodermis"><tspan
            x="350"
            y="189.11811"
-           id="tspan20">Ep</tspan></text><path
+           id="tspan14">Ep</tspan></text><path
          style="display:inline;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.9;stroke-linecap:round;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#DartArrow)"
          d="M 18.487956,29.650077 17.225472,26.393266"
          id="path15-3"
@@ -321,7 +321,11 @@
            sodipodi:role="line"
            id="tspan5"
            x="5.7596302"
-           y="113.96376">B</tspan></text></g><g
+           y="113.96376">B</tspan></text></g><path
+       style="fill:none;fill-opacity:1;stroke:#fcc400;stroke-width:0.755;stroke-dasharray:3.02, 0.755;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 57.007876,132.99205 c 0,0 -1.72951,-11.95217 20.06825,-18.81502 20.457909,-6.44102 27.143224,-5.09302 27.143224,-5.09302"
+       id="path1"
+       sodipodi:nodetypes="csc" /><g
        id="g7"
        inkscape:label="tag A"
        style="fill:#000000;fill-opacity:1"><rect
