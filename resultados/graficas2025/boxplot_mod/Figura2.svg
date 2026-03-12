@@ -7,9 +7,9 @@
    viewBox="0 0 150 215"
    version="1.1"
    id="svg1"
-   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
    sodipodi:docname="Figura2.svg"
-   inkscape:export-filename="Figura2-2.png"
+   inkscape:export-filename="Figuras cambiadas\Figure4.png"
    inkscape:export-xdpi="300"
    inkscape:export-ydpi="300"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -26,15 +26,16 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="1.8519888"
-     inkscape:cx="288.0687"
-     inkscape:cy="482.45432"
-     inkscape:window-width="1920"
-     inkscape:window-height="974"
-     inkscape:window-x="-11"
-     inkscape:window-y="-11"
+     inkscape:zoom="0.6547769"
+     inkscape:cx="142.03311"
+     inkscape:cy="211.52243"
+     inkscape:window-width="1366"
+     inkscape:window-height="697"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
+     inkscape:current-layer="g10"
+     inkscape:export-bgcolor="#ffffffff" />
   <defs
      id="defs1">
     <clipPath
@@ -1553,58 +1554,6 @@
            style="fill:#be2f36;stroke:#be2f36;stroke-width:1.42;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
            id="circle61-3" />
       </g>
-      <text
-         x="225.14"
-         y="154.46001"
-         text-anchor="middle"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.04px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;white-space:pre"
-         textLength="6.1399999"
-         lengthAdjust="spacingAndGlyphs"
-         id="text29-0"
-         transform="matrix(0.35277777,0,0,0.35277777,160.04157,95.469084)"><tspan
-           sodipodi:role="line"
-           id="tspan104"
-           x="225.14"
-           y="154.46001">b</tspan></text>
-      <text
-         x="225.14"
-         y="154.46001"
-         text-anchor="middle"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.04px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;white-space:pre"
-         textLength="6.1399999"
-         lengthAdjust="spacingAndGlyphs"
-         id="text29-8-0"
-         transform="matrix(0.35277777,0,0,0.35277777,188.65395,95.558686)"><tspan
-           sodipodi:role="line"
-           id="tspan106"
-           x="225.14"
-           y="154.46001">b</tspan></text>
-      <text
-         x="225.14"
-         y="154.46001"
-         text-anchor="middle"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.04px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;white-space:pre"
-         textLength="6.1399999"
-         lengthAdjust="spacingAndGlyphs"
-         id="text29-5-8"
-         transform="matrix(0.35277777,0,0,0.35277777,171.51651,99.852495)"><tspan
-           sodipodi:role="line"
-           id="tspan105"
-           x="225.14"
-           y="154.46001">a</tspan></text>
-      <text
-         x="225.14"
-         y="154.46001"
-         text-anchor="middle"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.04px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;white-space:pre"
-         textLength="6.1399999"
-         lengthAdjust="spacingAndGlyphs"
-         id="text29-1-7"
-         transform="matrix(0.35277777,0,0,0.35277777,200.13535,103.63463)"><tspan
-           sodipodi:role="line"
-           id="tspan107"
-           x="225.14"
-           y="154.46001">a</tspan></text>
       <g
          id="g2-6-6"
          transform="matrix(0.35277777,0,0,0.42008833,194.50961,102.39308)"

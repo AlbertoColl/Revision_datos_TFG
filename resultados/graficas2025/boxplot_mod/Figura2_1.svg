@@ -7,9 +7,9 @@
    viewBox="0 0 150 215"
    version="1.1"
    id="svg1"
-   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
    sodipodi:docname="Figura2_1.svg"
-   inkscape:export-filename="Figura2-1.png"
+   inkscape:export-filename="Figuras cambiadas\Figure3.png"
    inkscape:export-xdpi="300"
    inkscape:export-ydpi="300"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -26,15 +26,16 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="0.9259944"
-     inkscape:cx="179.8067"
-     inkscape:cy="151.72878"
-     inkscape:window-width="1920"
-     inkscape:window-height="974"
-     inkscape:window-x="-11"
-     inkscape:window-y="-11"
+     inkscape:zoom="0.65477692"
+     inkscape:cx="90.107025"
+     inkscape:cy="381.04581"
+     inkscape:window-width="1366"
+     inkscape:window-height="697"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
+     inkscape:current-layer="layer1"
+     inkscape:export-bgcolor="#ffffffff" />
   <defs
      id="defs1">
     <clipPath
@@ -975,6 +976,16 @@
            style="fill:none;stroke:#000000;stroke-width:1.02725;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
            id="line47-1-2-1-3-1-7" />
       </g>
+      <text
+         x="93.919998"
+         y="213.88"
+         text-anchor="middle"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.5193px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;white-space:pre;fill:#be2f36;fill-opacity:1;stroke-width:1.1;stroke-dasharray:none"
+         textLength="4.3000002"
+         lengthAdjust="spacingAndGlyphs"
+         id="text27-1-6-1-4"
+         transform="matrix(0.65257271,0,0,0.35277777,15.204409,-26.446825)"
+         inkscape:label="asterisco rojo">*</text>
       <g
          id="g2-8"
          transform="matrix(0.35277777,0,0,0.42008833,-12.996147,-20.187318)"
@@ -1404,58 +1415,6 @@
            style="fill:#be2f36;stroke:#be2f36;stroke-width:1.42;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
            id="circle32" />
       </g>
-      <text
-         x="225.14"
-         y="154.46001"
-         text-anchor="middle"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.04px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;white-space:pre"
-         textLength="6.1399999"
-         lengthAdjust="spacingAndGlyphs"
-         id="text29"
-         transform="matrix(0.35277777,0,0,0.35277777,90.533552,-1.7188254)"><tspan
-           sodipodi:role="line"
-           id="tspan55"
-           x="225.14"
-           y="154.46001">a</tspan></text>
-      <text
-         x="225.14"
-         y="154.46001"
-         text-anchor="middle"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.04px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;white-space:pre"
-         textLength="6.1399999"
-         lengthAdjust="spacingAndGlyphs"
-         id="text29-8"
-         transform="matrix(0.35277777,0,0,0.35277777,119.59951,0.65375253)"><tspan
-           sodipodi:role="line"
-           id="tspan55-8"
-           x="225.14"
-           y="154.46001">a</tspan></text>
-      <text
-         x="225.14"
-         y="154.46001"
-         text-anchor="middle"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.04px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;white-space:pre"
-         textLength="6.1399999"
-         lengthAdjust="spacingAndGlyphs"
-         id="text29-5"
-         transform="matrix(0.35277777,0,0,0.35277777,102.2504,-9.5062469)"><tspan
-           sodipodi:role="line"
-           id="tspan2"
-           x="225.14"
-           y="154.46001">b</tspan></text>
-      <text
-         x="225.14"
-         y="154.46001"
-         text-anchor="middle"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.04px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;white-space:pre"
-         textLength="6.1399999"
-         lengthAdjust="spacingAndGlyphs"
-         id="text29-1"
-         transform="matrix(0.35277777,0,0,0.35277777,131.20186,-10.864583)"><tspan
-           sodipodi:role="line"
-           id="tspan1"
-           x="225.14"
-           y="154.46001">b</tspan></text>
       <g
          id="g2-1"
          transform="matrix(0.35277777,0,0,0.42008833,126.8901,3.8559543)"
@@ -1737,6 +1696,16 @@
            style="fill:none;stroke:#000000;stroke-width:1.02725;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
            id="line47-1-2-1-3-1" />
       </g>
+      <text
+         x="93.919998"
+         y="213.88"
+         text-anchor="middle"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.5193px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;white-space:pre;fill:#be2f36;fill-opacity:1;stroke-width:1.1;stroke-dasharray:none"
+         textLength="4.3000002"
+         lengthAdjust="spacingAndGlyphs"
+         id="text27-1-6-1-4-5"
+         transform="matrix(0.65490422,0,0,0.35403817,218.7392,-31.474314)"
+         inkscape:label="asterisco rojo">*</text>
       <g
          id="g2-2-1"
          transform="matrix(0.35277777,0,0,0.42008833,192.7276,3.8777679)"

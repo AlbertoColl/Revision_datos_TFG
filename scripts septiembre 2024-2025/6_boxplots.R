@@ -6,8 +6,8 @@ library(tidyverse)
 library(ggpubr)
 
 ### SETUP ----
-#setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
-setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
+setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
+#setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
 
 source(file = "./scripts septiembre 2024-2025/0_lectura.R")
 
@@ -89,8 +89,8 @@ f.boxplot <- function(x){
   filename = sprintf("%s.png", x)
   filenamesvg = sprintf("%s.svg", x)
   
-  ggsave(filename, path = "./resultados/graficas2025/boxplot", width = 7, height = 3.5, units = "in")
-  ggsave(filenamesvg, path = "./resultados/graficas2025/boxplot", device = "svg",width = 7, height = 3.5, units = "in")
+  ggsave(filename, path = "./resultados/graficas2025/boxplot_fix", width = 7, height = 3.5, units = "in")
+  ggsave(filenamesvg, path = "./resultados/graficas2025/boxplot_fix", device = "svg",width = 7, height = 3.5, units = "in")
 }
 
 plots <- sapply(colnames(data[6:18]), f.boxplot)

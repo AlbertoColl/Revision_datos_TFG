@@ -7,11 +7,11 @@
    viewBox="0 0 297 210"
    version="1.1"
    id="svg1"
-   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
    sodipodi:docname="Figura1.svg"
-   inkscape:export-filename="Figura1.png"
-   inkscape:export-xdpi="96"
-   inkscape:export-ydpi="96"
+   inkscape:export-filename="Figuras cambiadas\Figura1.png"
+   inkscape:export-xdpi="300"
+   inkscape:export-ydpi="300"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -26,15 +26,16 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="2.6191077"
-     inkscape:cx="639.72168"
-     inkscape:cy="42.95356"
+     inkscape:zoom="0.65477693"
+     inkscape:cx="623.11297"
+     inkscape:cy="391.73647"
      inkscape:window-width="1366"
-     inkscape:window-height="705"
+     inkscape:window-height="697"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g4" />
+     inkscape:current-layer="g92"
+     inkscape:export-bgcolor="#ffffffff" />
   <defs
      id="defs1">
     <clipPath
@@ -1182,58 +1183,6 @@
            style="fill:#be2f36;stroke:#be2f36;stroke-width:1.42;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
            id="circle35-3" />
       </g>
-      <text
-         x="225.14"
-         y="154.46001"
-         text-anchor="middle"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.04px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;white-space:pre"
-         textLength="6.1399999"
-         lengthAdjust="spacingAndGlyphs"
-         id="text29"
-         transform="matrix(0.35277777,0,0,0.35277777,92.602044,-5.4189055)"><tspan
-           sodipodi:role="line"
-           id="tspan55"
-           x="225.14"
-           y="154.46001">a</tspan></text>
-      <text
-         x="225.14"
-         y="154.46001"
-         text-anchor="middle"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.04px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;white-space:pre"
-         textLength="6.1399999"
-         lengthAdjust="spacingAndGlyphs"
-         id="text29-8"
-         transform="matrix(0.35277777,0,0,0.35277777,121.21443,-3.7418035)"><tspan
-           sodipodi:role="line"
-           id="tspan55-8"
-           x="225.14"
-           y="154.46001">a</tspan></text>
-      <text
-         x="225.14"
-         y="154.46001"
-         text-anchor="middle"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.04px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;white-space:pre"
-         textLength="6.1399999"
-         lengthAdjust="spacingAndGlyphs"
-         id="text29-5"
-         transform="matrix(0.35277777,0,0,0.35277777,104.07699,-13.206328)"><tspan
-           sodipodi:role="line"
-           id="tspan2"
-           x="225.14"
-           y="154.46001">b</tspan></text>
-      <text
-         x="225.14"
-         y="154.46001"
-         text-anchor="middle"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.04px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;white-space:pre"
-         textLength="6.1399999"
-         lengthAdjust="spacingAndGlyphs"
-         id="text29-1"
-         transform="matrix(0.35277777,0,0,0.35277777,132.69583,-14.715855)"><tspan
-           sodipodi:role="line"
-           id="tspan1"
-           x="225.14"
-           y="154.46001">b</tspan></text>
       <g
          id="g2-1"
          transform="matrix(0.35277777,0,0,0.42008833,127.14286,5.4815545)"
@@ -1512,7 +1461,7 @@
       <g
          id="g52"
          inkscape:label="asterisco y corchete"
-         transform="matrix(0.35277777,0,0,0.35277777,211.01552,-36.694247)"
+         transform="matrix(0.35277777,0,0,0.35277777,211.01552,-37.752581)"
          style="stroke-width:1.1;stroke-dasharray:none">
         <line
            x1="73.073662"
@@ -1548,7 +1497,7 @@
       <g
          id="g52-5"
          inkscape:label="asterisco y corchete"
-         transform="matrix(0.35277777,0,0,0.35277777,239.63844,-36.551274)"
+         transform="matrix(0.35277777,0,0,0.35277777,239.63844,-37.609608)"
          style="stroke-width:1.1;stroke-dasharray:none">
         <line
            x1="73.073662"
@@ -1581,6 +1530,26 @@
            style="fill:none;stroke:#000000;stroke-width:1.02725;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
            id="line47-1-2-1-3-1-8" />
       </g>
+      <text
+         x="93.919998"
+         y="213.88"
+         text-anchor="middle"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.5193px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;white-space:pre;fill:#be2f36;fill-opacity:1;stroke-width:1.1;stroke-dasharray:none"
+         textLength="4.3000002"
+         lengthAdjust="spacingAndGlyphs"
+         id="text27-1-6-1-1"
+         transform="matrix(0.65257271,0,0,0.35277777,220.74799,-9.8703282)"
+         inkscape:label="asterisco rojo">*</text>
+      <text
+         x="93.919998"
+         y="213.88"
+         text-anchor="middle"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.5193px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;white-space:pre;fill:#0571b0;fill-opacity:1;stroke-width:1.1;stroke-dasharray:none"
+         textLength="4.3000002"
+         lengthAdjust="spacingAndGlyphs"
+         id="text27-1-6-1-4"
+         transform="matrix(0.65257271,0,0,0.35277777,209.62345,-33.252297)"
+         inkscape:label="asterisco rojo">*</text>
       <g
          id="g2-5"
          transform="matrix(0.35277777,0,0,0.41634885,191.79951,5.6170995)"
@@ -2206,6 +2175,16 @@
            style="fill:#be2f36;stroke:#be2f36;stroke-width:1.42;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
            id="circle63" />
       </g>
+      <text
+         x="93.919998"
+         y="213.88"
+         text-anchor="middle"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.5193px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;white-space:pre;fill:#be2f36;fill-opacity:1;stroke-width:1.1;stroke-dasharray:none"
+         textLength="4.3000002"
+         lengthAdjust="spacingAndGlyphs"
+         id="text27-1-6-1"
+         transform="matrix(0.65257271,0,0,0.35277777,72.135406,80.779045)"
+         inkscape:label="asterisco rojo">*</text>
       <g
          id="g52-9"
          inkscape:label="asterisco y corchete"
@@ -2729,58 +2708,6 @@
            style="fill:#be2f36;stroke:#be2f36;stroke-width:1.42;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
            id="circle30-3" />
       </g>
-      <text
-         x="225.14"
-         y="154.46001"
-         text-anchor="middle"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.04px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;white-space:pre"
-         textLength="6.1399999"
-         lengthAdjust="spacingAndGlyphs"
-         id="text29-9"
-         transform="matrix(0.35277777,0,0,0.35277777,92.440328,94.96693)"><tspan
-           sodipodi:role="line"
-           id="tspan99"
-           x="225.14"
-           y="154.46001">b</tspan></text>
-      <text
-         x="225.14"
-         y="154.46001"
-         text-anchor="middle"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.04px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;white-space:pre"
-         textLength="6.1399999"
-         lengthAdjust="spacingAndGlyphs"
-         id="text29-8-2"
-         transform="matrix(0.35277777,0,0,0.35277777,121.05271,97.702366)"><tspan
-           sodipodi:role="line"
-           id="tspan55-8-4"
-           x="225.14"
-           y="154.46001">a</tspan></text>
-      <text
-         x="225.14"
-         y="154.46001"
-         text-anchor="middle"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.04px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;white-space:pre"
-         textLength="6.1399999"
-         lengthAdjust="spacingAndGlyphs"
-         id="text29-5-6"
-         transform="matrix(0.35277777,0,0,0.35277777,103.91527,85.062842)"><tspan
-           sodipodi:role="line"
-           id="tspan98"
-           x="225.14"
-           y="154.46001">c</tspan></text>
-      <text
-         x="225.14"
-         y="154.46001"
-         text-anchor="middle"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.04px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;white-space:pre"
-         textLength="6.1399999"
-         lengthAdjust="spacingAndGlyphs"
-         id="text29-1-1"
-         transform="matrix(0.35277777,0,0,0.35277777,132.53411,90.432482)"><tspan
-           sodipodi:role="line"
-           id="tspan1-8"
-           x="225.14"
-           y="154.46001">b</tspan></text>
       <g
          id="g2-2"
          transform="matrix(0.35277777,0,0,0.42008833,126.93463,102.16363)"
@@ -3030,58 +2957,6 @@
            style="fill:#be2f36;stroke:#be2f36;stroke-width:1.42;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
            id="circle57-5" />
       </g>
-      <text
-         x="225.14"
-         y="154.46001"
-         text-anchor="middle"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.04px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;white-space:pre"
-         textLength="6.1399999"
-         lengthAdjust="spacingAndGlyphs"
-         id="text29-6"
-         transform="matrix(0.35277777,0,0,0.35277777,157.2736,85.07445)"><tspan
-           sodipodi:role="line"
-           id="tspan99-3"
-           x="225.14"
-           y="154.46001">b</tspan></text>
-      <text
-         x="225.14"
-         y="154.46001"
-         text-anchor="middle"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.04px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;white-space:pre"
-         textLength="6.1399999"
-         lengthAdjust="spacingAndGlyphs"
-         id="text29-8-7"
-         transform="matrix(0.35277777,0,0,0.35277777,185.88599,83.576552)"><tspan
-           sodipodi:role="line"
-           id="tspan55-8-8"
-           x="225.14"
-           y="154.46001">a</tspan></text>
-      <text
-         x="225.14"
-         y="154.46001"
-         text-anchor="middle"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.04px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;white-space:pre"
-         textLength="6.1399999"
-         lengthAdjust="spacingAndGlyphs"
-         id="text29-5-8"
-         transform="matrix(0.35277777,0,0,0.35277777,168.74855,70.937029)"><tspan
-           sodipodi:role="line"
-           id="tspan100"
-           x="225.14"
-           y="154.46001">b</tspan></text>
-      <text
-         x="225.14"
-         y="154.46001"
-         text-anchor="middle"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.04px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;white-space:pre"
-         textLength="6.1399999"
-         lengthAdjust="spacingAndGlyphs"
-         id="text29-1-9"
-         transform="matrix(0.35277777,0,0,0.35277777,197.36739,90.594168)"><tspan
-           sodipodi:role="line"
-           id="tspan101"
-           x="225.14"
-           y="154.46001">a</tspan></text>
       <g
          id="g2-4-8"
          transform="matrix(0.35277777,0,0,0.42008833,191.74706,102.15932)"
@@ -3236,7 +3111,7 @@
            lengthAdjust="spacingAndGlyphs"
            id="text68-7">20</text>
         <text
-           transform="rotate(-90,71.15,57.79)"
+           transform="rotate(-90,68.15,56.29)"
            text-anchor="middle"
            style="font-weight:bold;font-size:11px;font-family:Arial;white-space:pre"
            textLength="127.12"

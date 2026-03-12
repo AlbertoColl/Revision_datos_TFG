@@ -28,11 +28,10 @@ library(patchwork)
 
 ### SETUP y filtrado de datos ----
 
-#setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
-setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
+setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
+#setwd("D:/collf/Documents/GitHub/Revision_datos_TFG")
 
-#source(file = "./scripts septiembre 2024-2025/0_data_lab.R")
-source(file = "./scripts septiembre 2024-2025/0_data_laptop.R")
+source(file = "./scripts septiembre 2024-2025/0_lectura.R")
 
 source(file = "./scripts septiembre 2024-2025/1_funciones_graficas.R")
 
@@ -41,7 +40,7 @@ data_2 <- filter(datos, cultivo == "cultured")
 
 ### Exploracion ----
 
-ggplot(data_2, aes(y = Fbasica_p)) +
+ggplot(data_2, aes(y = GR_p)) +
   geom_boxplot(aes(x = time:section, color = time:section), alpha = 0) +
   geom_point(aes(x = time:section, color = time:section), alpha = 1, size = 2)
 
@@ -65,6 +64,9 @@ data_2$GPx_p[33] <- NA
 data_2$SOD_t[7] <- NA #para normalidad
 data_2$SOD_t[3] <- NA #para normalidad
 # Quitar la  #35 tambien
+data_2$GR_p[16] <- NA
+data_2$GR_p[23] <- NA
+
 
 
 data_2$CAT_t[35] <- NA # La funcion ha identificado otro, pero su eliminacion no afecta a la normalidad de residuos, este si.
@@ -114,7 +116,8 @@ modelos_shapiro <- lapply(modelos_lm, function(x){
     add_column(.before = 1, parametro = colnames(data_2[c(5:31)])))
 
 # Sin filtrar, no se cumple normalidad de residuos en el caso de:
-# SOD_t (solucionado), CAT_t (solucionado), Fbasica_p (solucionado), Mielo_p (solucionado), Mielo_t (solucionado), lisozima_p (solucionado)
+# SOD_t (solucionado), CAT_t (solucionado), Fbasica_p (solucionado), 
+# Mielo_p (solucionado), Mielo_t (solucionado), lisozima_p (solucionado)
 
 # No hay homocedasticidad en:
 # Fbasica_t (solucionado), GPx_t (solucionado)
@@ -127,26 +130,26 @@ posthoc_tree <- function(){
   letras <- c("", "", "", "")
   pvalues <- filter(as_tibble(anova_results), variable == i)$p.adj
   if (any(pvalues <= 0.05, na.rm = T)){
-    if (pvalues[3] <= 0.05){
-      t.results <-data_2 %>% 
-        group_by(time) %>% 
+    if (pvalues[3] <= 0.05){ # Interacción significativa
+      t.results.1 <-data_2 %>% 
+        group_by(time) %>% #Agrupación 1: por tiempo de corte
         t_test(as.formula(paste0(i, " ~ section")), p.adjust.method = "BH")
-      if(t.results[1,]$p <= 0.05){
+      if(t.results.1[1,]$p <= 0.05){ #Diferencias entre 0:control y 0:section
         letras[c(1,3)] <- c("", "*")} 
-      if(t.results[2,]$p <= 0.05){
+      if(t.results.1[2,]$p <= 0.05){ #Diferencias entre 1:control y 1:section
         letras[c(2,4)] <- c("", "*")} 
-      #Se pueden añadir tiers con case_when()
+
+      t.results.2 <-data_2 %>% 
+        group_by(section) %>% #Agrupación 2: por control o seccionados
+        t_test(as.formula(paste0(i, " ~ time")), p.adjust.method = "BH")
+      if(t.results.2[1,]$p <= 0.05){ #Diferencias entre 0:control y 1:control
+        letras[2] <- paste0(letras[2], "a")} 
+      if(t.results.2[2,]$p <= 0.05){ #Diferencias entre 0:section y 1:section
+        letras[4] <- paste0(letras[4], "a")} 
       print("Interacion is significant. Grouped t-test performed.")
       return(letras)
     }
-    else{
-      letras <- case_when(
-        pvalues[1] <= 0.05 & pvalues[2] <= 0.05 ~ c("b", "a", "c", "b"),
-        pvalues[1] <= 0.05 & tabla_summ[1,]$mean < tabla_summ[3,]$mean ~ c("a", "a", "b", "b"),
-        pvalues[1] <= 0.05 & tabla_summ[1,]$mean > tabla_summ[3,]$mean~ c("b", "b", "a", "a"),
-        pvalues[2] <= 0.05 & tabla_summ[1,]$mean < tabla_summ[2,]$mean ~ c("a", "b", "a", "b"),
-        pvalues[2] <= 0.05 & tabla_summ[1,]$mean > tabla_summ[2,]$mean~ c("b", "a", "b", "a"))
-      print("Interacion is not significant. Simple main effects computed.")
+    else{print("Interacion is not significant. Simple main effects computed.")
       return(letras)}}
   else{
     print("There is no significative effects")
@@ -196,10 +199,10 @@ for (n in c(1:27)) {
   (p <- barras_tfg() +
       ylim(c(0, max(limite_t, (max(tabla_summ$mean) + max(tabla_summ$se))))))
   #(pt <- p/wrap_table(t, panel = "full", space = "fixed")) #Vamos a wrap tables later
-  saveRDS(p, file = paste0("./resultados/graficas2025/contabla/", i, ".rds"))
-  ggsave(paste0("./resultados/graficas2025/contabla/", i, ".png"), width = 80, height = 90, units = "mm", dpi = 1000)
+  saveRDS(p, file = paste0("./resultados/graficas2025/contabla_mod/", i, ".rds"))
+  ggsave(paste0("./resultados/graficas2025/contabla_mod/", i, ".png"), width = 80, height = 90, units = "mm", dpi = 1000)
   (t <- table_maker())
-  saveRDS(t, file = paste0("./resultados/graficas2025/contabla/tabla", i, ".rds"))
+  saveRDS(t, file = paste0("./resultados/graficas2025/contabla_mod/tabla", i, ".rds"))
 }
 
 ### Construccion de figuras con patchwork ----

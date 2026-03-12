@@ -9,7 +9,7 @@
    id="svg1"
    inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
    sodipodi:docname="Figura3.svg"
-   inkscape:export-filename="Figura3fosfatasas-mielo.png"
+   inkscape:export-filename="Figuras cambiadas\Figure5.png"
    inkscape:export-xdpi="300"
    inkscape:export-ydpi="300"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -26,15 +26,16 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="0.65477695"
-     inkscape:cx="485.66157"
-     inkscape:cy="362.71894"
+     inkscape:zoom="0.46299722"
+     inkscape:cx="602.59541"
+     inkscape:cy="314.25675"
      inkscape:window-width="1366"
      inkscape:window-height="697"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g13" />
+     inkscape:current-layer="g13"
+     inkscape:export-bgcolor="#ffffffff" />
   <defs
      id="defs1">
     <clipPath
@@ -984,6 +985,16 @@
            style="fill:none;stroke:#000000;stroke-width:1.02725;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
            id="line47-1-2-1-3-1" />
       </g>
+      <text
+         x="93.919998"
+         y="213.88"
+         text-anchor="middle"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.5193px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;white-space:pre;fill:#0571b0;fill-opacity:1;stroke-width:1.1;stroke-dasharray:none"
+         textLength="4.3000002"
+         lengthAdjust="spacingAndGlyphs"
+         id="text27-1-6-1-4"
+         transform="matrix(0.65257271,0,0,0.35277777,-56.804014,103.31918)"
+         inkscape:label="asterisco rojo">*</text>
       <g
          id="g2-60"
          transform="matrix(0.35277777,0,0,0.42008833,-73.261861,111.63816)"

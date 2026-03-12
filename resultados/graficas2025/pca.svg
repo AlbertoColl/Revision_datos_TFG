@@ -7,7 +7,7 @@
    id="svg346"
    sodipodi:docname="pca.svg"
    inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
-   inkscape:export-filename="pca.png"
+   inkscape:export-filename="pca.svg"
    inkscape:export-xdpi="300"
    inkscape:export-ydpi="300"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -26,15 +26,16 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="pt"
-     inkscape:zoom="0.94105458"
-     inkscape:cx="543.53914"
-     inkscape:cy="278.94238"
+     inkscape:zoom="0.66542608"
+     inkscape:cx="519.2162"
+     inkscape:cy="426.04282"
      inkscape:window-width="1366"
      inkscape:window-height="697"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g345" />
+     inkscape:current-layer="g346"
+     inkscape:export-bgcolor="#ffffffff" />
   <g
      class="svglite"
      id="g346">
@@ -1848,14 +1849,14 @@
          lengthAdjust="spacingAndGlyphs"
          id="text221">ALP</text>
       <text
-         transform="matrix(0.7483113,-0.90854554,0.77388641,0.63335213,201.51334,530.29314)"
+         transform="rotate(-45,742.14988,23.313754)"
          text-anchor="end"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:end;white-space:pre;fill:#4d4d4d"
-         textLength="16"
+         textLength="22.67"
          lengthAdjust="spacingAndGlyphs"
-         id="text222"><tspan
+         id="text221-4"><tspan
            sodipodi:role="line"
-           id="tspan3"
+           id="tspan4"
            x="0"
            y="0">ACP</tspan></text>
       <text
@@ -2209,17 +2210,6 @@
          lengthAdjust="spacingAndGlyphs"
          id="text276">CAT</text>
       <text
-         transform="matrix(0.7483113,-0.90854554,0.77388641,0.63335213,398.17039,531.19337)"
-         text-anchor="end"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:end;white-space:pre;fill:#4d4d4d"
-         textLength="16"
-         lengthAdjust="spacingAndGlyphs"
-         id="text222-4"><tspan
-           sodipodi:role="line"
-           id="tspan3-8"
-           x="0"
-           y="0">ACP</tspan></text>
-      <text
          transform="translate(415.23,531.56) rotate(-45)"
          text-anchor="end"
          style="font-size: 12.00px;fill: #4D4D4D; font-family: &quot;Arial&quot;;"
@@ -2269,6 +2259,17 @@
          textLength="9.53px"
          lengthAdjust="spacingAndGlyphs"
          id="text284">D</text>
+      <text
+         transform="rotate(-45,839.96173,-215.80387)"
+         text-anchor="end"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:end;white-space:pre;fill:#4d4d4d"
+         textLength="22.67"
+         lengthAdjust="spacingAndGlyphs"
+         id="text221-4-2"><tspan
+           sodipodi:role="line"
+           id="tspan4-4"
+           x="0"
+           y="0">ACP</tspan></text>
     </g>
     <defs
        id="defs284">
@@ -2652,14 +2653,14 @@
          lengthAdjust="spacingAndGlyphs"
          id="text345">E</text>
       <text
-         transform="matrix(0.7483113,-0.90854554,0.77388641,0.63335213,580.91567,530.68393)"
+         transform="rotate(-45,930.9314,-437.98474)"
          text-anchor="end"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;font-family:Arial;-inkscape-font-specification:'Arial, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:end;white-space:pre;fill:#4d4d4d"
-         textLength="16"
+         textLength="22.67"
          lengthAdjust="spacingAndGlyphs"
-         id="text222-45"><tspan
+         id="text221-4-1"><tspan
            sodipodi:role="line"
-           id="tspan3-5"
+           id="tspan4-7"
            x="0"
            y="0">ACP</tspan></text>
     </g>
