@@ -7,9 +7,9 @@
    id="svg346"
    sodipodi:docname="pca.svg"
    inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
-   inkscape:export-filename="pca.svg"
-   inkscape:export-xdpi="300"
-   inkscape:export-ydpi="300"
+   inkscape:export-filename="pca.png"
+   inkscape:export-xdpi="600"
+   inkscape:export-ydpi="600"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -27,14 +27,14 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="pt"
      inkscape:zoom="0.66542608"
-     inkscape:cx="519.2162"
-     inkscape:cy="426.04282"
+     inkscape:cx="397.48968"
+     inkscape:cy="392.98129"
      inkscape:window-width="1366"
      inkscape:window-height="697"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g346"
+     inkscape:current-layer="g284"
      inkscape:export-bgcolor="#ffffffff" />
   <g
      class="svglite"
@@ -406,18 +406,20 @@
          x="260.63"
          y="149.55"
          text-anchor="middle"
-         style="font-size: 11.38px;fill: #333333; font-family: &quot;Arial&quot;;"
-         textLength="24.66px"
+         style="font-size:11.38px;font-family:Arial;fill:#333333"
+         textLength="24.66"
          lengthAdjust="spacingAndGlyphs"
-         id="text45">SOD</text>
+         id="text45"
+         transform="translate(13.747874,1.3947119)">SOD</text>
       <text
-         x="281.04"
+         x="281.04001"
          y="252.19"
          text-anchor="middle"
-         style="font-size: 11.38px;fill: #333333; font-family: &quot;Arial&quot;;"
-         textLength="21.92px"
+         style="font-size:11.38px;font-family:Arial;fill:#333333"
+         textLength="21.92"
          lengthAdjust="spacingAndGlyphs"
-         id="text46">CAT</text>
+         id="text46"
+         transform="translate(12.153918,-0.99622276)">CAT</text>
       <text
          x="281.79"
          y="109.06"
@@ -428,12 +430,13 @@
          id="text47">GPx</text>
       <text
          x="230.62"
-         y="283.70"
+         y="283.70001"
          text-anchor="middle"
-         style="font-size: 11.38px;fill: #333333; font-family: &quot;Arial&quot;;"
-         textLength="17.06px"
+         style="font-size:11.38px;font-family:Arial;fill:#333333"
+         textLength="17.059999"
          lengthAdjust="spacingAndGlyphs"
-         id="text48">GR</text>
+         id="text48"
+         transform="translate(0.79697821,10.559961)">GR</text>
       <text
          x="288.15"
          y="174.53"
@@ -446,18 +449,20 @@
          x="269.25"
          y="267.78"
          text-anchor="middle"
-         style="font-size: 11.38px;fill: #333333; font-family: &quot;Arial&quot;;"
-         textLength="23.39px"
+         style="font-size:11.38px;font-family:Arial;fill:#333333"
+         textLength="23.389999"
          lengthAdjust="spacingAndGlyphs"
-         id="text50">DTD</text>
+         id="text50"
+         transform="matrix(1.2877747,0,0,1,-70.313838,1.5939564)">NQO1</text>
       <text
          x="158.72"
-         y="179.82"
+         y="179.82001"
          text-anchor="middle"
-         style="font-size: 11.38px;fill: #333333; font-family: &quot;Arial&quot;;"
-         textLength="30.36px"
+         style="font-size:11.38px;font-family:Arial;fill:#333333"
+         textLength="30.360001"
          lengthAdjust="spacingAndGlyphs"
-         id="text51">TEAC</text>
+         id="text51"
+         transform="translate(-26.101036,5.778092)">TEAC</text>
       <text
          x="116.31"
          y="170.97"
@@ -1008,14 +1013,14 @@
          lengthAdjust="spacingAndGlyphs"
          id="text117">GST</text>
       <text
-         x="599.79999"
-         y="233.87"
+         x="269.25"
+         y="267.78"
          text-anchor="middle"
-         style="font-size:11.38px;font-family:Arial;fill:#333333"
+         style="font-size:11.38px;font-family:Arial;white-space:pre;fill:#333333"
          textLength="23.389999"
          lengthAdjust="spacingAndGlyphs"
-         id="text118"
-         transform="translate(0.5635487,12.96162)">DTD</text>
+         id="text50-4"
+         transform="matrix(1.2877747,0,0,1,248.02179,-19.071017)">NQO1</text>
       <text
          x="562.59"
          y="40.15"
@@ -1828,12 +1833,12 @@
          lengthAdjust="spacingAndGlyphs"
          id="text218">SOD</text>
       <text
-         transform="translate(152.17,531.56) rotate(-45)"
+         transform="matrix(0.86802616,-0.84577244,0.6918721,0.72217472,152.73829,530.19009)"
          text-anchor="end"
-         style="font-size: 12.00px;fill: #4D4D4D; font-family: &quot;Arial&quot;;"
-         textLength="24.67px"
+         style="font-size:12px;font-family:Arial;fill:#4d4d4d"
+         textLength="24.67"
          lengthAdjust="spacingAndGlyphs"
-         id="text219">DTD</text>
+         id="text219">NQO1</text>
       <text
          transform="translate(168.24,531.56) rotate(-45)"
          text-anchor="end"
@@ -2182,13 +2187,6 @@
          lengthAdjust="spacingAndGlyphs"
          id="text272">GR</text>
       <text
-         transform="translate(334.86,531.56) rotate(-45)"
-         text-anchor="end"
-         style="font-size: 12.00px;fill: #4D4D4D; font-family: &quot;Arial&quot;;"
-         textLength="24.67px"
-         lengthAdjust="spacingAndGlyphs"
-         id="text273">DTD</text>
-      <text
          transform="translate(350.93,531.56) rotate(-45)"
          text-anchor="end"
          style="font-size: 12.00px;fill: #4D4D4D; font-family: &quot;Arial&quot;;"
@@ -2270,6 +2268,13 @@
            id="tspan4-4"
            x="0"
            y="0">ACP</tspan></text>
+      <text
+         transform="matrix(0.86802616,-0.84577244,0.6918721,0.72217472,336.95856,529.87706)"
+         text-anchor="end"
+         style="font-size:12px;font-family:Arial;white-space:pre;fill:#4d4d4d"
+         textLength="24.67"
+         lengthAdjust="spacingAndGlyphs"
+         id="text219-2">NQO1</text>
     </g>
     <defs
        id="defs284">
@@ -2589,13 +2594,6 @@
          lengthAdjust="spacingAndGlyphs"
          id="text336">GST</text>
       <text
-         transform="translate(613.26,531.56) rotate(-45)"
-         text-anchor="end"
-         style="font-size: 12.00px;fill: #4D4D4D; font-family: &quot;Arial&quot;;"
-         textLength="24.67px"
-         lengthAdjust="spacingAndGlyphs"
-         id="text337">DTD</text>
-      <text
          transform="translate(629.34,531.56) rotate(-45)"
          text-anchor="end"
          style="font-size: 12.00px;fill: #4D4D4D; font-family: &quot;Arial&quot;;"
@@ -2663,6 +2661,13 @@
            id="tspan4-7"
            x="0"
            y="0">ACP</tspan></text>
+      <text
+         transform="matrix(0.86802616,-0.84577244,0.6918721,0.72217472,614.68775,529.86573)"
+         text-anchor="end"
+         style="font-size:12px;font-family:Arial;white-space:pre;fill:#4d4d4d"
+         textLength="24.67"
+         lengthAdjust="spacingAndGlyphs"
+         id="text219-5">NQO1</text>
     </g>
   </g>
 </svg>
