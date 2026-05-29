@@ -11,18 +11,21 @@ setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
 
 datos <- read.csv2("./datos/TFG_datos_2025.csv", numerals = "warn.loss", encoding = "latin1")%>% 
   mutate(playa = as.factor(playa), cultivo = as.factor(cultivo), 
-         section = as.factor(corte), time = as.factor(madurez)) %>% 
+         section = as.factor(corte), time = as.factor(madurez),
+         MDA_p = (MDA_p/10^3)*4,
+         MDA_t = (MDA_t/10^3)*4) %>% 
   select(-madurez, -corte) %>% relocate(section, .after = cultivo)
 
 datos_long <- read.csv2("./datos/TFG_datos_2025_long.csv", numerals = "warn.loss", encoding = "latin1")%>% 
   mutate(playa = as.factor(playa), cultivo = as.factor(cultivo), 
-         section = as.factor(corte), time = as.factor(madurez)) %>% 
+         section = as.factor(corte), time = as.factor(ifelse(madurez=="Si", 1, 0)),
+         MDA = (MDA/10^3)*4) %>% 
   select(-madurez, -corte) %>% relocate(section, .after = cultivo)
 
 
 datos_long2 <- read.csv2("./datos/Datos_sin_NaS_2025.csv", numerals = "warn.loss", encoding = "latin1")%>% 
   mutate(playa = as.factor(playa), cultivo = as.factor(cultivo), 
-         section = as.factor(corte), time = as.factor(madurez), group = section:time) %>% 
+         section = as.factor(corte), time = as.factor(ifelse(madurez=="Si", 1, 0)), group = section:time) %>% 
   select(-madurez, -corte) %>% relocate(section, .after = cultivo)
 
 datos$playa <- factor(datos$playa, levels = c("Calahonda", "Almuñecar", "Salobreña")) # Reordenar niveles

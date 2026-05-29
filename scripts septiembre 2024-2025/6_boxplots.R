@@ -61,7 +61,7 @@ f.boxplot <- function(x){
   ggboxplot(data, x = "time", y = x, color = "grupo", fill = "grupo", alpha = 0.15, width = 0.5, add = "mean", add.params = list(shape = 1), facet.by = "tejido", panel.labs = list(tejido = c("Column", "Tentacle"))) +
     theme_minimal() + labs(color = "Treatment") +
     #geom_point(data = data, mapping =aes(x = time, y = get(x), color = grupo), alpha = 0.2, position = position_jitterdodge(seed = 42)) +
-    ylab(case_when(x == "MDA" ~ "MDA (μM)",
+    ylab(case_when(x == "MDA" ~ "TBARS (μmol/mg of tissue)",
                    x == "TEAC" ~ "TEAC (Trolox equivalent μM)",
                    x == "SOD" ~ "SOD (U / mg  of protein)",
                    x == "CAT" ~ "CAT (U / mg  of protein)",

@@ -40,12 +40,12 @@ data_2 <- filter(datos, cultivo == "cultured")
 
 ### Exploracion ----
 
-ggplot(data_2, aes(y = GR_p)) +
+ggplot(data_2, aes(y = MDA_t)) +
   geom_boxplot(aes(x = time:section, color = time:section), alpha = 0) +
   geom_point(aes(x = time:section, color = time:section), alpha = 1, size = 2)
 
 # Deteccion de outliers
-view(data_2 %>%  group_by(section:time) %>%  identify_outliers(GPx_t))
+view(data_2 %>%  group_by(section:time) %>%  identify_outliers(MDA_t))
 
 data_2$GPx_t[9] <- NA # Afecta a homcedasticidad y es extremo
 data_2$GPx_t[6] <- NA #HOMOCEDASTICIDAD
@@ -543,6 +543,42 @@ ggsave("./resultados/graficas2025/finales/10_MPx.png", width = 190, height = 142
 ggsave("./resultados/graficas2025/finales/10_MPx.eps", width = 190, height = 142.5, units = "mm", dpi = 1000, device = cairo_ps) # Para la revista
 }
 ### Separacion por playas, no usada ----
+### EM MEANS ----
+# Ejemplo con MDA_t
+
+
+fit <- lm(data = data_2, formula = GPx_t ~ section*time)
+kable(Anova(lm(data = data_2, formula = GPx_t ~ section*time), type = "II"))
+
+# Get estimated marginal means and errors
+emm = as.data.frame(emmeans(fit, specs=c("section", "time")))
+# Las medias estimadas no coinciden perfectamente con las observadas porque es un diseño no balanceado debido a que se quitaron puntos
+
+
+# Prepare plot with stimated marginal means and CIs
+(mm = ggplot(data=data_2, aes(x=time, y=GPx_t, fill=section)) + #ylim(0,60) +
+  geom_line(data=emm, size=1.3, linetype=1,
+            aes(x=time, y=emmean, group=section, colour=section)) + 
+  geom_point(data=emm, size=3, shape=18, 
+             aes(x=time, y=emmean, group=section, colour=section)) + 
+  geom_errorbar(data=emm, size=1, width=.1,
+                aes(x=time, y=emmean, group=section, colour=section, ymin=lower.CL, ymax=upper.CL)) +
+  scale_colour_brewer(palette="Dark2") + scale_fill_brewer(palette="Dark2") +
+  ggtitle("Model estimated \n marginal means ") + 
+  theme_bw() + 
+  theme(plot.title=element_text(hjust=0.5, size=27), 
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        legend.position="right",
+        legend.title=element_text(size=25), 
+        legend.text=element_text(size=25),
+        axis.title.x=element_text(size=27),
+        axis.text.x=element_text(size=27),
+        axis.title.y=element_text(size=25),
+        axis.text.y=element_text(size=25),
+        panel.border = element_blank(),
+        axis.line.x = element_line(size = 0.5, linetype = "solid", colour = "black"),
+        axis.line.y = element_line(size = 0.5, linetype = "solid", colour = "black"))
+)
 if(FALSE){
   ### Separacion por playas - CALAHONDA ----
   
