@@ -4,6 +4,8 @@
 
 library(tidyverse)
 library(ggpubr)
+library(emmeans)
+library(patchwork)
 
 ### SETUP ----
 setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
@@ -12,7 +14,8 @@ setwd("C:/Users/Usuario/Documents/GitHub/Revision_datos_TFG")
 source(file = "./scripts septiembre 2024-2025/0_lectura.R")
 
 data <- filter(datos_long, cultivo == "Si") %>%
-  mutate(grupo = time:section)
+  mutate(grupo = time:section,
+         tejido = as.factor(tejido))
 
 data$GPx[9] <- NA # Afecta a homcedasticidad y es extremo
 data$GPx[6] <- NA #HOMOCEDASTICIDAD
@@ -119,50 +122,75 @@ emm <- rbind(emm_p, emm_t) %>%
 tejido.labs <- c("Column", "Tentacle")
 names(tejido.labs) <- c("Pie", "Tentaculo")
 
-f.emmeansplot <- function(x){
+f.emmeansplot <- function(x, tissue){
   # Fit linear model
-  fit <- data %>% group_by(tejido) %>% 
-    do(model = lm(formula = x ~ section*time, data = .))
+  fit <- data %>% filter(tejido == tissue) %>% 
+    lm(formula = as.formula(paste0(x," ~ section * time")), data = .)
+   # do(model = lm(formula = as.formula(paste0(x," ~ section * time")), data = .))
   
   # Get estimated marginal means and errors
-  emm_p= as.data.frame(emmeans(fit$model[[1]], specs=c("section", "time")))
-  emm_t= as.data.frame(emmeans(fit$model[[2]], specs=c("section", "time")))
-  emm <- rbind(emm_p, emm_t) %>% 
-    add_column(.before = 1, variable = rep(c("Pie", "Tentaculo"), each = 4))
+  emm= as.data.frame(emmeans(fit, specs=c("section", "time")))
+  #emm <- rbind(emm_p, emm_t) %>% 
+   # add_column(.before = 1, variable = rep(c("Pie", "Tentaculo"), each = 4))
   
-  # Graficar
-  ggplot(emm) + ylim(0, 1.5*max(emm$emmean)) +
+  # Graficar (poner noombre de grafica para patchwork)
+  p <- ggplot(emm) + ylim(0, 1.5*max(emm$emmean)) +
     geom_line(data=emm, linewidth = 1.3, position = position_dodge(width = 0.25),
-              aes(x=time, y=emmean, group=section, colour=section)) + 
+              alpha =0.7, aes(x=time, y=emmean, group=section, colour=section, linetype = section)) + 
     geom_point(data=emm, size=2,position = position_dodge(width = 0.25),
                aes(x=time, y=emmean, group=section, colour=section, shape = section)) + 
     geom_errorbar(data=emm, size=1, width=.1, position = position_dodge(width = 0.25),
-                  aes(x=time, y=emmean, group=section, colour=section,
+                  alpha =0.8, aes(x=time, y=emmean, group=section, colour=section,
                       ymin=lower.CL, ymax=upper.CL)) +
-    scale_colour_discrete(palette = c("#12A3F8","#E64B35FF")) +
+    scale_colour_discrete(palette = c("#076AA3","#E64B35"), labels = c("Control", "Sectioned")) +
     scale_x_discrete(labels = c("T1", "T2")) +
+    scale_linetype_discrete(labels = c("Control", "Sectioned"), guide = "none") +
+    scale_shape_discrete(labels = c("Control", "Sectioned")) +
+    
     labs_pubr() + 
     ylab(case_when(x == "MDA" ~ "TBARS (μmol/mg of tissue)",
                    x == "TEAC" ~ "TEAC (Trolox equivalent μM)",
                    x == "SOD" ~ "SOD (U / mg  of protein)",
                    x == "CAT" ~ "CAT (U / mg  of protein)",
-                   x == "Mielo" ~ "MPx (mU 10^2 / mg of protein)",
+                   x == "Mielo" ~ "MPO (mU 10^2 / mg of protein)",
                    x == "GPx" ~ "GPx (mU / mg  of protein)",
                    x == "GR" ~ "GR (mU / mg  of protein)",
                    x == "GST" ~ "GST (mU / mg  of protein)",
                    x == "DTD" ~ "NQO1 (mU / mg  of protein)",
-                   x == "Facida" ~ "Acid phosphatase (mU / mg  of protein)",
-                   x == "Fbasica" ~ "Alkaline phosphatase (mU / mg  of protein)")) +
+                   x == "Facida" ~ "ACP (mU / mg  of protein)",
+                   x == "Fbasica" ~ "ALP phosphatase (mU / mg  of protein)")) +
     theme_minimal() +
     labs(color = "Treatment", shape = "Treatment") +
-    facet_grid(~variable, labeller = labeller(variable = tejido.labs)) +
-    theme(legend.position=c(.1,.85),
+    #facet_grid(~variable, labeller = labeller(variable = tejido.labs)) +
+    theme(legend.position=c(.85,.88),
           axis.title.x=element_blank(),
-          axis.text.x = element_text(size = 9),
+          axis.text.x = element_text(size = 11, face = "bold"),
           axis.title.y = element_text(size = 11),
           axis.line = element_line(color = "gray5"),
           panel.background = element_rect(color = "gray80"),
           strip.text = element_text(face = "bold"),
           strip.background = element_rect(color = "gray60"))
 
+  filename = sprintf("%s.png", x)
+  filenamesvg = sprintf("%s.svg", x)
+  
+  ggsave(filename, path = "./resultados/graficas2025/emmeans", width = 4, height = 3.5, units = "in")
+  ggsave(filenamesvg, path = "./resultados/graficas2025/emmeans", device = "svg",width = 4, height = 3.5, units = "in")
+  return(p)
 }
+
+# Ahora se hacen las graficas de aquellos parametros que presentaron interaccion:
+p_cat <- f.emmeansplot("CAT", "Tentaculo")
+p_gpx <- f.emmeansplot("GPx", "Tentaculo")
+p_gst <- f.emmeansplot("GST", "Tentaculo")
+p_dtd <- f.emmeansplot("DTD", "Tentaculo")
+p_mpo <- f.emmeansplot("Mielo", "Pie")
+
+#Para patchwork guaradar cada grafica en objeto
+(p <- wrap_plots(p_cat,p_gpx,p_gst,p_dtd,p_mpo)) + plot_annotation(tag_levels = 'A')& 
+  theme(plot.tag = element_text(size = 12, face ="bold")) #+
+    #plot_layout(design = "AABBCC
+                          #DDEE#") + plot_annotation(tag_levels = 'A'))
+
+ggsave(filename = "patchwork.png", path = "./resultados/graficas2025/emmeans", width = 12.5, height = 7.5, units = "in")
+ggsave(filename = "patchwork.svg", path = "./resultados/graficas2025/emmeans", device = "svg",width = 12.5, height = 7.5, units = "in")
