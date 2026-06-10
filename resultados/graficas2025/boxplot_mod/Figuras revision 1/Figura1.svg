@@ -26,15 +26,15 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="0.65477693"
-     inkscape:cx="586.45927"
-     inkscape:cy="393.2637"
-     inkscape:window-width="1920"
-     inkscape:window-height="1094"
-     inkscape:window-x="-11"
-     inkscape:window-y="-11"
+     inkscape:zoom="2.6191077"
+     inkscape:cx="1010.6495"
+     inkscape:cy="460.27126"
+     inkscape:window-width="1366"
+     inkscape:window-height="697"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g6"
+     inkscape:current-layer="g2-4-8"
      inkscape:export-bgcolor="#ffffffff" />
   <defs
      id="defs1">
@@ -1497,7 +1497,7 @@
              sodipodi:role="line"
              id="tspan111-6"
              x="184.02"
-             y="56.119999">Section*Time - 0.0008</tspan></text>
+             y="56.119999">Section*Time - 0.0012</tspan></text>
       </g>
       <g
          clip-path="url(#cpMzQuMDZ8MjEyLjQzfDUuNDh8MjQuNjE=)"
@@ -2203,7 +2203,7 @@
              sodipodi:role="line"
              id="tspan106-9"
              x="184.02"
-             y="56.119999">Section*Time - 0.0041</tspan></text>
+             y="56.119999">Section*Time - 0.0035</tspan></text>
       </g>
       <polyline
          points="34.06,233.26 212.43,233.26 "
@@ -2549,7 +2549,7 @@
              sodipodi:role="line"
              id="tspan93"
              x="184.02"
-             y="36.799999">Section - 0.0045</tspan></text>
+             y="36.799999">Section - 0.0042</tspan></text>
         <text
            x="184.02"
            y="46.459999"
@@ -2561,7 +2561,7 @@
              sodipodi:role="line"
              id="tspan94"
              x="184.02"
-             y="46.459999">Time - 0.0381</tspan></text>
+             y="46.459999">Time - 0.0361</tspan></text>
         <text
            x="184.02"
            y="56.119999"
@@ -2810,7 +2810,7 @@
              sodipodi:role="line"
              id="tspan94-6"
              x="184.02"
-             y="46.459999">Time - 0.0381</tspan></text>
+             y="46.459999">Time - 0.0024</tspan></text>
         <text
            x="184.02"
            y="56.119999"
