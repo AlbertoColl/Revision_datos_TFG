@@ -27,14 +27,14 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
      inkscape:zoom="0.92599437"
-     inkscape:cx="114.47154"
-     inkscape:cy="461.66587"
-     inkscape:window-width="1920"
-     inkscape:window-height="1094"
-     inkscape:window-x="-11"
-     inkscape:window-y="-11"
+     inkscape:cx="332.07545"
+     inkscape:cy="115.0115"
+     inkscape:window-width="1366"
+     inkscape:window-height="697"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g10"
+     inkscape:current-layer="g1"
      inkscape:export-bgcolor="#ffffffff" />
   <defs
      id="defs1">
@@ -1875,7 +1875,7 @@
          textLength="57.580002"
          lengthAdjust="spacingAndGlyphs"
          id="text103"
-         transform="matrix(0.35277777,0,0,0.35277777,42.123412,93.153702)">Sectioned T1</text>
+         transform="matrix(0.35277777,0,0,0.35277777,42.123412,93.153702)">Treatment T1</text>
       <text
          x="435.45999"
          y="148.36"
@@ -1891,7 +1891,7 @@
          textLength="57.580002"
          lengthAdjust="spacingAndGlyphs"
          id="text105"
-         transform="matrix(0.35277777,0,0,0.35277777,77.660351,80.940896)">Sectioned T2</text>
+         transform="matrix(0.35277777,0,0,0.35277777,77.660351,80.940896)">Treatment T2</text>
     </g>
     <text
        x="127.26"

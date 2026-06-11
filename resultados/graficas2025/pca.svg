@@ -26,15 +26,15 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="pt"
-     inkscape:zoom="0.66542608"
-     inkscape:cx="397.48968"
-     inkscape:cy="392.98129"
+     inkscape:zoom="1.8821092"
+     inkscape:cx="621.11169"
+     inkscape:cy="487.48501"
      inkscape:window-width="1366"
      inkscape:window-height="697"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g284"
+     inkscape:current-layer="g159"
      inkscape:export-bgcolor="#ffffffff" />
   <g
      class="svglite"
@@ -1383,17 +1383,17 @@
          style="stroke-width: 1.16; stroke: #F4A582; stroke-linecap: butt; stroke-linejoin: miter; fill: #F4A582; fill-opacity: 0.10;"
          id="rect155" />
       <circle
-         cx="483.08"
+         cx="498.15491"
          cy="367.63"
          r="3.05"
-         style="stroke-width: 0.77; stroke: none; fill: #D6604D;"
+         style="fill:#d6604d;stroke:none;stroke-width:0.77"
          id="circle155" />
       <rect
-         x="475.21"
-         y="359.77"
+         x="489.9541"
+         y="359.76999"
          width="15.73"
          height="15.73"
-         style="stroke-width: 1.16; stroke: #D6604D; stroke-linecap: butt; stroke-linejoin: miter; fill: #D6604D; fill-opacity: 0.10;"
+         style="fill:#d6604d;fill-opacity:0.1;stroke:#d6604d;stroke-width:1.16;stroke-linecap:butt;stroke-linejoin:miter"
          id="rect156" />
       <text
          x="211.66"
@@ -1410,19 +1410,21 @@
          lengthAdjust="spacingAndGlyphs"
          id="text157">Control T2</text>
       <text
-         x="401.29"
+         x="401.29001"
          y="372.66"
-         style="font-size: 14.06px; font-style: italic; font-family: &quot;Arial&quot;;"
-         textLength="67.17px"
+         style="font-style:italic;font-size:14.06px;font-family:Arial"
+         textLength="67.169998"
          lengthAdjust="spacingAndGlyphs"
-         id="text158">Section T1</text>
+         id="text158"
+         transform="matrix(1.1780877,0,0,1,-71.716065,0)">Treatment T1</text>
       <text
-         x="497.70"
+         x="497.70001"
          y="372.66"
-         style="font-size: 14.06px; font-style: italic; font-family: &quot;Arial&quot;;"
-         textLength="67.17px"
+         style="font-style:italic;font-size:14.06px;font-family:Arial"
+         textLength="67.169998"
          lengthAdjust="spacingAndGlyphs"
-         id="text159">Section T2</text>
+         id="text159"
+         transform="matrix(1.1797863,0,0,1,-74.989218,0)">Treatment T2</text>
     </g>
     <defs
        id="defs159">

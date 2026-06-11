@@ -9,7 +9,7 @@
    id="svg1"
    inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
    sodipodi:docname="Figura2.svg"
-   inkscape:export-filename="Figuras revision 1\Figura2.png"
+   inkscape:export-filename="Figura2.png"
    inkscape:export-xdpi="300"
    inkscape:export-ydpi="300"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -26,15 +26,15 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="2.6191076"
-     inkscape:cx="339.04678"
-     inkscape:cy="115.49735"
+     inkscape:zoom="0.6547769"
+     inkscape:cx="317.66545"
+     inkscape:cy="234.43099"
      inkscape:window-width="1366"
      inkscape:window-height="697"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g2"
+     inkscape:current-layer="g1"
      inkscape:export-bgcolor="#ffffffff" />
   <defs
      id="defs1">
@@ -1954,7 +1954,7 @@
          textLength="57.580002"
          lengthAdjust="spacingAndGlyphs"
          id="text103"
-         transform="matrix(0.35277777,0,0,0.35277777,42.123412,93.153702)">Sectioned T1</text>
+         transform="matrix(0.35277777,0,0,0.35277777,42.123412,93.153702)">Treatment T1</text>
       <text
          x="435.45999"
          y="148.36"
@@ -1970,7 +1970,7 @@
          textLength="57.580002"
          lengthAdjust="spacingAndGlyphs"
          id="text105"
-         transform="matrix(0.35277777,0,0,0.35277777,77.660351,80.940896)">Sectioned T2</text>
+         transform="matrix(0.35277777,0,0,0.35277777,77.660351,80.940896)">Treatment T2</text>
     </g>
     <text
        x="127.26"
