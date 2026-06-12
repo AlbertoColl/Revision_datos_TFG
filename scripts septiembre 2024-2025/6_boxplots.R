@@ -62,7 +62,7 @@ f.boxplot <- function(x){
     theme_minimal() + labs(color = "Treatment") +
     #geom_point(data = data, mapping =aes(x = time, y = get(x), color = grupo), alpha = 0.2, position = position_jitterdodge(seed = 42)) +
     ylab(case_when(x == "MDA" ~ "TBARS (μmol/mg of tissue)",
-                   x == "TEAC" ~ "TEAC (Trolox equivalent μM)",
+                   x == "TEAC" ~ "TEAC (Trolox equivalent μmol/mg of tissue)",
                    x == "SOD" ~ "SOD (U / mg  of protein)",
                    x == "CAT" ~ "CAT (U / mg  of protein)",
                    x == "Mielo" ~ "MPx (mU 10^2 / mg of protein)",

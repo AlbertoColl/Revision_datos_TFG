@@ -13,13 +13,16 @@ datos <- read.csv2("./datos/TFG_datos_2025.csv", numerals = "warn.loss", encodin
   mutate(playa = as.factor(playa), cultivo = as.factor(cultivo), 
          section = as.factor(corte), time = as.factor(madurez),
          MDA_p = (MDA_p/10^3)*4,
-         MDA_t = (MDA_t/10^3)*4) %>% 
+         MDA_t = (MDA_t/10^3)*4,
+         TEAC_p = (TEAC_p/10^3)*4,
+         TEAC_t = (TEAC_t/10^3)*4) %>% 
   select(-madurez, -corte) %>% relocate(section, .after = cultivo)
 
 datos_long <- read.csv2("./datos/TFG_datos_2025_long.csv", numerals = "warn.loss", encoding = "latin1")%>% 
   mutate(playa = as.factor(playa), cultivo = as.factor(cultivo), 
          section = as.factor(corte), time = as.factor(ifelse(madurez=="Si", 1, 0)),
-         MDA = (MDA/10^3)*4) %>% 
+         MDA = (MDA/10^3)*4,
+         TEAC = (TEAC/10^3)*4) %>% 
   select(-madurez, -corte) %>% relocate(section, .after = cultivo)
 
 
