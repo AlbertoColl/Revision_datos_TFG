@@ -26,15 +26,15 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="pt"
-     inkscape:zoom="0.6875"
-     inkscape:cx="610.18182"
-     inkscape:cy="342.54545"
+     inkscape:zoom="0.48613591"
+     inkscape:cx="566.71394"
+     inkscape:cy="371.29534"
      inkscape:window-width="1366"
      inkscape:window-height="697"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g173"
+     inkscape:current-layer="g211"
      inkscape:export-bgcolor="#ffffffff" />
   <g
      class="svglite"
@@ -462,13 +462,6 @@
       <text
          x="226.66"
          y="33.27"
-         style="font-size: 11.00px; font-family: &quot;Arial&quot;;"
-         textLength="49.75px"
-         lengthAdjust="spacingAndGlyphs"
-         id="text50">Treatment</text>
-      <text
-         x="226.66"
-         y="33.27"
          style="font-size:11px;font-family:Arial;white-space:pre"
          textLength="49.75"
          lengthAdjust="spacingAndGlyphs"
@@ -476,58 +469,65 @@
          transform="matrix(0.86192102,0,0,1,-142.78718,3.1322659)"><tspan
            style="fill:#6b6b6b;fill-opacity:1;stroke:none;stroke-opacity:1"
            id="tspan214">Tentacle</tspan></text>
-      <line
-         x1="228.39"
-         y1="48.55"
-         x2="242.21"
-         y2="48.55"
-         style="stroke-width: 2.77; stroke: #076AA3; stroke-opacity: 0.70; stroke-linecap: butt;"
-         id="line50" />
-      <circle
-         cx="235.30"
-         cy="48.55"
-         r="2.49"
-         style="stroke-width: 0.71; stroke: none; fill: #076AA3;"
-         id="circle50" />
-      <line
-         x1="228.39"
-         y1="48.55"
-         x2="242.21"
-         y2="48.55"
-         style="stroke-width: 2.13; stroke: #076AA3; stroke-opacity: 0.80; stroke-linecap: butt;"
-         id="line51" />
-      <line
-         x1="228.39"
-         y1="65.83"
-         x2="242.21"
-         y2="65.83"
-         style="stroke-width: 2.77; stroke: #E64B35; stroke-opacity: 0.70; stroke-linecap: butt;"
-         id="line52" />
-      <polygon
-         points="235.30,61.96 238.65,67.77 231.95,67.77 "
-         style="stroke-width: 0.71; stroke: none; fill: #E64B35;"
-         id="polygon52" />
-      <line
-         x1="228.39"
-         y1="65.83"
-         x2="242.21"
-         y2="65.83"
-         style="stroke-width: 2.13; stroke: #E64B35; stroke-opacity: 0.80; stroke-linecap: butt;"
-         id="line53" />
-      <text
-         x="249.42"
-         y="51.70"
-         style="font-size: 8.80px; font-family: &quot;Arial&quot;;"
-         textLength="28.34px"
-         lengthAdjust="spacingAndGlyphs"
-         id="text53">Control</text>
-      <text
-         x="249.42"
-         y="68.98"
-         style="font-size: 8.80px; font-family: &quot;Arial&quot;;"
-         textLength="39.12px"
-         lengthAdjust="spacingAndGlyphs"
-         id="text54">Sectioned</text>
+      <g
+         id="g1">
+        <g
+           id="g2"
+           transform="translate(0,-16.298435)">
+          <line
+             x1="228.39"
+             y1="48.549999"
+             x2="242.21001"
+             y2="48.549999"
+             style="stroke:#076aa3;stroke-width:2.77;stroke-linecap:butt;stroke-opacity:0.7"
+             id="line50" />
+          <line
+             x1="228.39"
+             y1="65.830002"
+             x2="242.21001"
+             y2="65.830002"
+             style="stroke:#e64b35;stroke-width:2.77;stroke-linecap:butt;stroke-opacity:0.7"
+             id="line52" />
+          <circle
+             cx="235.3"
+             cy="48.549999"
+             r="2.49"
+             style="fill:#076aa3;stroke:none;stroke-width:0.71"
+             id="circle50" />
+          <line
+             x1="228.39"
+             y1="48.549999"
+             x2="242.21001"
+             y2="48.549999"
+             style="stroke:#076aa3;stroke-width:2.13;stroke-linecap:butt;stroke-opacity:0.8"
+             id="line51" />
+          <polygon
+             points="231.95,67.77 235.3,61.96 238.65,67.77 "
+             style="fill:#e64b35;stroke:none;stroke-width:0.71"
+             id="polygon52" />
+          <line
+             x1="228.39"
+             y1="65.830002"
+             x2="242.21001"
+             y2="65.830002"
+             style="stroke:#e64b35;stroke-width:2.13;stroke-linecap:butt;stroke-opacity:0.8"
+             id="line53" />
+          <text
+             x="249.42"
+             y="51.700001"
+             style="font-size:8.8px;font-family:Arial"
+             textLength="28.34"
+             lengthAdjust="spacingAndGlyphs"
+             id="text53">Control</text>
+          <text
+             x="249.42"
+             y="68.980003"
+             style="font-size:8.8px;font-family:Arial"
+             textLength="39.119999"
+             lengthAdjust="spacingAndGlyphs"
+             id="text54">Treatment</text>
+        </g>
+      </g>
       <text
          x="15.29"
          y="20.82"
@@ -765,65 +765,6 @@
          lengthAdjust="spacingAndGlyphs"
          id="text88">GPx (mU / mg  of protein)</text>
       <text
-         x="521.38"
-         y="33.27"
-         style="font-size: 11.00px; font-family: &quot;Arial&quot;;"
-         textLength="49.75px"
-         lengthAdjust="spacingAndGlyphs"
-         id="text89">Treatment</text>
-      <line
-         x1="523.10"
-         y1="48.55"
-         x2="536.93"
-         y2="48.55"
-         style="stroke-width: 2.77; stroke: #076AA3; stroke-opacity: 0.70; stroke-linecap: butt;"
-         id="line89" />
-      <circle
-         cx="530.02"
-         cy="48.55"
-         r="2.49"
-         style="stroke-width: 0.71; stroke: none; fill: #076AA3;"
-         id="circle89" />
-      <line
-         x1="523.10"
-         y1="48.55"
-         x2="536.93"
-         y2="48.55"
-         style="stroke-width: 2.13; stroke: #076AA3; stroke-opacity: 0.80; stroke-linecap: butt;"
-         id="line90" />
-      <line
-         x1="523.10"
-         y1="65.83"
-         x2="536.93"
-         y2="65.83"
-         style="stroke-width: 2.77; stroke: #E64B35; stroke-opacity: 0.70; stroke-linecap: butt;"
-         id="line91" />
-      <polygon
-         points="530.02,61.96 533.37,67.77 526.66,67.77 "
-         style="stroke-width: 0.71; stroke: none; fill: #E64B35;"
-         id="polygon91" />
-      <line
-         x1="523.10"
-         y1="65.83"
-         x2="536.93"
-         y2="65.83"
-         style="stroke-width: 2.13; stroke: #E64B35; stroke-opacity: 0.80; stroke-linecap: butt;"
-         id="line92" />
-      <text
-         x="544.14"
-         y="51.70"
-         style="font-size: 8.80px; font-family: &quot;Arial&quot;;"
-         textLength="28.34px"
-         lengthAdjust="spacingAndGlyphs"
-         id="text92">Control</text>
-      <text
-         x="544.14"
-         y="68.98"
-         style="font-size: 8.80px; font-family: &quot;Arial&quot;;"
-         textLength="39.12px"
-         lengthAdjust="spacingAndGlyphs"
-         id="text93">Sectioned</text>
-      <text
          x="310.01"
          y="20.82"
          text-anchor="middle"
@@ -831,6 +772,62 @@
          textLength="8.67px"
          lengthAdjust="spacingAndGlyphs"
          id="text94">B</text>
+      <g
+         id="g2-4"
+         transform="translate(294.29446,-16.39336)">
+        <line
+           x1="228.39"
+           y1="48.549999"
+           x2="242.21001"
+           y2="48.549999"
+           style="fill:none;stroke:#076aa3;stroke-width:2.77;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:0.7"
+           id="line50-8" />
+        <line
+           x1="228.39"
+           y1="65.830002"
+           x2="242.21001"
+           y2="65.830002"
+           style="fill:none;stroke:#e64b35;stroke-width:2.77;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:0.7"
+           id="line52-8" />
+        <circle
+           cx="235.3"
+           cy="48.549999"
+           r="2.49"
+           style="fill:#076aa3;stroke:none;stroke-width:0.71;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+           id="circle50-2" />
+        <line
+           x1="228.39"
+           y1="48.549999"
+           x2="242.21001"
+           y2="48.549999"
+           style="fill:none;stroke:#076aa3;stroke-width:2.13;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:0.8"
+           id="line51-4" />
+        <polygon
+           points="238.65,67.77 231.95,67.77 235.3,61.96 "
+           style="fill:#e64b35;stroke:none;stroke-width:0.71;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+           id="polygon52-5" />
+        <line
+           x1="228.39"
+           y1="65.830002"
+           x2="242.21001"
+           y2="65.830002"
+           style="fill:none;stroke:#e64b35;stroke-width:2.13;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:0.8"
+           id="line53-5" />
+        <text
+           x="249.42"
+           y="51.700001"
+           style="font-size:8.8px;font-family:Arial;white-space:pre"
+           textLength="28.34"
+           lengthAdjust="spacingAndGlyphs"
+           id="text53-1">Control</text>
+        <text
+           x="249.42"
+           y="68.980003"
+           style="font-size:8.8px;font-family:Arial;white-space:pre"
+           textLength="39.119999"
+           lengthAdjust="spacingAndGlyphs"
+           id="text54-7">Treatment</text>
+      </g>
     </g>
     <defs
        id="defs94">
@@ -1076,65 +1073,6 @@
          lengthAdjust="spacingAndGlyphs"
          id="text130">GST (mU / mg  of protein)</text>
       <text
-         x="820.98"
-         y="33.27"
-         style="font-size: 11.00px; font-family: &quot;Arial&quot;;"
-         textLength="49.75px"
-         lengthAdjust="spacingAndGlyphs"
-         id="text131">Treatment</text>
-      <line
-         x1="822.71"
-         y1="48.55"
-         x2="836.54"
-         y2="48.55"
-         style="stroke-width: 2.77; stroke: #076AA3; stroke-opacity: 0.70; stroke-linecap: butt;"
-         id="line131" />
-      <circle
-         cx="829.62"
-         cy="48.55"
-         r="2.49"
-         style="stroke-width: 0.71; stroke: none; fill: #076AA3;"
-         id="circle131" />
-      <line
-         x1="822.71"
-         y1="48.55"
-         x2="836.54"
-         y2="48.55"
-         style="stroke-width: 2.13; stroke: #076AA3; stroke-opacity: 0.80; stroke-linecap: butt;"
-         id="line132" />
-      <line
-         x1="822.71"
-         y1="65.83"
-         x2="836.54"
-         y2="65.83"
-         style="stroke-width: 2.77; stroke: #E64B35; stroke-opacity: 0.70; stroke-linecap: butt;"
-         id="line133" />
-      <polygon
-         points="829.62,61.96 832.97,67.77 826.27,67.77 "
-         style="stroke-width: 0.71; stroke: none; fill: #E64B35;"
-         id="polygon133" />
-      <line
-         x1="822.71"
-         y1="65.83"
-         x2="836.54"
-         y2="65.83"
-         style="stroke-width: 2.13; stroke: #E64B35; stroke-opacity: 0.80; stroke-linecap: butt;"
-         id="line134" />
-      <text
-         x="843.74"
-         y="51.70"
-         style="font-size: 8.80px; font-family: &quot;Arial&quot;;"
-         textLength="28.34px"
-         lengthAdjust="spacingAndGlyphs"
-         id="text134">Control</text>
-      <text
-         x="843.74"
-         y="68.98"
-         style="font-size: 8.80px; font-family: &quot;Arial&quot;;"
-         textLength="39.12px"
-         lengthAdjust="spacingAndGlyphs"
-         id="text135">Sectioned</text>
-      <text
          x="604.73"
          y="20.82"
          text-anchor="middle"
@@ -1142,6 +1080,62 @@
          textLength="8.67px"
          lengthAdjust="spacingAndGlyphs"
          id="text136">C</text>
+      <g
+         id="g2-5"
+         transform="translate(596.61001,-16.29836)">
+        <line
+           x1="228.39"
+           y1="48.549999"
+           x2="242.21001"
+           y2="48.549999"
+           style="fill:none;stroke:#076aa3;stroke-width:2.77;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:0.7"
+           id="line50-2" />
+        <line
+           x1="228.39"
+           y1="65.830002"
+           x2="242.21001"
+           y2="65.830002"
+           style="fill:none;stroke:#e64b35;stroke-width:2.77;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:0.7"
+           id="line52-7" />
+        <circle
+           cx="235.3"
+           cy="48.549999"
+           r="2.49"
+           style="fill:#076aa3;stroke:none;stroke-width:0.71;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+           id="circle50-6" />
+        <line
+           x1="228.39"
+           y1="48.549999"
+           x2="242.21001"
+           y2="48.549999"
+           style="fill:none;stroke:#076aa3;stroke-width:2.13;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:0.8"
+           id="line51-1" />
+        <polygon
+           points="235.3,61.96 238.65,67.77 231.95,67.77 "
+           style="fill:#e64b35;stroke:none;stroke-width:0.71;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+           id="polygon52-4" />
+        <line
+           x1="228.39"
+           y1="65.830002"
+           x2="242.21001"
+           y2="65.830002"
+           style="fill:none;stroke:#e64b35;stroke-width:2.13;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:0.8"
+           id="line53-2" />
+        <text
+           x="249.42"
+           y="51.700001"
+           style="font-size:8.8px;font-family:Arial;white-space:pre"
+           textLength="28.34"
+           lengthAdjust="spacingAndGlyphs"
+           id="text53-3">Control</text>
+        <text
+           x="249.42"
+           y="68.980003"
+           style="font-size:8.8px;font-family:Arial;white-space:pre"
+           textLength="39.119999"
+           lengthAdjust="spacingAndGlyphs"
+           id="text54-2">Treatment</text>
+      </g>
     </g>
     <defs
        id="defs136">
@@ -1361,65 +1355,6 @@
          lengthAdjust="spacingAndGlyphs"
          id="text167">NQO1 (mU / mg  of protein)</text>
       <text
-         x="226.66"
-         y="297.79001"
-         style="font-size:11px;font-family:Arial"
-         textLength="49.75"
-         lengthAdjust="spacingAndGlyphs"
-         id="text168">Treatment</text>
-      <line
-         x1="228.39"
-         y1="313.07001"
-         x2="242.21001"
-         y2="313.07001"
-         style="stroke:#076aa3;stroke-width:2.77;stroke-linecap:butt;stroke-opacity:0.7"
-         id="line168" />
-      <circle
-         cx="235.3"
-         cy="313.07001"
-         r="2.49"
-         style="fill:#076aa3;stroke:none;stroke-width:0.71"
-         id="circle168" />
-      <line
-         x1="228.39"
-         y1="313.07001"
-         x2="242.21001"
-         y2="313.07001"
-         style="stroke:#076aa3;stroke-width:2.13;stroke-linecap:butt;stroke-opacity:0.8"
-         id="line169" />
-      <line
-         x1="228.39"
-         y1="330.35001"
-         x2="242.21001"
-         y2="330.35001"
-         style="stroke:#e64b35;stroke-width:2.77;stroke-linecap:butt;stroke-opacity:0.7"
-         id="line170" />
-      <polygon
-         points="235.3,326.48 238.65,332.29 231.95,332.29 "
-         style="fill:#e64b35;stroke:none;stroke-width:0.71"
-         id="polygon170" />
-      <line
-         x1="228.39"
-         y1="330.35001"
-         x2="242.21001"
-         y2="330.35001"
-         style="stroke:#e64b35;stroke-width:2.13;stroke-linecap:butt;stroke-opacity:0.8"
-         id="line171" />
-      <text
-         x="249.42"
-         y="316.22"
-         style="font-size:8.8px;font-family:Arial"
-         textLength="28.34"
-         lengthAdjust="spacingAndGlyphs"
-         id="text171">Control</text>
-      <text
-         x="249.42"
-         y="333.5"
-         style="font-size:8.8px;font-family:Arial"
-         textLength="39.119999"
-         lengthAdjust="spacingAndGlyphs"
-         id="text172">Sectioned</text>
-      <text
          x="15.29"
          y="285.34"
          text-anchor="middle"
@@ -1427,6 +1362,62 @@
          textLength="8.6700001"
          lengthAdjust="spacingAndGlyphs"
          id="text173">D</text>
+      <g
+         id="g2-6"
+         transform="translate(2.1587703,247.40087)">
+        <line
+           x1="228.39"
+           y1="48.549999"
+           x2="242.21001"
+           y2="48.549999"
+           style="fill:none;stroke:#076aa3;stroke-width:2.77;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:0.7"
+           id="line50-85" />
+        <line
+           x1="228.39"
+           y1="65.830002"
+           x2="242.21001"
+           y2="65.830002"
+           style="fill:none;stroke:#e64b35;stroke-width:2.77;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:0.7"
+           id="line52-76" />
+        <circle
+           cx="235.3"
+           cy="48.549999"
+           r="2.49"
+           style="fill:#076aa3;stroke:none;stroke-width:0.71;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+           id="circle50-1" />
+        <line
+           x1="228.39"
+           y1="48.549999"
+           x2="242.21001"
+           y2="48.549999"
+           style="fill:none;stroke:#076aa3;stroke-width:2.13;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:0.8"
+           id="line51-8" />
+        <polygon
+           points="235.3,61.96 238.65,67.77 231.95,67.77 "
+           style="fill:#e64b35;stroke:none;stroke-width:0.71;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+           id="polygon52-9" />
+        <line
+           x1="228.39"
+           y1="65.830002"
+           x2="242.21001"
+           y2="65.830002"
+           style="fill:none;stroke:#e64b35;stroke-width:2.13;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:0.8"
+           id="line53-27" />
+        <text
+           x="249.42"
+           y="51.700001"
+           style="font-size:8.8px;font-family:Arial;white-space:pre"
+           textLength="28.34"
+           lengthAdjust="spacingAndGlyphs"
+           id="text53-9">Control</text>
+        <text
+           x="249.42"
+           y="68.980003"
+           style="font-size:8.8px;font-family:Arial;white-space:pre"
+           textLength="39.119999"
+           lengthAdjust="spacingAndGlyphs"
+           id="text54-5">Treatment</text>
+      </g>
     </g>
     <defs
        id="defs173">
@@ -1639,65 +1630,6 @@
          lengthAdjust="spacingAndGlyphs"
          id="text203">T2</text>
       <text
-         x="521.38"
-         y="297.79001"
-         style="font-size:11px;font-family:Arial"
-         textLength="49.75"
-         lengthAdjust="spacingAndGlyphs"
-         id="text205">Treatment</text>
-      <line
-         x1="523.09998"
-         y1="313.07001"
-         x2="536.92999"
-         y2="313.07001"
-         style="stroke:#076aa3;stroke-width:2.77;stroke-linecap:butt;stroke-opacity:0.7"
-         id="line205" />
-      <circle
-         cx="530.02002"
-         cy="313.07001"
-         r="2.49"
-         style="fill:#076aa3;stroke:none;stroke-width:0.71"
-         id="circle205" />
-      <line
-         x1="523.09998"
-         y1="313.07001"
-         x2="536.92999"
-         y2="313.07001"
-         style="stroke:#076aa3;stroke-width:2.13;stroke-linecap:butt;stroke-opacity:0.8"
-         id="line206" />
-      <line
-         x1="523.09998"
-         y1="330.35001"
-         x2="536.92999"
-         y2="330.35001"
-         style="stroke:#e64b35;stroke-width:2.77;stroke-linecap:butt;stroke-opacity:0.7"
-         id="line207" />
-      <polygon
-         points="530.02,326.48 533.37,332.29 526.66,332.29 "
-         style="fill:#e64b35;stroke:none;stroke-width:0.71"
-         id="polygon207" />
-      <line
-         x1="523.09998"
-         y1="330.35001"
-         x2="536.92999"
-         y2="330.35001"
-         style="stroke:#e64b35;stroke-width:2.13;stroke-linecap:butt;stroke-opacity:0.8"
-         id="line208" />
-      <text
-         x="544.14001"
-         y="316.22"
-         style="font-size:8.8px;font-family:Arial"
-         textLength="28.34"
-         lengthAdjust="spacingAndGlyphs"
-         id="text208">Control</text>
-      <text
-         x="544.14001"
-         y="333.5"
-         style="font-size:8.8px;font-family:Arial"
-         textLength="39.119999"
-         lengthAdjust="spacingAndGlyphs"
-         id="text209">Sectioned</text>
-      <text
          x="310.01001"
          y="285.34"
          text-anchor="middle"
@@ -1712,6 +1644,62 @@
          textLength="152.56"
          lengthAdjust="spacingAndGlyphs"
          id="text204-9">MPO (mU 10^2 / mg of protein)</text>
+    </g>
+    <g
+       id="g2-1"
+       transform="translate(461.88876,246.6281)">
+      <line
+         x1="228.39"
+         y1="48.549999"
+         x2="242.21001"
+         y2="48.549999"
+         style="fill:none;stroke:#076aa3;stroke-width:2.77;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:0.7"
+         id="line50-23" />
+      <line
+         x1="228.39"
+         y1="65.830002"
+         x2="242.21001"
+         y2="65.830002"
+         style="fill:none;stroke:#e64b35;stroke-width:2.77;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:0.7"
+         id="line52-3" />
+      <circle
+         cx="235.3"
+         cy="48.549999"
+         r="2.49"
+         style="fill:#076aa3;stroke:none;stroke-width:0.71;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+         id="circle50-4" />
+      <line
+         x1="228.39"
+         y1="48.549999"
+         x2="242.21001"
+         y2="48.549999"
+         style="fill:none;stroke:#076aa3;stroke-width:2.13;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:0.8"
+         id="line51-11" />
+      <polygon
+         points="235.3,61.96 238.65,67.77 231.95,67.77 "
+         style="fill:#e64b35;stroke:none;stroke-width:0.71;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10"
+         id="polygon52-3" />
+      <line
+         x1="228.39"
+         y1="65.830002"
+         x2="242.21001"
+         y2="65.830002"
+         style="fill:none;stroke:#e64b35;stroke-width:2.13;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10;stroke-opacity:0.8"
+         id="line53-8" />
+      <text
+         x="249.42"
+         y="51.700001"
+         style="font-size:8.8px;font-family:Arial;white-space:pre"
+         textLength="28.34"
+         lengthAdjust="spacingAndGlyphs"
+         id="text53-7">Control</text>
+      <text
+         x="249.42"
+         y="68.980003"
+         style="font-size:8.8px;font-family:Arial;white-space:pre"
+         textLength="39.119999"
+         lengthAdjust="spacingAndGlyphs"
+         id="text54-4">Treatment</text>
     </g>
   </g>
 </svg>
